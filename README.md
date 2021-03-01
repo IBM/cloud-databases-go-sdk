@@ -1,8 +1,8 @@
-[![Build Status](https://travis.ibm.com/CloudEngineering/go-sdk-template.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/CloudEngineering/go-sdk-template.svg?token=eW5FVD71iyte6tTby8gr&branch=main)
+[![Build Status](https://travis-ci.com/ibmcloud/icd-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/ibmcloud/icd-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# IBM Cloud MySDK Go SDK Version 0.0.1
-Go client library to interact with the various [IBM Cloud MySDK Service APIs](https://cloud.ibm.com/apidocs?category=<service-category>).
+# IBM Cloud Databases Go SDK 0.0.1
+Go client library to interact with the various [IBM Cloud Cloud Databases APIs](https://cloud.ibm.com/apidocs?category=cloud-databases).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
 Changes might occur which impact applications that use this SDK.
@@ -37,11 +37,11 @@ Changes might occur which impact applications that use this SDK.
 
 ## Overview
 
-The IBM Cloud MySDK Go SDK allows developers to programmatically interact with the following IBM Cloud services:
+The IBM Cloud Cloud Databases Go SDK allows developers to programmatically interact with the following IBM Cloud services:
 
 Service Name | Package name 
 --- | --- 
-[Example Service](https://cloud.ibm.com/apidocs/example-service) | exampleservicev1
+<!-- [Example Service](https://cloud.ibm.com/apidocs/example-service) | exampleservicev1 -->
 
 ## Prerequisites
 
@@ -54,7 +54,7 @@ Service Name | Package name
 ## Installation
 The current version of this SDK: 0.0.1
 
-There are a few different ways to download and install the MySDK Go SDK project for use by your
+There are a few different ways to download and install the Cloud Databases Go SDK project for use by your
 Go application:
 
 #### `go get` command  
@@ -62,7 +62,7 @@ Use this command to download and install the SDK to allow your Go application to
 use it:
 
 ```
-go get -u github.ibm.com/CloudEngineering/go-sdk-template
+go get -u github.ibm.com/ibmcloud/icd-go-sdk
 ```
 
 #### Go modules  
@@ -71,7 +71,7 @@ Go application, like this:
 
 ```go
 import (
-	"github.ibm.com/CloudEngineering/go-sdk-template/exampleservicev1"
+	"github.ibm.com/ibmcloud/icd-go-sdk/exampleservicev1"
 )
 ```
 
@@ -84,7 +84,7 @@ to your `Gopkg.toml` file.  Here is an example:
 
 ```
 [[constraint]]
-  name = "github.ibm.com/CloudEngineering/go-sdk-template"
+  name = "github.ibm.com/ibmcloud/icd-go-sdk"
   version = "0.0.1"
 
 ```
@@ -102,7 +102,7 @@ please ask a question at
 
 ## Issues
 If you encounter an issue with the project, you are welcome to submit a
-[bug report](<github-repo-url>/issues).
+[bug report](github.ibm.com/ibmcloud/icd-go-sdk/issues).
 Before that, please search for similar issues. It's possible that someone has already reported the problem.
 
 ## Open source @ IBM
