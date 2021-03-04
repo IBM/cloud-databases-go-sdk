@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/ibmcloud/icd-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/ibmcloud/icd-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# IBM Cloud Databases Go SDK 0.0.1
+# IBM Cloud Databases Go SDK 0.1.0
 Go client library to interact with the various [IBM Cloud Cloud Databases APIs](https://cloud.ibm.com/apidocs?category=cloud-databases).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
@@ -52,7 +52,7 @@ Service Name | Package name
 * Go version 1.14 or above.
 
 ## Installation
-The current version of this SDK: 0.0.1
+The current version of this SDK: 0.1.0
 
 There are a few different ways to download and install the Cloud Databases Go SDK project for use by your
 Go application:
@@ -85,7 +85,7 @@ to your `Gopkg.toml` file.  Here is an example:
 ```
 [[constraint]]
   name = "github.ibm.com/ibmcloud/icd-go-sdk"
-  version = "0.0.1"
+  version = "0.1.0"
 
 ```
 
