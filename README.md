@@ -41,7 +41,7 @@ The IBM Cloud Cloud Databases Go SDK allows developers to programmatically inter
 
 Service Name | Package name 
 --- | --- 
-<!-- [Example Service](https://cloud.ibm.com/apidocs/example-service) | exampleservicev1 -->
+[Cloud Databases](https://cloud.ibm.com/apidocs/cloud-databases-api/cloud-databases-api-v5) | clouddatabasesv5
 
 ## Prerequisites
 
