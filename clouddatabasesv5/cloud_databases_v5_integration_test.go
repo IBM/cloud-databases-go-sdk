@@ -38,7 +38,7 @@ import (
 
 var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
-	const externalConfigFile = "../cloud_databases.env"
+	const externalConfigFile = "../cloud_databases_v5.env"
 
 	var (
 		err                   error
@@ -101,8 +101,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`AddAllowlistEntry(addAllowlistEntryOptions *AddAllowlistEntryOptions)`, func() {
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address:     core.StringPtr("testString"),
-				Description: core.StringPtr("testString"),
+				Address:     core.StringPtr("172.16.0.0/16"),
+				Description: core.StringPtr("Dev IP space 3"),
 			}
 
 			addAllowlistEntryOptions := &clouddatabasesv5.AddAllowlistEntryOptions{
@@ -121,6 +121,34 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
+	Describe(`ChangeUserPassword - Set specified user's password`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
+
+			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
+				Password: core.StringPtr("xyzzyyzzyx"),
+			}
+
+			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
+				ID:       core.StringPtr("testString"),
+				UserType: core.StringPtr("database"),
+				Username: core.StringPtr("james"),
+				User:     aPasswordSettingUserModel,
+			}
+
+			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(changeUserPasswordResponse).ToNot(BeNil())
+
+			taskIDLink = *changeUserPasswordResponse.Task.ID
+
+		})
+	})
+
 	Describe(`CreateDatabaseUser - Creates a user based on user type`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -135,7 +163,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
 				ID:       core.StringPtr("testString"),
-				UserType: core.StringPtr("testString"),
+				UserType: core.StringPtr("database"),
 				User:     createDatabaseUserRequestUserModel,
 			}
 
@@ -180,8 +208,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			deleteDatabaseUserOptions := &clouddatabasesv5.DeleteDatabaseUserOptions{
 				ID:       core.StringPtr("testString"),
-				UserType: core.StringPtr("testString"),
-				Username: core.StringPtr("testString"),
+				UserType: core.StringPtr("database"),
+				Username: core.StringPtr("james"),
 			}
 
 			deleteDatabaseUserResponse, response, err := cloudDatabasesService.DeleteDatabaseUser(deleteDatabaseUserOptions)
@@ -195,30 +223,100 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`ReplaceAllowlist - Replace the allowlist for a deployment`, func() {
+	Describe(`KillConnections - Kill connections to a PostgreSQL or EnterpriseDB deployment`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`ReplaceAllowlist(replaceAllowlistOptions *ReplaceAllowlistOptions)`, func() {
+		It(`KillConnections(killConnectionsOptions *KillConnectionsOptions)`, func() {
 
-			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address:     core.StringPtr("testString"),
-				Description: core.StringPtr("testString"),
+			killConnectionsOptions := &clouddatabasesv5.KillConnectionsOptions{
+				ID: core.StringPtr("testString"),
 			}
 
-			replaceAllowlistOptions := &clouddatabasesv5.ReplaceAllowlistOptions{
+			killConnectionsResponse, response, err := cloudDatabasesService.KillConnections(killConnectionsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(killConnectionsResponse).ToNot(BeNil())
+
+			taskIDLink = *killConnectionsResponse.Task.ID
+
+		})
+	})
+
+	Describe(`SetAllowlist - Set the allowlist for a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetAllowlist(setAllowlistOptions *SetAllowlistOptions)`, func() {
+
+			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
+				Address:     core.StringPtr("195.212.0.0/16"),
+				Description: core.StringPtr("Dev IP space 1"),
+			}
+
+			setAllowlistOptions := &clouddatabasesv5.SetAllowlistOptions{
 				ID:          core.StringPtr("testString"),
 				IPAddresses: []clouddatabasesv5.AllowlistEntry{*allowlistEntryModel},
 				IfMatch:     core.StringPtr("testString"),
 			}
 
-			replaceAllowlistResponse, response, err := cloudDatabasesService.ReplaceAllowlist(replaceAllowlistOptions)
+			setAllowlistResponse, response, err := cloudDatabasesService.SetAllowlist(setAllowlistOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(replaceAllowlistResponse).ToNot(BeNil())
+			Expect(setAllowlistResponse).ToNot(BeNil())
 
-			taskIDLink = *replaceAllowlistResponse.Task.ID
+			taskIDLink = *setAllowlistResponse.Task.ID
+
+		})
+	})
+
+	Describe(`SetAutoscalingConditions - Set the autoscaling configuration from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetAutoscalingConditions(setAutoscalingConditionsOptions *SetAutoscalingConditionsOptions)`, func() {
+
+			autoscalingMemoryGroupMemoryScalersIoUtilizationModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization{
+				Enabled:      core.BoolPtr(true),
+				OverPeriod:   core.StringPtr("5m"),
+				AbovePercent: core.Int64Ptr(int64(90)),
+			}
+
+			autoscalingMemoryGroupMemoryScalersModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalers{
+				IoUtilization: autoscalingMemoryGroupMemoryScalersIoUtilizationModel,
+			}
+
+			autoscalingMemoryGroupMemoryRateModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryRate{
+				IncreasePercent:  core.Float64Ptr(float64(10.0)),
+				PeriodSeconds:    core.Int64Ptr(int64(300)),
+				LimitMbPerMember: core.Float64Ptr(float64(125952)),
+				Units:            core.StringPtr("mb"),
+			}
+
+			autoscalingMemoryGroupMemoryModel := &clouddatabasesv5.AutoscalingMemoryGroupMemory{
+				Scalers: autoscalingMemoryGroupMemoryScalersModel,
+				Rate:    autoscalingMemoryGroupMemoryRateModel,
+			}
+
+			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup{
+				Memory: autoscalingMemoryGroupMemoryModel,
+			}
+
+			setAutoscalingConditionsOptions := &clouddatabasesv5.SetAutoscalingConditionsOptions{
+				ID:          core.StringPtr("testString"),
+				GroupID:     core.StringPtr("testString"),
+				Autoscaling: autoscalingSetGroupAutoscalingModel,
+			}
+
+			setAutoscalingConditionsResponse, response, err := cloudDatabasesService.SetAutoscalingConditions(setAutoscalingConditionsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(setAutoscalingConditionsResponse).ToNot(BeNil())
+
+			taskIDLink = *setAutoscalingConditionsResponse.Task.ID
 
 		})
 	})
@@ -229,12 +327,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions)`, func() {
 
-			setMembersGroupMembersModel := &clouddatabasesv5.SetMembersGroupMembers{
-				AllocationCount: core.Int64Ptr(int64(4)),
+			setMemoryGroupMemoryModel := &clouddatabasesv5.SetMemoryGroupMemory{
+				AllocationMb: core.Int64Ptr(int64(4096)),
 			}
 
-			setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMembersGroup{
-				Members: setMembersGroupMembersModel,
+			setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup{
+				Memory: setMemoryGroupMemoryModel,
 			}
 
 			setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
@@ -250,6 +348,42 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(setDeploymentScalingGroupResponse).ToNot(BeNil())
 
 			taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
+
+		})
+	})
+
+	Describe(`UpdateDatabaseConfiguration - Change your database configuration`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions)`, func() {
+
+			setConfigurationConfigurationModel := &clouddatabasesv5.SetConfigurationConfigurationPgConfiguration{
+				MaxConnections:          core.Int64Ptr(int64(200)),
+				MaxPreparedTransactions: core.Int64Ptr(int64(0)),
+				DeadlockTimeout:         core.Int64Ptr(int64(100)),
+				EffectiveIoConcurrency:  core.Int64Ptr(int64(1)),
+				MaxReplicationSlots:     core.Int64Ptr(int64(10)),
+				MaxWalSenders:           core.Int64Ptr(int64(12)),
+				SharedBuffers:           core.Int64Ptr(int64(16)),
+				SynchronousCommit:       core.StringPtr("local"),
+				WalLevel:                core.StringPtr("hot_standby"),
+				ArchiveTimeout:          core.Int64Ptr(int64(300)),
+				LogMinDurationStatement: core.Int64Ptr(int64(100)),
+			}
+
+			updateDatabaseConfigurationOptions := &clouddatabasesv5.UpdateDatabaseConfigurationOptions{
+				ID:            core.StringPtr("testString"),
+				Configuration: setConfigurationConfigurationModel,
+			}
+
+			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
+
+			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
 
 		})
 	})
@@ -307,105 +441,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`ChangeUserPassword - Set specified user's password`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
-
-			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
-				Password: core.StringPtr("xyzzy"),
-			}
-
-			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
-				ID:       core.StringPtr("testString"),
-				UserType: core.StringPtr("testString"),
-				Username: core.StringPtr("testString"),
-				User:     aPasswordSettingUserModel,
-			}
-
-			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(changeUserPasswordResponse).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`GetUser - Discover user name and password information for a deployment for a user with an endpoint type`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`GetUser(getUserOptions *GetUserOptions)`, func() {
-
-			getUserOptions := &clouddatabasesv5.GetUserOptions{
-				ID:     core.StringPtr("testString"),
-				UserID: core.StringPtr("testString"),
-			}
-
-			task, response, err := cloudDatabasesService.GetUser(getUserOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(task).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`SetDatabaseConfiguration - Change your database configuration`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`SetDatabaseConfiguration(setDatabaseConfigurationOptions *SetDatabaseConfigurationOptions)`, func() {
-
-			setConfigurationConfigurationModel := &clouddatabasesv5.SetConfigurationConfigurationPgConfiguration{
-				MaxConnections:          core.Int64Ptr(int64(115)),
-				MaxPreparedTransactions: core.Int64Ptr(int64(0)),
-				DeadlockTimeout:         core.Int64Ptr(int64(100)),
-				EffectiveIoConcurrency:  core.Int64Ptr(int64(1)),
-				MaxReplicationSlots:     core.Int64Ptr(int64(10)),
-				MaxWalSenders:           core.Int64Ptr(int64(12)),
-				SharedBuffers:           core.Int64Ptr(int64(16)),
-				SynchronousCommit:       core.StringPtr("local"),
-				WalLevel:                core.StringPtr("hot_standby"),
-				ArchiveTimeout:          core.Int64Ptr(int64(300)),
-				LogMinDurationStatement: core.Int64Ptr(int64(100)),
-			}
-
-			setDatabaseConfigurationOptions := &clouddatabasesv5.SetDatabaseConfigurationOptions{
-				ID:            core.StringPtr("testString"),
-				Configuration: setConfigurationConfigurationModel,
-			}
-
-			setDatabaseConfigurationResponse, response, err := cloudDatabasesService.SetDatabaseConfiguration(setDatabaseConfigurationOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(setDatabaseConfigurationResponse).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`GetDatabaseConfigurationSchema - Get the schema of the database configuration`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`GetDatabaseConfigurationSchema(getDatabaseConfigurationSchemaOptions *GetDatabaseConfigurationSchemaOptions)`, func() {
-
-			getDatabaseConfigurationSchemaOptions := &clouddatabasesv5.GetDatabaseConfigurationSchemaOptions{
-				ID: core.StringPtr("testString"),
-			}
-
-			configurationSchema, response, err := cloudDatabasesService.GetDatabaseConfigurationSchema(getDatabaseConfigurationSchemaOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(configurationSchema).ToNot(BeNil())
-
-		})
-	})
-
 	Describe(`ListRemotes - List read-only replica information`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -425,21 +460,21 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`GetRemotesSchema - Resync read-only replica`, func() {
+	Describe(`ResyncReplica - Resync read-only replica`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`GetRemotesSchema(getRemotesSchemaOptions *GetRemotesSchemaOptions)`, func() {
+		It(`ResyncReplica(resyncReplicaOptions *ResyncReplicaOptions)`, func() {
 
-			getRemotesSchemaOptions := &clouddatabasesv5.GetRemotesSchemaOptions{
+			resyncReplicaOptions := &clouddatabasesv5.ResyncReplicaOptions{
 				ID: core.StringPtr("testString"),
 			}
 
-			getRemotesSchemaResponse, response, err := cloudDatabasesService.GetRemotesSchema(getRemotesSchemaOptions)
+			resyncReplicaResponse, response, err := cloudDatabasesService.ResyncReplica(resyncReplicaOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(getRemotesSchemaResponse).ToNot(BeNil())
+			Expect(resyncReplicaResponse).ToNot(BeNil())
 
 		})
 	})
@@ -590,7 +625,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			getConnectionOptions := &clouddatabasesv5.GetConnectionOptions{
 				ID:              core.StringPtr("testString"),
-				UserType:        core.StringPtr("testString"),
+				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testString"),
 				EndpointType:    core.StringPtr("public"),
 				CertificateRoot: core.StringPtr("testString"),
@@ -613,10 +648,10 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			completeConnectionOptions := &clouddatabasesv5.CompleteConnectionOptions{
 				ID:              core.StringPtr("testString"),
-				UserType:        core.StringPtr("testString"),
+				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testString"),
 				EndpointType:    core.StringPtr("public"),
-				Password:        core.StringPtr("testString"),
+				Password:        core.StringPtr("providedpassword"),
 				CertificateRoot: core.StringPtr("testString"),
 			}
 
@@ -687,104 +722,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`SetAutoscalingConditions - Set the autoscaling configuration from a deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`SetAutoscalingConditions(setAutoscalingConditionsOptions *SetAutoscalingConditionsOptions)`, func() {
-
-			autoscalingDiskGroupDiskScalersCapacityModel := &clouddatabasesv5.AutoscalingDiskGroupDiskScalersCapacity{
-				Enabled:                  core.BoolPtr(true),
-				FreeSpaceLessThanPercent: core.Int64Ptr(int64(10)),
-			}
-
-			autoscalingDiskGroupDiskScalersIoUtilizationModel := &clouddatabasesv5.AutoscalingDiskGroupDiskScalersIoUtilization{
-				Enabled:      core.BoolPtr(true),
-				OverPeriod:   core.StringPtr("30m"),
-				AbovePercent: core.Int64Ptr(int64(45)),
-			}
-
-			autoscalingDiskGroupDiskScalersModel := &clouddatabasesv5.AutoscalingDiskGroupDiskScalers{
-				Capacity:      autoscalingDiskGroupDiskScalersCapacityModel,
-				IoUtilization: autoscalingDiskGroupDiskScalersIoUtilizationModel,
-			}
-
-			autoscalingDiskGroupDiskRateModel := &clouddatabasesv5.AutoscalingDiskGroupDiskRate{
-				IncreasePercent:  core.Float64Ptr(float64(20)),
-				PeriodSeconds:    core.Int64Ptr(int64(900)),
-				LimitMbPerMember: core.Float64Ptr(float64(3670016)),
-				Units:            core.StringPtr("mb"),
-			}
-
-			autoscalingDiskGroupDiskModel := &clouddatabasesv5.AutoscalingDiskGroupDisk{
-				Scalers: autoscalingDiskGroupDiskScalersModel,
-				Rate:    autoscalingDiskGroupDiskRateModel,
-			}
-
-			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingDiskGroup{
-				Disk: autoscalingDiskGroupDiskModel,
-			}
-
-			setAutoscalingConditionsOptions := &clouddatabasesv5.SetAutoscalingConditionsOptions{
-				ID:          core.StringPtr("testString"),
-				GroupID:     core.StringPtr("testString"),
-				Autoscaling: autoscalingSetGroupAutoscalingModel,
-			}
-
-			setAutoscalingConditionsResponse, response, err := cloudDatabasesService.SetAutoscalingConditions(setAutoscalingConditionsOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(setAutoscalingConditionsResponse).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`FileSync - Sync files uploaded to Elasticsearch deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`FileSync(fileSyncOptions *FileSyncOptions)`, func() {
-
-			fileSyncOptions := &clouddatabasesv5.FileSyncOptions{
-				ID: core.StringPtr("testString"),
-			}
-
-			fileSyncResponse, response, err := cloudDatabasesService.FileSync(fileSyncOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(fileSyncResponse).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`CreateLogicalReplicationSlot - Create a new logical replication slot`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
-
-			logicalReplicationSlotLogicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot{
-				Name:         core.StringPtr("customer_replication"),
-				DatabaseName: core.StringPtr("customers"),
-				PluginType:   core.StringPtr("wal2json"),
-			}
-
-			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
-				ID:                     core.StringPtr("testString"),
-				LogicalReplicationSlot: logicalReplicationSlotLogicalReplicationSlotModel,
-			}
-
-			createLogicalReplicationSlotResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(createLogicalReplicationSlotResponse).ToNot(BeNil())
-
-		})
-	})
-
 	Describe(`GetAllowlist - Retrieve the allowlisted addresses and ranges for a deployment`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -800,90 +737,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(allowlist).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`KillConnections - Kill connections to a PostgreSQL or EnterpriseDB deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`KillConnections(killConnectionsOptions *KillConnectionsOptions)`, func() {
-
-			killConnectionsOptions := &clouddatabasesv5.KillConnectionsOptions{
-				ID: core.StringPtr("testString"),
-			}
-
-			killConnectionsResponse, response, err := cloudDatabasesService.KillConnections(killConnectionsOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(killConnectionsResponse).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`DeleteLogicalReplicationSlot - Delete a logical replication slot`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions)`, func() {
-
-			deleteLogicalReplicationSlotOptions := &clouddatabasesv5.DeleteLogicalReplicationSlotOptions{
-				ID:   core.StringPtr("testString"),
-				Name: core.StringPtr("testString"),
-			}
-
-			deleteLogicalReplicationSlotResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(deleteLogicalReplicationSlotResponse).ToNot(BeNil())
-
-		})
-	})
-
-	Describe(`DeleteDatabaseUser - Deletes a user based on user type`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`DeleteDatabaseUser(deleteDatabaseUserOptions *DeleteDatabaseUserOptions)`, func() {
-
-			deleteDatabaseUserOptions := &clouddatabasesv5.DeleteDatabaseUserOptions{
-				ID:       core.StringPtr("testString"),
-				UserType: core.StringPtr("testString"),
-				Username: core.StringPtr("testString"),
-			}
-
-			deleteDatabaseUserResponse, response, err := cloudDatabasesService.DeleteDatabaseUser(deleteDatabaseUserOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(deleteDatabaseUserResponse).ToNot(BeNil())
-
-			taskIDLink = *deleteDatabaseUserResponse.Task.ID
-
-		})
-	})
-
-	Describe(`DeleteAllowlistEntry - Delete an address or range from the allowlist of a deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions)`, func() {
-
-			deleteAllowlistEntryOptions := &clouddatabasesv5.DeleteAllowlistEntryOptions{
-				ID:        core.StringPtr("testString"),
-				Ipaddress: core.StringPtr("testString"),
-			}
-
-			deleteAllowlistEntryResponse, response, err := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(deleteAllowlistEntryResponse).ToNot(BeNil())
-
-			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
 
 		})
 	})
