@@ -21,6 +21,7 @@ package clouddatabasesv5_test
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/IBM/go-sdk-core/v5/core"
 	. "github.com/onsi/ginkgo"
@@ -44,16 +45,50 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		err                   error
 		cloudDatabasesService *clouddatabasesv5.CloudDatabasesV5
 		serviceURL            string
+		deploymentID          string
+		replicaID             string
+		autoScalingGroupID    string = "member"
 		config                map[string]string
 	)
 
 	// Globlal variables to hold link values
 	var (
+		backupIDLink string
+		scalingGroupIDLink string
 		taskIDLink string
 	)
 
 	var shouldSkipTest = func() {
 		Skip("External configuration is not available, skipping tests...")
+	}
+
+	var waitForTask = func(taskID string) {
+		getTaskOptions := &clouddatabasesv5.GetTaskOptions{
+			ID: &taskID,
+		}
+
+		// If the task runs for more than a minute, then we'll consider it to have succeeded.
+		for complete, attempts := false, 0; !complete && attempts < 30; attempts++ {
+			getTaskResponse, response, err := cloudDatabasesService.GetTask(getTaskOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getTaskResponse).ToNot(BeNil())
+			if getTaskResponse.Task == nil {
+				complete = true
+			} else {
+				switch *getTaskResponse.Task.Status {
+				case "completed", "failed":
+					complete = true
+					Expect(*getTaskResponse.Task.Status).To(Equal("completed"))
+				case "queued", "running":
+					break  // from switch, not from for
+				default:
+					fmt.Println("status is " + *getTaskResponse.Task.Status)
+				}
+			}
+			time.Sleep(2 * time.Second)
+		}
 	}
 
 	Describe(`External configuration`, func() {
@@ -71,6 +106,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			serviceURL = config["URL"]
 			if serviceURL == "" {
 				Skip("Unable to load service URL configuration property, skipping tests")
+			}
+			deploymentID = config["DEPLOYMENT_ID"]
+			if deploymentID == "" {
+				Skip("Unable to load service DEPLOYMENT_ID configuration property, skipping tests")
+			}
+			replicaID = config["REPLICA_ID"]
+			if replicaID == "" {
+				Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
 			}
 
 			fmt.Printf("Service URL: %s\n", serviceURL)
@@ -106,7 +149,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			addAllowlistEntryOptions := &clouddatabasesv5.AddAllowlistEntryOptions{
-				ID:        core.StringPtr("testString"),
+				ID:        &deploymentID,
 				IPAddress: allowlistEntryModel,
 			}
 
@@ -118,34 +161,30 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *addAllowlistEntryResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
-	Describe(`ChangeUserPassword - Set specified user's password`, func() {
+	Describe(`DeleteAllowlistEntry - Delete an address or range from the allowlist of a deployment`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
+		It(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions)`, func() {
 
-			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
-				Password: core.StringPtr("xyzzyyzzyx"),
+			deleteAllowlistEntryOptions := &clouddatabasesv5.DeleteAllowlistEntryOptions{
+				ID:        &deploymentID,
+				Ipaddress: core.StringPtr("172.16.0.0/16"),
 			}
 
-			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
-				ID:       core.StringPtr("testString"),
-				UserType: core.StringPtr("database"),
-				Username: core.StringPtr("james"),
-				User:     aPasswordSettingUserModel,
-			}
-
-			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+			deleteAllowlistEntryResponse, response, err := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(changeUserPasswordResponse).ToNot(BeNil())
+			Expect(deleteAllowlistEntryResponse).ToNot(BeNil())
 
-			taskIDLink = *changeUserPasswordResponse.Task.ID
+			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -162,7 +201,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
-				ID:       core.StringPtr("testString"),
+				ID:       &deploymentID,
 				UserType: core.StringPtr("database"),
 				User:     createDatabaseUserRequestUserModel,
 			}
@@ -175,28 +214,36 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *createDatabaseUserResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
-	Describe(`DeleteAllowlistEntry - Delete an address or range from the allowlist of a deployment`, func() {
+	Describe(`ChangeUserPassword - Set specified user's password`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions)`, func() {
+		It(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
 
-			deleteAllowlistEntryOptions := &clouddatabasesv5.DeleteAllowlistEntryOptions{
-				ID:        core.StringPtr("testString"),
-				Ipaddress: core.StringPtr("testString"),
+			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
+				Password: core.StringPtr("xyzzyyzzyx"),
 			}
 
-			deleteAllowlistEntryResponse, response, err := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptions)
+			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
+				ID:       &deploymentID,
+				UserType: core.StringPtr("database"),
+				Username: core.StringPtr("james"),
+				User:     aPasswordSettingUserModel,
+			}
+
+			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(deleteAllowlistEntryResponse).ToNot(BeNil())
+			Expect(changeUserPasswordResponse).ToNot(BeNil())
 
-			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
+			taskIDLink = *changeUserPasswordResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -207,7 +254,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`DeleteDatabaseUser(deleteDatabaseUserOptions *DeleteDatabaseUserOptions)`, func() {
 
 			deleteDatabaseUserOptions := &clouddatabasesv5.DeleteDatabaseUserOptions{
-				ID:       core.StringPtr("testString"),
+				ID:       &deploymentID,
 				UserType: core.StringPtr("database"),
 				Username: core.StringPtr("james"),
 			}
@@ -220,6 +267,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *deleteDatabaseUserResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -230,7 +278,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`KillConnections(killConnectionsOptions *KillConnectionsOptions)`, func() {
 
 			killConnectionsOptions := &clouddatabasesv5.KillConnectionsOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			killConnectionsResponse, response, err := cloudDatabasesService.KillConnections(killConnectionsOptions)
@@ -241,6 +289,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *killConnectionsResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -256,7 +305,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			setAllowlistOptions := &clouddatabasesv5.SetAllowlistOptions{
-				ID:          core.StringPtr("testString"),
+				ID:          &deploymentID,
 				IPAddresses: []clouddatabasesv5.AllowlistEntry{*allowlistEntryModel},
 				IfMatch:     core.StringPtr("testString"),
 			}
@@ -269,6 +318,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *setAllowlistResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -291,7 +341,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			autoscalingMemoryGroupMemoryRateModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryRate{
 				IncreasePercent:  core.Float64Ptr(float64(10.0)),
 				PeriodSeconds:    core.Int64Ptr(int64(300)),
-				LimitMbPerMember: core.Float64Ptr(float64(125952)),
+				LimitMbPerMember: core.Float64Ptr(float64(114432)),
 				Units:            core.StringPtr("mb"),
 			}
 
@@ -305,50 +355,23 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			setAutoscalingConditionsOptions := &clouddatabasesv5.SetAutoscalingConditionsOptions{
-				ID:          core.StringPtr("testString"),
-				GroupID:     core.StringPtr("testString"),
+				ID:          &deploymentID,
+				GroupID:     &autoScalingGroupID,
 				Autoscaling: autoscalingSetGroupAutoscalingModel,
 			}
 
 			setAutoscalingConditionsResponse, response, err := cloudDatabasesService.SetAutoscalingConditions(setAutoscalingConditionsOptions)
 
+			if err != nil {
+				fmt.Printf("\nError: %s", response.Result.(map[string]interface{}))
+			}
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
 			Expect(setAutoscalingConditionsResponse).ToNot(BeNil())
 
 			taskIDLink = *setAutoscalingConditionsResponse.Task.ID
 
-		})
-	})
-
-	Describe(`SetDeploymentScalingGroup - Set scaling values on a specified group`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions)`, func() {
-
-			setMemoryGroupMemoryModel := &clouddatabasesv5.SetMemoryGroupMemory{
-				AllocationMb: core.Int64Ptr(int64(4096)),
-			}
-
-			setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup{
-				Memory: setMemoryGroupMemoryModel,
-			}
-
-			setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
-				ID:                               core.StringPtr("testString"),
-				GroupID:                          core.StringPtr("testString"),
-				SetDeploymentScalingGroupRequest: setDeploymentScalingGroupRequestModel,
-			}
-
-			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(setDeploymentScalingGroupResponse).ToNot(BeNil())
-
-			taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
-
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -373,7 +396,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			updateDatabaseConfigurationOptions := &clouddatabasesv5.UpdateDatabaseConfigurationOptions{
-				ID:            core.StringPtr("testString"),
+				ID:            &deploymentID,
 				Configuration: setConfigurationConfigurationModel,
 			}
 
@@ -385,6 +408,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -429,7 +453,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetDeploymentInfo(getDeploymentInfoOptions *GetDeploymentInfoOptions)`, func() {
 
 			getDeploymentInfoOptions := &clouddatabasesv5.GetDeploymentInfoOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			getDeploymentInfoResponse, response, err := cloudDatabasesService.GetDeploymentInfo(getDeploymentInfoOptions)
@@ -448,7 +472,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`ListRemotes(listRemotesOptions *ListRemotesOptions)`, func() {
 
 			listRemotesOptions := &clouddatabasesv5.ListRemotesOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			listRemotesResponse, response, err := cloudDatabasesService.ListRemotes(listRemotesOptions)
@@ -467,7 +491,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`ResyncReplica(resyncReplicaOptions *ResyncReplicaOptions)`, func() {
 
 			resyncReplicaOptions := &clouddatabasesv5.ResyncReplicaOptions{
-				ID: core.StringPtr("testString"),
+				ID: &replicaID,
 			}
 
 			resyncReplicaResponse, response, err := cloudDatabasesService.ResyncReplica(resyncReplicaOptions)
@@ -476,21 +500,25 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(resyncReplicaResponse).ToNot(BeNil())
 
+			taskIDLink = *resyncReplicaResponse.Task.ID
+
+			waitForTask(taskIDLink)
 		})
 	})
 
 	Describe(`SetPromotion - Promote read-only replica to a full deployment`, func() {
 		BeforeEach(func() {
+			Skip("Skip test for SetPromotion to preserve test environment")
 			shouldSkipTest()
 		})
 		It(`SetPromotion(setPromotionOptions *SetPromotionOptions)`, func() {
 
 			setPromotionPromotionModel := &clouddatabasesv5.SetPromotionPromotionPromote{
-				Promotion: make(map[string]interface{}),
+				Promotion: map[string]interface{}{"skip_initial_backup": false},
 			}
 
 			setPromotionOptions := &clouddatabasesv5.SetPromotionOptions{
-				ID:        core.StringPtr("testString"),
+				ID:        &replicaID,
 				Promotion: setPromotionPromotionModel,
 			}
 
@@ -500,6 +528,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(setPromotionResponse).ToNot(BeNil())
 
+			taskIDLink = *setPromotionResponse.Task.ID
+
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -510,7 +541,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`ListDeploymentTasks(listDeploymentTasksOptions *ListDeploymentTasksOptions)`, func() {
 
 			listDeploymentTasksOptions := &clouddatabasesv5.ListDeploymentTasksOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			tasks, response, err := cloudDatabasesService.ListDeploymentTasks(listDeploymentTasksOptions)
@@ -541,6 +572,26 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
+	Describe(`ListDeploymentBackups - List currently available backups from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`ListDeploymentBackups(listDeploymentBackupsOptions *ListDeploymentBackupsOptions)`, func() {
+
+			listDeploymentBackupsOptions := &clouddatabasesv5.ListDeploymentBackupsOptions{
+				ID: &deploymentID,
+			}
+
+			backups, response, err := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(backups).ToNot(BeNil())
+
+			backupIDLink = *backups.Backups[0].ID
+		})
+	})
+
 	Describe(`GetBackupInfo - Get information about a backup`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -548,7 +599,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetBackupInfo(getBackupInfoOptions *GetBackupInfoOptions)`, func() {
 
 			getBackupInfoOptions := &clouddatabasesv5.GetBackupInfoOptions{
-				BackupID: core.StringPtr("testString"),
+				BackupID: &backupIDLink,
 			}
 
 			getBackupInfoResponse, response, err := cloudDatabasesService.GetBackupInfo(getBackupInfoOptions)
@@ -560,25 +611,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`ListDeploymentBackups - List currently available backups from a deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`ListDeploymentBackups(listDeploymentBackupsOptions *ListDeploymentBackupsOptions)`, func() {
-
-			listDeploymentBackupsOptions := &clouddatabasesv5.ListDeploymentBackupsOptions{
-				ID: core.StringPtr("testString"),
-			}
-
-			backups, response, err := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(backups).ToNot(BeNil())
-
-		})
-	})
-
 	Describe(`StartOndemandBackup - Initiate an on-demand backup`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -586,7 +618,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`StartOndemandBackup(startOndemandBackupOptions *StartOndemandBackupOptions)`, func() {
 
 			startOndemandBackupOptions := &clouddatabasesv5.StartOndemandBackupOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			startOndemandBackupResponse, response, err := cloudDatabasesService.StartOndemandBackup(startOndemandBackupOptions)
@@ -605,7 +637,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetPitRdata(getPitRdataOptions *GetPitRdataOptions)`, func() {
 
 			getPitRdataOptions := &clouddatabasesv5.GetPitRdataOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			pointInTimeRecoveryData, response, err := cloudDatabasesService.GetPitRdata(getPitRdataOptions)
@@ -624,7 +656,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetConnection(getConnectionOptions *GetConnectionOptions)`, func() {
 
 			getConnectionOptions := &clouddatabasesv5.GetConnectionOptions{
-				ID:              core.StringPtr("testString"),
+				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testString"),
 				EndpointType:    core.StringPtr("public"),
@@ -647,7 +679,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`CompleteConnection(completeConnectionOptions *CompleteConnectionOptions)`, func() {
 
 			completeConnectionOptions := &clouddatabasesv5.CompleteConnectionOptions{
-				ID:              core.StringPtr("testString"),
+				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testString"),
 				EndpointType:    core.StringPtr("public"),
@@ -671,7 +703,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions)`, func() {
 
 			listDeploymentScalingGroupsOptions := &clouddatabasesv5.ListDeploymentScalingGroupsOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			groups, response, err := cloudDatabasesService.ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions)
@@ -680,6 +712,54 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(groups).ToNot(BeNil())
 
+			scalingGroupIDLink = *groups.Groups[0].ID
+		})
+	})
+
+	Describe(`SetDeploymentScalingGroup - Set scaling values on a specified group`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions)`, func() {
+
+			setMemoryGroupMemoryModel := &clouddatabasesv5.SetMemoryGroupMemory{
+				AllocationMb: core.Int64Ptr(int64(114688)),
+			}
+
+			setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup{
+				Memory: setMemoryGroupMemoryModel,
+			}
+
+			setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
+				ID:                               &deploymentID,
+				GroupID:                          &scalingGroupIDLink,
+				SetDeploymentScalingGroupRequest: setDeploymentScalingGroupRequestModel,
+			}
+
+			// SetDeploymentScalingGroup will fail if the value sent matches the current value.
+			// So first we make a request to set to one value -- and that might fail but we don't care
+			// Then we'll make a request to set to a different value, and that one we will check for success
+
+			setDeploymentScalingGroupResponse, _, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
+			if err == nil {
+				taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
+				waitForTask(taskIDLink)
+			}
+
+			setMemoryGroupMemoryModel.AllocationMb = core.Int64Ptr(int64(114432))
+
+			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
+
+			if err != nil {
+				fmt.Printf("\nError: %s", response.Result.(map[string]interface{}))
+			}
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(setDeploymentScalingGroupResponse).ToNot(BeNil())
+
+			taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
+
+			waitForTask(taskIDLink)
 		})
 	})
 
@@ -709,8 +789,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetAutoscalingConditions(getAutoscalingConditionsOptions *GetAutoscalingConditionsOptions)`, func() {
 
 			getAutoscalingConditionsOptions := &clouddatabasesv5.GetAutoscalingConditionsOptions{
-				ID:      core.StringPtr("testString"),
-				GroupID: core.StringPtr("testString"),
+				ID:      &deploymentID,
+				GroupID: &autoScalingGroupID,
 			}
 
 			autoscalingGroup, response, err := cloudDatabasesService.GetAutoscalingConditions(getAutoscalingConditionsOptions)
@@ -729,7 +809,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetAllowlist(getAllowlistOptions *GetAllowlistOptions)`, func() {
 
 			getAllowlistOptions := &clouddatabasesv5.GetAllowlistOptions{
-				ID: core.StringPtr("testString"),
+				ID: &deploymentID,
 			}
 
 			allowlist, response, err := cloudDatabasesService.GetAllowlist(getAllowlistOptions)
