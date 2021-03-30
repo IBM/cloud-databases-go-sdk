@@ -39,7 +39,7 @@ import (
 
 var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
-	const externalConfigFile = "../cloud_databases_v5.env"
+	const externalConfigFile = "../cloud_databases.env"
 
 	var (
 		err                   error
@@ -53,9 +53,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 	// Globlal variables to hold link values
 	var (
-		backupIDLink string
+		backupIDLink       string
 		scalingGroupIDLink string
-		taskIDLink string
+		taskIDLink         string
 	)
 
 	var shouldSkipTest = func() {
@@ -74,6 +74,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getTaskResponse).ToNot(BeNil())
+
 			if getTaskResponse.Task == nil {
 				complete = true
 			} else {
@@ -82,7 +83,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 					complete = true
 					Expect(*getTaskResponse.Task.Status).To(Equal("completed"))
 				case "queued", "running":
-					break  // from switch, not from for
+					break // from switch, not from for
 				default:
 					fmt.Println("status is " + *getTaskResponse.Task.Status)
 				}
@@ -425,7 +426,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listDeployablesResponse).ToNot(BeNil())
-
 		})
 	})
 
@@ -442,7 +442,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listRegionsResponse).ToNot(BeNil())
-
 		})
 	})
 
@@ -461,7 +460,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getDeploymentInfoResponse).ToNot(BeNil())
-
 		})
 	})
 
@@ -480,7 +478,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listRemotesResponse).ToNot(BeNil())
-
 		})
 	})
 
@@ -549,7 +546,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(tasks).ToNot(BeNil())
-
 		})
 	})
 
@@ -568,7 +564,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getTaskResponse).ToNot(BeNil())
-
 		})
 	})
 
@@ -607,7 +602,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getBackupInfoResponse).ToNot(BeNil())
-
 		})
 	})
 
@@ -626,7 +620,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(startOndemandBackupResponse).ToNot(BeNil())
-
 		})
 	})
 
@@ -645,7 +638,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(pointInTimeRecoveryData).ToNot(BeNil())
-
 		})
 	})
 
@@ -668,7 +660,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(connection).ToNot(BeNil())
-
 		})
 	})
 
@@ -692,7 +683,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(connection).ToNot(BeNil())
-
 		})
 	})
 
@@ -778,7 +768,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(groups).ToNot(BeNil())
-
 		})
 	})
 
@@ -798,7 +787,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(autoscalingGroup).ToNot(BeNil())
-
 		})
 	})
 
@@ -817,7 +805,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(allowlist).ToNot(BeNil())
-
 		})
 	})
 })

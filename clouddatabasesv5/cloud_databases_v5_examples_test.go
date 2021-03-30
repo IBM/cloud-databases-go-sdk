@@ -42,7 +42,7 @@ import (
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
 //
-const externalConfigFile = "../cloud_databases_v5.env"
+const externalConfigFile = "../cloud_databases.env"
 
 var (
 	cloudDatabasesService *clouddatabasesv5.CloudDatabasesV5
