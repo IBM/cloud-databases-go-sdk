@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-5bc4c538-20210303-194647
+ * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-f9bb1b47-20210329-151039
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -522,84 +522,25 @@ func (cloudDatabases *CloudDatabasesV5) DeleteDatabaseUserWithContext(ctx contex
 	return
 }
 
-// GetUser : Discover user name and password information for a deployment for a user with an endpoint type
-// Only for Redis v5 and prior: Discover connection information for a deployment for a user with an endpoint type.
-func (cloudDatabases *CloudDatabasesV5) GetUser(getUserOptions *GetUserOptions) (result *Task, response *core.DetailedResponse, err error) {
-	return cloudDatabases.GetUserWithContext(context.Background(), getUserOptions)
-}
-
-// GetUserWithContext is an alternate form of the GetUser method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) GetUserWithContext(ctx context.Context, getUserOptions *GetUserOptions) (result *Task, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getUserOptions, "getUserOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(getUserOptions, "getUserOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"id":      *getUserOptions.ID,
-		"user_id": *getUserOptions.UserID,
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/users/{user_id}/`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range getUserOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "GetUser")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = cloudDatabases.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	response.Result = result
-
-	return
-}
-
-// SetDatabaseConfiguration : Change your database configuration
+// UpdateDatabaseConfiguration : Change your database configuration
 // Change your database configuration. Available for PostgreSQL, EnterpriseDB, and Redis ONLY.
-func (cloudDatabases *CloudDatabasesV5) SetDatabaseConfiguration(setDatabaseConfigurationOptions *SetDatabaseConfigurationOptions) (result *SetDatabaseConfigurationResponse, response *core.DetailedResponse, err error) {
-	return cloudDatabases.SetDatabaseConfigurationWithContext(context.Background(), setDatabaseConfigurationOptions)
+func (cloudDatabases *CloudDatabasesV5) UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions) (result *UpdateDatabaseConfigurationResponse, response *core.DetailedResponse, err error) {
+	return cloudDatabases.UpdateDatabaseConfigurationWithContext(context.Background(), updateDatabaseConfigurationOptions)
 }
 
-// SetDatabaseConfigurationWithContext is an alternate form of the SetDatabaseConfiguration method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) SetDatabaseConfigurationWithContext(ctx context.Context, setDatabaseConfigurationOptions *SetDatabaseConfigurationOptions) (result *SetDatabaseConfigurationResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(setDatabaseConfigurationOptions, "setDatabaseConfigurationOptions cannot be nil")
+// UpdateDatabaseConfigurationWithContext is an alternate form of the UpdateDatabaseConfiguration method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) UpdateDatabaseConfigurationWithContext(ctx context.Context, updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions) (result *UpdateDatabaseConfigurationResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(updateDatabaseConfigurationOptions, "updateDatabaseConfigurationOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(setDatabaseConfigurationOptions, "setDatabaseConfigurationOptions")
+	err = core.ValidateStruct(updateDatabaseConfigurationOptions, "updateDatabaseConfigurationOptions")
 	if err != nil {
 		return
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *setDatabaseConfigurationOptions.ID,
+		"id": *updateDatabaseConfigurationOptions.ID,
 	}
 
 	builder := core.NewRequestBuilder(core.PATCH)
@@ -610,11 +551,11 @@ func (cloudDatabases *CloudDatabasesV5) SetDatabaseConfigurationWithContext(ctx 
 		return
 	}
 
-	for headerName, headerValue := range setDatabaseConfigurationOptions.Headers {
+	for headerName, headerValue := range updateDatabaseConfigurationOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "SetDatabaseConfiguration")
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "UpdateDatabaseConfiguration")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -622,8 +563,8 @@ func (cloudDatabases *CloudDatabasesV5) SetDatabaseConfigurationWithContext(ctx 
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
-	if setDatabaseConfigurationOptions.Configuration != nil {
-		body["configuration"] = setDatabaseConfigurationOptions.Configuration
+	if updateDatabaseConfigurationOptions.Configuration != nil {
+		body["configuration"] = updateDatabaseConfigurationOptions.Configuration
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -640,65 +581,7 @@ func (cloudDatabases *CloudDatabasesV5) SetDatabaseConfigurationWithContext(ctx 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetDatabaseConfigurationResponse)
-	if err != nil {
-		return
-	}
-	response.Result = result
-
-	return
-}
-
-// GetDatabaseConfigurationSchema : Get the schema of the database configuration
-// Get the schema of the database configuration. Available for PostgreSQL and Redis ONLY.
-func (cloudDatabases *CloudDatabasesV5) GetDatabaseConfigurationSchema(getDatabaseConfigurationSchemaOptions *GetDatabaseConfigurationSchemaOptions) (result *ConfigurationSchema, response *core.DetailedResponse, err error) {
-	return cloudDatabases.GetDatabaseConfigurationSchemaWithContext(context.Background(), getDatabaseConfigurationSchemaOptions)
-}
-
-// GetDatabaseConfigurationSchemaWithContext is an alternate form of the GetDatabaseConfigurationSchema method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) GetDatabaseConfigurationSchemaWithContext(ctx context.Context, getDatabaseConfigurationSchemaOptions *GetDatabaseConfigurationSchemaOptions) (result *ConfigurationSchema, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getDatabaseConfigurationSchemaOptions, "getDatabaseConfigurationSchemaOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(getDatabaseConfigurationSchemaOptions, "getDatabaseConfigurationSchemaOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"id": *getDatabaseConfigurationSchemaOptions.ID,
-	}
-
-	builder := core.NewRequestBuilder(core.GET)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/configuration/schema`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range getDatabaseConfigurationSchemaOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "GetDatabaseConfigurationSchema")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = cloudDatabases.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalConfigurationSchema)
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalUpdateDatabaseConfigurationResponse)
 	if err != nil {
 		return
 	}
@@ -765,25 +648,25 @@ func (cloudDatabases *CloudDatabasesV5) ListRemotesWithContext(ctx context.Conte
 	return
 }
 
-// GetRemotesSchema : Resync read-only replica
+// ResyncReplica : Resync read-only replica
 // Reinitialize a read-only replica. Available for PostgreSQL and EnterpriseDB ONLY.
-func (cloudDatabases *CloudDatabasesV5) GetRemotesSchema(getRemotesSchemaOptions *GetRemotesSchemaOptions) (result *GetRemotesSchemaResponse, response *core.DetailedResponse, err error) {
-	return cloudDatabases.GetRemotesSchemaWithContext(context.Background(), getRemotesSchemaOptions)
+func (cloudDatabases *CloudDatabasesV5) ResyncReplica(resyncReplicaOptions *ResyncReplicaOptions) (result *ResyncReplicaResponse, response *core.DetailedResponse, err error) {
+	return cloudDatabases.ResyncReplicaWithContext(context.Background(), resyncReplicaOptions)
 }
 
-// GetRemotesSchemaWithContext is an alternate form of the GetRemotesSchema method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) GetRemotesSchemaWithContext(ctx context.Context, getRemotesSchemaOptions *GetRemotesSchemaOptions) (result *GetRemotesSchemaResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getRemotesSchemaOptions, "getRemotesSchemaOptions cannot be nil")
+// ResyncReplicaWithContext is an alternate form of the ResyncReplica method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) ResyncReplicaWithContext(ctx context.Context, resyncReplicaOptions *ResyncReplicaOptions) (result *ResyncReplicaResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(resyncReplicaOptions, "resyncReplicaOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(getRemotesSchemaOptions, "getRemotesSchemaOptions")
+	err = core.ValidateStruct(resyncReplicaOptions, "resyncReplicaOptions")
 	if err != nil {
 		return
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *getRemotesSchemaOptions.ID,
+		"id": *resyncReplicaOptions.ID,
 	}
 
 	builder := core.NewRequestBuilder(core.POST)
@@ -794,11 +677,11 @@ func (cloudDatabases *CloudDatabasesV5) GetRemotesSchemaWithContext(ctx context.
 		return
 	}
 
-	for headerName, headerValue := range getRemotesSchemaOptions.Headers {
+	for headerName, headerValue := range resyncReplicaOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "GetRemotesSchema")
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "ResyncReplica")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -814,7 +697,7 @@ func (cloudDatabases *CloudDatabasesV5) GetRemotesSchemaWithContext(ctx context.
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetRemotesSchemaResponse)
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResyncReplicaResponse)
 	if err != nil {
 		return
 	}
@@ -1757,192 +1640,6 @@ func (cloudDatabases *CloudDatabasesV5) KillConnectionsWithContext(ctx context.C
 	return
 }
 
-// FileSync : Sync files uploaded to Elasticsearch deployment
-// Starts a task that writes files to disk. Available for Elasticsearch ONLY.
-func (cloudDatabases *CloudDatabasesV5) FileSync(fileSyncOptions *FileSyncOptions) (result *FileSyncResponse, response *core.DetailedResponse, err error) {
-	return cloudDatabases.FileSyncWithContext(context.Background(), fileSyncOptions)
-}
-
-// FileSyncWithContext is an alternate form of the FileSync method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) FileSyncWithContext(ctx context.Context, fileSyncOptions *FileSyncOptions) (result *FileSyncResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(fileSyncOptions, "fileSyncOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(fileSyncOptions, "fileSyncOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"id": *fileSyncOptions.ID,
-	}
-
-	builder := core.NewRequestBuilder(core.POST)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/elasticsearch/file_syncs`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range fileSyncOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "FileSync")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = cloudDatabases.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalFileSyncResponse)
-	if err != nil {
-		return
-	}
-	response.Result = result
-
-	return
-}
-
-// CreateLogicalReplicationSlot : Create a new logical replication slot
-// Creates a new logical replication slot on the specified database. For use with PostgreSQL, EnterpriseDB, and wal2json
-// only.
-func (cloudDatabases *CloudDatabasesV5) CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions) (result *CreateLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
-	return cloudDatabases.CreateLogicalReplicationSlotWithContext(context.Background(), createLogicalReplicationSlotOptions)
-}
-
-// CreateLogicalReplicationSlotWithContext is an alternate form of the CreateLogicalReplicationSlot method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) CreateLogicalReplicationSlotWithContext(ctx context.Context, createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions) (result *CreateLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(createLogicalReplicationSlotOptions, "createLogicalReplicationSlotOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(createLogicalReplicationSlotOptions, "createLogicalReplicationSlotOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"id": *createLogicalReplicationSlotOptions.ID,
-	}
-
-	builder := core.NewRequestBuilder(core.POST)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/postgresql/logical_replication_slots`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range createLogicalReplicationSlotOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "CreateLogicalReplicationSlot")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-	builder.AddHeader("Content-Type", "application/json")
-
-	body := make(map[string]interface{})
-	if createLogicalReplicationSlotOptions.LogicalReplicationSlot != nil {
-		body["logical_replication_slot"] = createLogicalReplicationSlotOptions.LogicalReplicationSlot
-	}
-	_, err = builder.SetBodyContentJSON(body)
-	if err != nil {
-		return
-	}
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = cloudDatabases.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCreateLogicalReplicationSlotResponse)
-	if err != nil {
-		return
-	}
-	response.Result = result
-
-	return
-}
-
-// DeleteLogicalReplicationSlot : Delete a logical replication slot
-// Deletes a logical replication slot from a database. For use with PostgreSQL, EnterpriseDB, and wal2json only.
-func (cloudDatabases *CloudDatabasesV5) DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions) (result *DeleteLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
-	return cloudDatabases.DeleteLogicalReplicationSlotWithContext(context.Background(), deleteLogicalReplicationSlotOptions)
-}
-
-// DeleteLogicalReplicationSlotWithContext is an alternate form of the DeleteLogicalReplicationSlot method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) DeleteLogicalReplicationSlotWithContext(ctx context.Context, deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions) (result *DeleteLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(deleteLogicalReplicationSlotOptions, "deleteLogicalReplicationSlotOptions cannot be nil")
-	if err != nil {
-		return
-	}
-	err = core.ValidateStruct(deleteLogicalReplicationSlotOptions, "deleteLogicalReplicationSlotOptions")
-	if err != nil {
-		return
-	}
-
-	pathParamsMap := map[string]string{
-		"id":   *deleteLogicalReplicationSlotOptions.ID,
-		"name": *deleteLogicalReplicationSlotOptions.Name,
-	}
-
-	builder := core.NewRequestBuilder(core.DELETE)
-	builder = builder.WithContext(ctx)
-	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/postgresql/logical_replication_slots/{name}`, pathParamsMap)
-	if err != nil {
-		return
-	}
-
-	for headerName, headerValue := range deleteLogicalReplicationSlotOptions.Headers {
-		builder.AddHeader(headerName, headerValue)
-	}
-
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "DeleteLogicalReplicationSlot")
-	for headerName, headerValue := range sdkHeaders {
-		builder.AddHeader(headerName, headerValue)
-	}
-	builder.AddHeader("Accept", "application/json")
-
-	request, err := builder.Build()
-	if err != nil {
-		return
-	}
-
-	var rawResponse map[string]json.RawMessage
-	response, err = cloudDatabases.Service.Request(request, &rawResponse)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDeleteLogicalReplicationSlotResponse)
-	if err != nil {
-		return
-	}
-	response.Result = result
-
-	return
-}
-
 // GetAllowlist : Retrieve the allowlisted addresses and ranges for a deployment
 // Retrieve the allowlisted addresses and ranges for a deployment.
 func (cloudDatabases *CloudDatabasesV5) GetAllowlist(getAllowlistOptions *GetAllowlistOptions) (result *Allowlist, response *core.DetailedResponse, err error) {
@@ -2001,27 +1698,27 @@ func (cloudDatabases *CloudDatabasesV5) GetAllowlistWithContext(ctx context.Cont
 	return
 }
 
-// ReplaceAllowlist : Replace the allowlist for a deployment
-// Replace the allowlist for a deployment. This action overwrites all existing entries, so when you modify the allowlist
-// via a GET/update/PUT, provide the GET response's ETag header value in this endpoint's If-Match header to ensure that
+// SetAllowlist : Set the allowlist for a deployment
+// Set the allowlist for a deployment. This action overwrites all existing entries, so when you modify the allowlist via
+// a GET/update/PUT, provide the GET response's ETag header value in this endpoint's If-Match header to ensure that
 // changes that are made by other clients are not accidentally overwritten.
-func (cloudDatabases *CloudDatabasesV5) ReplaceAllowlist(replaceAllowlistOptions *ReplaceAllowlistOptions) (result *ReplaceAllowlistResponse, response *core.DetailedResponse, err error) {
-	return cloudDatabases.ReplaceAllowlistWithContext(context.Background(), replaceAllowlistOptions)
+func (cloudDatabases *CloudDatabasesV5) SetAllowlist(setAllowlistOptions *SetAllowlistOptions) (result *SetAllowlistResponse, response *core.DetailedResponse, err error) {
+	return cloudDatabases.SetAllowlistWithContext(context.Background(), setAllowlistOptions)
 }
 
-// ReplaceAllowlistWithContext is an alternate form of the ReplaceAllowlist method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) ReplaceAllowlistWithContext(ctx context.Context, replaceAllowlistOptions *ReplaceAllowlistOptions) (result *ReplaceAllowlistResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(replaceAllowlistOptions, "replaceAllowlistOptions cannot be nil")
+// SetAllowlistWithContext is an alternate form of the SetAllowlist method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) SetAllowlistWithContext(ctx context.Context, setAllowlistOptions *SetAllowlistOptions) (result *SetAllowlistResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(setAllowlistOptions, "setAllowlistOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(replaceAllowlistOptions, "replaceAllowlistOptions")
+	err = core.ValidateStruct(setAllowlistOptions, "setAllowlistOptions")
 	if err != nil {
 		return
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *replaceAllowlistOptions.ID,
+		"id": *setAllowlistOptions.ID,
 	}
 
 	builder := core.NewRequestBuilder(core.PUT)
@@ -2032,23 +1729,23 @@ func (cloudDatabases *CloudDatabasesV5) ReplaceAllowlistWithContext(ctx context.
 		return
 	}
 
-	for headerName, headerValue := range replaceAllowlistOptions.Headers {
+	for headerName, headerValue := range setAllowlistOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "ReplaceAllowlist")
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "SetAllowlist")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
 	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
-	if replaceAllowlistOptions.IfMatch != nil {
-		builder.AddHeader("If-Match", fmt.Sprint(*replaceAllowlistOptions.IfMatch))
+	if setAllowlistOptions.IfMatch != nil {
+		builder.AddHeader("If-Match", fmt.Sprint(*setAllowlistOptions.IfMatch))
 	}
 
 	body := make(map[string]interface{})
-	if replaceAllowlistOptions.IPAddresses != nil {
-		body["ip_addresses"] = replaceAllowlistOptions.IPAddresses
+	if setAllowlistOptions.IPAddresses != nil {
+		body["ip_addresses"] = setAllowlistOptions.IPAddresses
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -2065,7 +1762,7 @@ func (cloudDatabases *CloudDatabasesV5) ReplaceAllowlistWithContext(ctx context.
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalReplaceAllowlistResponse)
+	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetAllowlistResponse)
 	if err != nil {
 		return
 	}
@@ -2840,65 +2537,6 @@ func UnmarshalChangeUserPasswordResponse(m map[string]json.RawMessage, result in
 	return
 }
 
-// ChoicePropertySchema : Choice Property Schema.
-type ChoicePropertySchema struct {
-	// Whether the setting is customer-configurable.
-	CustomerConfigurable *bool `json:"customer_configurable,omitempty"`
-
-	// The default value of the setting.
-	Default *int64 `json:"default,omitempty"`
-
-	// The description of the default value.
-	DefaultDescription *string `json:"default_description,omitempty"`
-
-	// The description of the setting.
-	Description *string `json:"description,omitempty"`
-
-	// The type of this setting (e.g., string, integer).
-	Kind *string `json:"kind,omitempty"`
-
-	// Whether or not changing this setting will restart the database.
-	RequiresRestart *bool `json:"requires_restart,omitempty"`
-
-	// The valid choices for this setting.
-	Choices []string `json:"choices,omitempty"`
-}
-
-// UnmarshalChoicePropertySchema unmarshals an instance of ChoicePropertySchema from the specified map of raw messages.
-func UnmarshalChoicePropertySchema(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ChoicePropertySchema)
-	err = core.UnmarshalPrimitive(m, "customer_configurable", &obj.CustomerConfigurable)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "default", &obj.Default)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "default_description", &obj.DefaultDescription)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "kind", &obj.Kind)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "requires_restart", &obj.RequiresRestart)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "choices", &obj.Choices)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // CompleteConnectionOptions : The CompleteConnection options.
 type CompleteConnectionOptions struct {
 	// Deployment ID.
@@ -2983,162 +2621,6 @@ func (options *CompleteConnectionOptions) SetCertificateRoot(certificateRoot str
 func (options *CompleteConnectionOptions) SetHeaders(param map[string]string) *CompleteConnectionOptions {
 	options.Headers = param
 	return options
-}
-
-// ConfigurationSchema : Database Configuration Schema.
-type ConfigurationSchema struct {
-	Schema ConfigurationSchemaSchemaIntf `json:"schema" validate:"required"`
-}
-
-// UnmarshalConfigurationSchema unmarshals an instance of ConfigurationSchema from the specified map of raw messages.
-func UnmarshalConfigurationSchema(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConfigurationSchema)
-	err = core.UnmarshalModel(m, "schema", &obj.Schema, UnmarshalConfigurationSchemaSchema)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConfigurationSchemaSchema : ConfigurationSchemaSchema struct
-// Models which "extend" this model:
-// - ConfigurationSchemaSchemaPgConfigurationSchema
-// - ConfigurationSchemaSchemaRedisConfigurationSchema
-type ConfigurationSchemaSchema struct {
-	// Integer Property Schema.
-	MaxConnections *IntegerPropertySchema `json:"max_connections,omitempty"`
-
-	// Integer Property Schema.
-	MaxPreparedConnections *IntegerPropertySchema `json:"max_prepared_connections,omitempty"`
-
-	// Integer Property Schema.
-	BackupRetentionPeriod *IntegerPropertySchema `json:"backup_retention_period,omitempty"`
-
-	// Integer Property Schema.
-	DeadlockTimeout *IntegerPropertySchema `json:"deadlock_timeout,omitempty"`
-
-	// Integer Property Schema.
-	EffectiveIoConcurrency *IntegerPropertySchema `json:"effective_io_concurrency,omitempty"`
-
-	// Integer Property Schema.
-	MaxReplicationSlots *IntegerPropertySchema `json:"max_replication_slots,omitempty"`
-
-	// Integer Property Schema.
-	MaxWalSenders *IntegerPropertySchema `json:"max_wal_senders,omitempty"`
-
-	// Integer Property Schema.
-	SharedBuffers *IntegerPropertySchema `json:"shared_buffers,omitempty"`
-
-	// Choice Property Schema.
-	SynchronousCommit *ChoicePropertySchema `json:"synchronous_commit,omitempty"`
-
-	// Choice Property Schema.
-	WalLevel *ChoicePropertySchema `json:"wal_level,omitempty"`
-
-	// Integer Property Schema.
-	ArchiveTimeout *IntegerPropertySchema `json:"archive_timeout,omitempty"`
-
-	// Integer Property Schema.
-	LogMinDurationStatement *IntegerPropertySchema `json:"log_min_duration_statement,omitempty"`
-
-	// Integer Property Schema.
-	MaxmemoryRedis *IntegerPropertySchema `json:"maxmemory-redis,omitempty"`
-
-	// Choice Property Schema.
-	MaxmemoryPolicy *ChoicePropertySchema `json:"maxmemory-policy,omitempty"`
-
-	// Choice Property Schema.
-	Appendonly *ChoicePropertySchema `json:"appendonly,omitempty"`
-
-	// Integer Property Schema.
-	MaxmemorySamples *IntegerPropertySchema `json:"maxmemory-samples,omitempty"`
-
-	// Choice Property Schema.
-	StopWritesOnBgsaveError *ChoicePropertySchema `json:"stop-writes-on-bgsave-error,omitempty"`
-}
-
-func (*ConfigurationSchemaSchema) isaConfigurationSchemaSchema() bool {
-	return true
-}
-
-type ConfigurationSchemaSchemaIntf interface {
-	isaConfigurationSchemaSchema() bool
-}
-
-// UnmarshalConfigurationSchemaSchema unmarshals an instance of ConfigurationSchemaSchema from the specified map of raw messages.
-func UnmarshalConfigurationSchemaSchema(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConfigurationSchemaSchema)
-	err = core.UnmarshalModel(m, "max_connections", &obj.MaxConnections, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "max_prepared_connections", &obj.MaxPreparedConnections, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "backup_retention_period", &obj.BackupRetentionPeriod, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "deadlock_timeout", &obj.DeadlockTimeout, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "effective_io_concurrency", &obj.EffectiveIoConcurrency, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "max_replication_slots", &obj.MaxReplicationSlots, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "max_wal_senders", &obj.MaxWalSenders, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "shared_buffers", &obj.SharedBuffers, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "synchronous_commit", &obj.SynchronousCommit, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "wal_level", &obj.WalLevel, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "archive_timeout", &obj.ArchiveTimeout, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "log_min_duration_statement", &obj.LogMinDurationStatement, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "maxmemory-redis", &obj.MaxmemoryRedis, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "maxmemory-policy", &obj.MaxmemoryPolicy, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "appendonly", &obj.Appendonly, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "maxmemory-samples", &obj.MaxmemorySamples, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "stop-writes-on-bgsave-error", &obj.StopWritesOnBgsaveError, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
 }
 
 // Connection : Connection struct
@@ -3413,58 +2895,6 @@ func UnmarshalCreateDatabaseUserResponse(m map[string]json.RawMessage, result in
 	return
 }
 
-// CreateLogicalReplicationSlotOptions : The CreateLogicalReplicationSlot options.
-type CreateLogicalReplicationSlotOptions struct {
-	// Deployment ID.
-	ID *string `validate:"required,ne="`
-
-	LogicalReplicationSlot *LogicalReplicationSlotLogicalReplicationSlot
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewCreateLogicalReplicationSlotOptions : Instantiate CreateLogicalReplicationSlotOptions
-func (*CloudDatabasesV5) NewCreateLogicalReplicationSlotOptions(id string) *CreateLogicalReplicationSlotOptions {
-	return &CreateLogicalReplicationSlotOptions{
-		ID: core.StringPtr(id),
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *CreateLogicalReplicationSlotOptions) SetID(id string) *CreateLogicalReplicationSlotOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetLogicalReplicationSlot : Allow user to set LogicalReplicationSlot
-func (options *CreateLogicalReplicationSlotOptions) SetLogicalReplicationSlot(logicalReplicationSlot *LogicalReplicationSlotLogicalReplicationSlot) *CreateLogicalReplicationSlotOptions {
-	options.LogicalReplicationSlot = logicalReplicationSlot
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *CreateLogicalReplicationSlotOptions) SetHeaders(param map[string]string) *CreateLogicalReplicationSlotOptions {
-	options.Headers = param
-	return options
-}
-
-// CreateLogicalReplicationSlotResponse : CreateLogicalReplicationSlotResponse struct
-type CreateLogicalReplicationSlotResponse struct {
-	Task *Task `json:"task,omitempty"`
-}
-
-// UnmarshalCreateLogicalReplicationSlotResponse unmarshals an instance of CreateLogicalReplicationSlotResponse from the specified map of raw messages.
-func UnmarshalCreateLogicalReplicationSlotResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CreateLogicalReplicationSlotResponse)
-	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // DeleteAllowlistEntryOptions : The DeleteAllowlistEntry options.
 type DeleteAllowlistEntryOptions struct {
 	// Deployment ID.
@@ -3575,60 +3005,6 @@ type DeleteDatabaseUserResponse struct {
 // UnmarshalDeleteDatabaseUserResponse unmarshals an instance of DeleteDatabaseUserResponse from the specified map of raw messages.
 func UnmarshalDeleteDatabaseUserResponse(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(DeleteDatabaseUserResponse)
-	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// DeleteLogicalReplicationSlotOptions : The DeleteLogicalReplicationSlot options.
-type DeleteLogicalReplicationSlotOptions struct {
-	// Deployment ID.
-	ID *string `validate:"required,ne="`
-
-	// Name of the logical replication slot.
-	Name *string `validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewDeleteLogicalReplicationSlotOptions : Instantiate DeleteLogicalReplicationSlotOptions
-func (*CloudDatabasesV5) NewDeleteLogicalReplicationSlotOptions(id string, name string) *DeleteLogicalReplicationSlotOptions {
-	return &DeleteLogicalReplicationSlotOptions{
-		ID:   core.StringPtr(id),
-		Name: core.StringPtr(name),
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *DeleteLogicalReplicationSlotOptions) SetID(id string) *DeleteLogicalReplicationSlotOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetName : Allow user to set Name
-func (options *DeleteLogicalReplicationSlotOptions) SetName(name string) *DeleteLogicalReplicationSlotOptions {
-	options.Name = core.StringPtr(name)
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *DeleteLogicalReplicationSlotOptions) SetHeaders(param map[string]string) *DeleteLogicalReplicationSlotOptions {
-	options.Headers = param
-	return options
-}
-
-// DeleteLogicalReplicationSlotResponse : DeleteLogicalReplicationSlotResponse struct
-type DeleteLogicalReplicationSlotResponse struct {
-	Task *Task `json:"task,omitempty"`
-}
-
-// UnmarshalDeleteLogicalReplicationSlotResponse unmarshals an instance of DeleteLogicalReplicationSlotResponse from the specified map of raw messages.
-func UnmarshalDeleteLogicalReplicationSlotResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(DeleteLogicalReplicationSlotResponse)
 	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
 	if err != nil {
 		return
@@ -3954,50 +3330,6 @@ func UnmarshalElasticsearchConnectionHTTPSHostsItem(m map[string]json.RawMessage
 	return
 }
 
-// FileSyncOptions : The FileSync options.
-type FileSyncOptions struct {
-	// Deployment ID.
-	ID *string `validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewFileSyncOptions : Instantiate FileSyncOptions
-func (*CloudDatabasesV5) NewFileSyncOptions(id string) *FileSyncOptions {
-	return &FileSyncOptions{
-		ID: core.StringPtr(id),
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *FileSyncOptions) SetID(id string) *FileSyncOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *FileSyncOptions) SetHeaders(param map[string]string) *FileSyncOptions {
-	options.Headers = param
-	return options
-}
-
-// FileSyncResponse : FileSyncResponse struct
-type FileSyncResponse struct {
-	Task *Task `json:"task,omitempty"`
-}
-
-// UnmarshalFileSyncResponse unmarshals an instance of FileSyncResponse from the specified map of raw messages.
-func UnmarshalFileSyncResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(FileSyncResponse)
-	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // GrpcConnectionURI : GrpcConnectionURI struct
 type GrpcConnectionURI struct {
 	// Type of connection being described.
@@ -4245,34 +3577,6 @@ func (options *GetConnectionOptions) SetHeaders(param map[string]string) *GetCon
 	return options
 }
 
-// GetDatabaseConfigurationSchemaOptions : The GetDatabaseConfigurationSchema options.
-type GetDatabaseConfigurationSchemaOptions struct {
-	// Deployment ID.
-	ID *string `validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewGetDatabaseConfigurationSchemaOptions : Instantiate GetDatabaseConfigurationSchemaOptions
-func (*CloudDatabasesV5) NewGetDatabaseConfigurationSchemaOptions(id string) *GetDatabaseConfigurationSchemaOptions {
-	return &GetDatabaseConfigurationSchemaOptions{
-		ID: core.StringPtr(id),
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *GetDatabaseConfigurationSchemaOptions) SetID(id string) *GetDatabaseConfigurationSchemaOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *GetDatabaseConfigurationSchemaOptions) SetHeaders(param map[string]string) *GetDatabaseConfigurationSchemaOptions {
-	options.Headers = param
-	return options
-}
-
 // GetDefaultScalingGroupsOptions : The GetDefaultScalingGroups options.
 type GetDefaultScalingGroupsOptions struct {
 	// Database type name.
@@ -4380,50 +3684,6 @@ func (options *GetPitRdataOptions) SetHeaders(param map[string]string) *GetPitRd
 	return options
 }
 
-// GetRemotesSchemaOptions : The GetRemotesSchema options.
-type GetRemotesSchemaOptions struct {
-	// Deployment ID.
-	ID *string `validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewGetRemotesSchemaOptions : Instantiate GetRemotesSchemaOptions
-func (*CloudDatabasesV5) NewGetRemotesSchemaOptions(id string) *GetRemotesSchemaOptions {
-	return &GetRemotesSchemaOptions{
-		ID: core.StringPtr(id),
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *GetRemotesSchemaOptions) SetID(id string) *GetRemotesSchemaOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *GetRemotesSchemaOptions) SetHeaders(param map[string]string) *GetRemotesSchemaOptions {
-	options.Headers = param
-	return options
-}
-
-// GetRemotesSchemaResponse : GetRemotesSchemaResponse struct
-type GetRemotesSchemaResponse struct {
-	Task *Task `json:"task,omitempty"`
-}
-
-// UnmarshalGetRemotesSchemaResponse unmarshals an instance of GetRemotesSchemaResponse from the specified map of raw messages.
-func UnmarshalGetRemotesSchemaResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(GetRemotesSchemaResponse)
-	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // GetTaskOptions : The GetTask options.
 type GetTaskOptions struct {
 	// Task ID.
@@ -4466,44 +3726,6 @@ func UnmarshalGetTaskResponse(m map[string]json.RawMessage, result interface{}) 
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
 	return
-}
-
-// GetUserOptions : The GetUser options.
-type GetUserOptions struct {
-	// Deployment ID.
-	ID *string `validate:"required,ne="`
-
-	// User ID.
-	UserID *string `validate:"required,ne="`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewGetUserOptions : Instantiate GetUserOptions
-func (*CloudDatabasesV5) NewGetUserOptions(id string, userID string) *GetUserOptions {
-	return &GetUserOptions{
-		ID:     core.StringPtr(id),
-		UserID: core.StringPtr(userID),
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *GetUserOptions) SetID(id string) *GetUserOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetUserID : Allow user to set UserID
-func (options *GetUserOptions) SetUserID(userID string) *GetUserOptions {
-	options.UserID = core.StringPtr(userID)
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *GetUserOptions) SetHeaders(param map[string]string) *GetUserOptions {
-	options.Headers = param
-	return options
 }
 
 // Group : Group struct
@@ -4913,79 +4135,6 @@ func UnmarshalGrpcConnectionURIHostsItem(m map[string]json.RawMessage, result in
 	return
 }
 
-// IntegerPropertySchema : Integer Property Schema.
-type IntegerPropertySchema struct {
-	// Whether the setting is customer-configurable.
-	CustomerConfigurable *bool `json:"customer_configurable,omitempty"`
-
-	// The default value of the setting.
-	Default *int64 `json:"default,omitempty"`
-
-	// The description of the default value.
-	DefaultDescription *string `json:"default_description,omitempty"`
-
-	// The description of the setting.
-	Description *string `json:"description,omitempty"`
-
-	// The type of this setting (e.g., string, integer).
-	Kind *string `json:"kind,omitempty"`
-
-	// Whether or not changing this setting will restart the database.
-	RequiresRestart *bool `json:"requires_restart,omitempty"`
-
-	// The minimum value that this setting accepts.
-	Min *int64 `json:"min,omitempty"`
-
-	// The maximum value that this setting accepts.
-	Max *int64 `json:"max,omitempty"`
-
-	// The number that should be skipped between each step of a slider rendered for this setting.
-	Step *int64 `json:"step,omitempty"`
-}
-
-// UnmarshalIntegerPropertySchema unmarshals an instance of IntegerPropertySchema from the specified map of raw messages.
-func UnmarshalIntegerPropertySchema(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(IntegerPropertySchema)
-	err = core.UnmarshalPrimitive(m, "customer_configurable", &obj.CustomerConfigurable)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "default", &obj.Default)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "default_description", &obj.DefaultDescription)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "kind", &obj.Kind)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "requires_restart", &obj.RequiresRestart)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "min", &obj.Min)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "max", &obj.Max)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "step", &obj.Step)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // KillConnectionsOptions : The KillConnections options.
 type KillConnectionsOptions struct {
 	// Deployment ID.
@@ -5221,37 +4370,6 @@ type ListRemotesResponse struct {
 func UnmarshalListRemotesResponse(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(ListRemotesResponse)
 	err = core.UnmarshalModel(m, "remotes", &obj.Remotes, UnmarshalRemotes)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// LogicalReplicationSlotLogicalReplicationSlot : LogicalReplicationSlotLogicalReplicationSlot struct
-type LogicalReplicationSlotLogicalReplicationSlot struct {
-	// name of the replication slot.
-	Name *string `json:"name,omitempty"`
-
-	// name of the database the replication slot is created on.
-	DatabaseName *string `json:"database_name,omitempty"`
-
-	// creating a replication slot is only supported for use with wal2json.
-	PluginType *string `json:"plugin_type,omitempty"`
-}
-
-// UnmarshalLogicalReplicationSlotLogicalReplicationSlot unmarshals an instance of LogicalReplicationSlotLogicalReplicationSlot from the specified map of raw messages.
-func UnmarshalLogicalReplicationSlotLogicalReplicationSlot(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(LogicalReplicationSlotLogicalReplicationSlot)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "database_name", &obj.DatabaseName)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "plugin_type", &obj.PluginType)
 	if err != nil {
 		return
 	}
@@ -6307,8 +5425,52 @@ func UnmarshalRemotes(m map[string]json.RawMessage, result interface{}) (err err
 	return
 }
 
-// ReplaceAllowlistOptions : The ReplaceAllowlist options.
-type ReplaceAllowlistOptions struct {
+// ResyncReplicaOptions : The ResyncReplica options.
+type ResyncReplicaOptions struct {
+	// Deployment ID of the read-only replica.
+	ID *string `validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewResyncReplicaOptions : Instantiate ResyncReplicaOptions
+func (*CloudDatabasesV5) NewResyncReplicaOptions(id string) *ResyncReplicaOptions {
+	return &ResyncReplicaOptions{
+		ID: core.StringPtr(id),
+	}
+}
+
+// SetID : Allow user to set ID
+func (options *ResyncReplicaOptions) SetID(id string) *ResyncReplicaOptions {
+	options.ID = core.StringPtr(id)
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *ResyncReplicaOptions) SetHeaders(param map[string]string) *ResyncReplicaOptions {
+	options.Headers = param
+	return options
+}
+
+// ResyncReplicaResponse : ResyncReplicaResponse struct
+type ResyncReplicaResponse struct {
+	Task *Task `json:"task,omitempty"`
+}
+
+// UnmarshalResyncReplicaResponse unmarshals an instance of ResyncReplicaResponse from the specified map of raw messages.
+func UnmarshalResyncReplicaResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ResyncReplicaResponse)
+	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// SetAllowlistOptions : The SetAllowlist options.
+type SetAllowlistOptions struct {
 	// Deployment ID.
 	ID *string `validate:"required,ne="`
 
@@ -6323,45 +5485,45 @@ type ReplaceAllowlistOptions struct {
 	Headers map[string]string
 }
 
-// NewReplaceAllowlistOptions : Instantiate ReplaceAllowlistOptions
-func (*CloudDatabasesV5) NewReplaceAllowlistOptions(id string) *ReplaceAllowlistOptions {
-	return &ReplaceAllowlistOptions{
+// NewSetAllowlistOptions : Instantiate SetAllowlistOptions
+func (*CloudDatabasesV5) NewSetAllowlistOptions(id string) *SetAllowlistOptions {
+	return &SetAllowlistOptions{
 		ID: core.StringPtr(id),
 	}
 }
 
 // SetID : Allow user to set ID
-func (options *ReplaceAllowlistOptions) SetID(id string) *ReplaceAllowlistOptions {
+func (options *SetAllowlistOptions) SetID(id string) *SetAllowlistOptions {
 	options.ID = core.StringPtr(id)
 	return options
 }
 
 // SetIPAddresses : Allow user to set IPAddresses
-func (options *ReplaceAllowlistOptions) SetIPAddresses(ipAddresses []AllowlistEntry) *ReplaceAllowlistOptions {
+func (options *SetAllowlistOptions) SetIPAddresses(ipAddresses []AllowlistEntry) *SetAllowlistOptions {
 	options.IPAddresses = ipAddresses
 	return options
 }
 
 // SetIfMatch : Allow user to set IfMatch
-func (options *ReplaceAllowlistOptions) SetIfMatch(ifMatch string) *ReplaceAllowlistOptions {
+func (options *SetAllowlistOptions) SetIfMatch(ifMatch string) *SetAllowlistOptions {
 	options.IfMatch = core.StringPtr(ifMatch)
 	return options
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *ReplaceAllowlistOptions) SetHeaders(param map[string]string) *ReplaceAllowlistOptions {
+func (options *SetAllowlistOptions) SetHeaders(param map[string]string) *SetAllowlistOptions {
 	options.Headers = param
 	return options
 }
 
-// ReplaceAllowlistResponse : ReplaceAllowlistResponse struct
-type ReplaceAllowlistResponse struct {
+// SetAllowlistResponse : SetAllowlistResponse struct
+type SetAllowlistResponse struct {
 	Task *Task `json:"task,omitempty"`
 }
 
-// UnmarshalReplaceAllowlistResponse unmarshals an instance of ReplaceAllowlistResponse from the specified map of raw messages.
-func UnmarshalReplaceAllowlistResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ReplaceAllowlistResponse)
+// UnmarshalSetAllowlistResponse unmarshals an instance of SetAllowlistResponse from the specified map of raw messages.
+func UnmarshalSetAllowlistResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(SetAllowlistResponse)
 	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
 	if err != nil {
 		return
@@ -6626,59 +5788,6 @@ func UnmarshalSetConfigurationConfiguration(m map[string]json.RawMessage, result
 	return
 }
 
-// SetDatabaseConfigurationOptions : The SetDatabaseConfiguration options.
-type SetDatabaseConfigurationOptions struct {
-	// Deployment ID.
-	ID *string `validate:"required,ne="`
-
-	Configuration SetConfigurationConfigurationIntf `validate:"required"`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewSetDatabaseConfigurationOptions : Instantiate SetDatabaseConfigurationOptions
-func (*CloudDatabasesV5) NewSetDatabaseConfigurationOptions(id string, configuration SetConfigurationConfigurationIntf) *SetDatabaseConfigurationOptions {
-	return &SetDatabaseConfigurationOptions{
-		ID:            core.StringPtr(id),
-		Configuration: configuration,
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *SetDatabaseConfigurationOptions) SetID(id string) *SetDatabaseConfigurationOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetConfiguration : Allow user to set Configuration
-func (options *SetDatabaseConfigurationOptions) SetConfiguration(configuration SetConfigurationConfigurationIntf) *SetDatabaseConfigurationOptions {
-	options.Configuration = configuration
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *SetDatabaseConfigurationOptions) SetHeaders(param map[string]string) *SetDatabaseConfigurationOptions {
-	options.Headers = param
-	return options
-}
-
-// SetDatabaseConfigurationResponse : SetDatabaseConfigurationResponse struct
-type SetDatabaseConfigurationResponse struct {
-	Task *Task `json:"task,omitempty"`
-}
-
-// UnmarshalSetDatabaseConfigurationResponse unmarshals an instance of SetDatabaseConfigurationResponse from the specified map of raw messages.
-func UnmarshalSetDatabaseConfigurationResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetDatabaseConfigurationResponse)
-	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // SetDeploymentScalingGroupOptions : The SetDeploymentScalingGroup options.
 type SetDeploymentScalingGroupOptions struct {
 	// Deployment ID.
@@ -6843,7 +5952,7 @@ func UnmarshalSetMemoryGroupMemory(m map[string]json.RawMessage, result interfac
 
 // SetPromotionOptions : The SetPromotion options.
 type SetPromotionOptions struct {
-	// Deployment ID.
+	// Deployment ID of the read-only replica to promote.
 	ID *string `validate:"required,ne="`
 
 	Promotion SetPromotionPromotionIntf `validate:"required"`
@@ -7042,6 +6151,59 @@ func UnmarshalTasks(m map[string]json.RawMessage, result interface{}) (err error
 	return
 }
 
+// UpdateDatabaseConfigurationOptions : The UpdateDatabaseConfiguration options.
+type UpdateDatabaseConfigurationOptions struct {
+	// Deployment ID.
+	ID *string `validate:"required,ne="`
+
+	Configuration SetConfigurationConfigurationIntf `validate:"required"`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewUpdateDatabaseConfigurationOptions : Instantiate UpdateDatabaseConfigurationOptions
+func (*CloudDatabasesV5) NewUpdateDatabaseConfigurationOptions(id string, configuration SetConfigurationConfigurationIntf) *UpdateDatabaseConfigurationOptions {
+	return &UpdateDatabaseConfigurationOptions{
+		ID:            core.StringPtr(id),
+		Configuration: configuration,
+	}
+}
+
+// SetID : Allow user to set ID
+func (options *UpdateDatabaseConfigurationOptions) SetID(id string) *UpdateDatabaseConfigurationOptions {
+	options.ID = core.StringPtr(id)
+	return options
+}
+
+// SetConfiguration : Allow user to set Configuration
+func (options *UpdateDatabaseConfigurationOptions) SetConfiguration(configuration SetConfigurationConfigurationIntf) *UpdateDatabaseConfigurationOptions {
+	options.Configuration = configuration
+	return options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *UpdateDatabaseConfigurationOptions) SetHeaders(param map[string]string) *UpdateDatabaseConfigurationOptions {
+	options.Headers = param
+	return options
+}
+
+// UpdateDatabaseConfigurationResponse : UpdateDatabaseConfigurationResponse struct
+type UpdateDatabaseConfigurationResponse struct {
+	Task *Task `json:"task,omitempty"`
+}
+
+// UnmarshalUpdateDatabaseConfigurationResponse unmarshals an instance of UpdateDatabaseConfigurationResponse from the specified map of raw messages.
+func UnmarshalUpdateDatabaseConfigurationResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(UpdateDatabaseConfigurationResponse)
+	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // AutoscalingSetGroupAutoscalingAutoscalingCPUGroup : AutoscalingSetGroupAutoscalingAutoscalingCPUGroup struct
 // This model "extends" AutoscalingSetGroupAutoscaling
 type AutoscalingSetGroupAutoscalingAutoscalingCPUGroup struct {
@@ -7098,155 +6260,6 @@ func (*AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup) isaAutoscalingSetGr
 func UnmarshalAutoscalingSetGroupAutoscalingAutoscalingMemoryGroup(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup)
 	err = core.UnmarshalModel(m, "memory", &obj.Memory, UnmarshalAutoscalingMemoryGroupMemory)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConfigurationSchemaSchemaPgConfigurationSchema : PostgreSQL and EnterpriseDB Configuration Schema.
-// This model "extends" ConfigurationSchemaSchema
-type ConfigurationSchemaSchemaPgConfigurationSchema struct {
-	// Integer Property Schema.
-	MaxConnections *IntegerPropertySchema `json:"max_connections" validate:"required"`
-
-	// Integer Property Schema.
-	MaxPreparedConnections *IntegerPropertySchema `json:"max_prepared_connections" validate:"required"`
-
-	// Integer Property Schema.
-	BackupRetentionPeriod *IntegerPropertySchema `json:"backup_retention_period" validate:"required"`
-
-	// Integer Property Schema.
-	DeadlockTimeout *IntegerPropertySchema `json:"deadlock_timeout" validate:"required"`
-
-	// Integer Property Schema.
-	EffectiveIoConcurrency *IntegerPropertySchema `json:"effective_io_concurrency" validate:"required"`
-
-	// Integer Property Schema.
-	MaxReplicationSlots *IntegerPropertySchema `json:"max_replication_slots" validate:"required"`
-
-	// Integer Property Schema.
-	MaxWalSenders *IntegerPropertySchema `json:"max_wal_senders" validate:"required"`
-
-	// Integer Property Schema.
-	SharedBuffers *IntegerPropertySchema `json:"shared_buffers" validate:"required"`
-
-	// Choice Property Schema.
-	SynchronousCommit *ChoicePropertySchema `json:"synchronous_commit" validate:"required"`
-
-	// Choice Property Schema.
-	WalLevel *ChoicePropertySchema `json:"wal_level" validate:"required"`
-
-	// Integer Property Schema.
-	ArchiveTimeout *IntegerPropertySchema `json:"archive_timeout" validate:"required"`
-
-	// Integer Property Schema.
-	LogMinDurationStatement *IntegerPropertySchema `json:"log_min_duration_statement" validate:"required"`
-}
-
-func (*ConfigurationSchemaSchemaPgConfigurationSchema) isaConfigurationSchemaSchema() bool {
-	return true
-}
-
-// UnmarshalConfigurationSchemaSchemaPgConfigurationSchema unmarshals an instance of ConfigurationSchemaSchemaPgConfigurationSchema from the specified map of raw messages.
-func UnmarshalConfigurationSchemaSchemaPgConfigurationSchema(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConfigurationSchemaSchemaPgConfigurationSchema)
-	err = core.UnmarshalModel(m, "max_connections", &obj.MaxConnections, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "max_prepared_connections", &obj.MaxPreparedConnections, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "backup_retention_period", &obj.BackupRetentionPeriod, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "deadlock_timeout", &obj.DeadlockTimeout, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "effective_io_concurrency", &obj.EffectiveIoConcurrency, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "max_replication_slots", &obj.MaxReplicationSlots, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "max_wal_senders", &obj.MaxWalSenders, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "shared_buffers", &obj.SharedBuffers, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "synchronous_commit", &obj.SynchronousCommit, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "wal_level", &obj.WalLevel, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "archive_timeout", &obj.ArchiveTimeout, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "log_min_duration_statement", &obj.LogMinDurationStatement, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConfigurationSchemaSchemaRedisConfigurationSchema : Redis Configuration Schema.
-// This model "extends" ConfigurationSchemaSchema
-type ConfigurationSchemaSchemaRedisConfigurationSchema struct {
-	// Integer Property Schema.
-	MaxmemoryRedis *IntegerPropertySchema `json:"maxmemory-redis" validate:"required"`
-
-	// Choice Property Schema.
-	MaxmemoryPolicy *ChoicePropertySchema `json:"maxmemory-policy" validate:"required"`
-
-	// Choice Property Schema.
-	Appendonly *ChoicePropertySchema `json:"appendonly" validate:"required"`
-
-	// Integer Property Schema.
-	MaxmemorySamples *IntegerPropertySchema `json:"maxmemory-samples" validate:"required"`
-
-	// Choice Property Schema.
-	StopWritesOnBgsaveError *ChoicePropertySchema `json:"stop-writes-on-bgsave-error" validate:"required"`
-}
-
-func (*ConfigurationSchemaSchemaRedisConfigurationSchema) isaConfigurationSchemaSchema() bool {
-	return true
-}
-
-// UnmarshalConfigurationSchemaSchemaRedisConfigurationSchema unmarshals an instance of ConfigurationSchemaSchemaRedisConfigurationSchema from the specified map of raw messages.
-func UnmarshalConfigurationSchemaSchemaRedisConfigurationSchema(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConfigurationSchemaSchemaRedisConfigurationSchema)
-	err = core.UnmarshalModel(m, "maxmemory-redis", &obj.MaxmemoryRedis, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "maxmemory-policy", &obj.MaxmemoryPolicy, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "appendonly", &obj.Appendonly, UnmarshalChoicePropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "maxmemory-samples", &obj.MaxmemorySamples, UnmarshalIntegerPropertySchema)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "stop-writes-on-bgsave-error", &obj.StopWritesOnBgsaveError, UnmarshalChoicePropertySchema)
 	if err != nil {
 		return
 	}

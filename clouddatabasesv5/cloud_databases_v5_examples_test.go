@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/IBM/go-sdk-core/v5/core"
 	. "github.com/onsi/ginkgo"
@@ -34,9 +35,9 @@ import (
 //
 // The following configuration properties are assumed to be defined:
 // CLOUD_DATABASES_URL=<service base url>
-// CLOUD_DATABASES_AUTH_TYPE=iam
 // CLOUD_DATABASES_APIKEY=<IAM apikey>
-// CLOUD_DATABASES_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+// CLOUD_DATABASES_DEPLOYMENT_ID=<ID of an example deployment>
+// CLOUD_DATABASES_REPLICA_ID=<ID of an example replica>
 //
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
@@ -48,12 +49,56 @@ var (
 	cloudDatabasesService *clouddatabasesv5.CloudDatabasesV5
 	config                map[string]string
 	configLoaded          bool = false
+
+	IPAddress1         string = "195.212.0.0/16"
+	IPAddress3         string = "172.16.0.0/16"
+	username           string = "exampleUsername"
+	password           string = "examplePassword"
+	newPassword        string = "exampleNewPassword"
+	userType           string = "database"
+	autoScalingGroupID string = "member"
+
+	deploymentID string
+	replicaID    string
+
+	backupIDLink       string
+	scalingGroupIDLink string
 )
 
 // Globlal variables to hold link values
 var (
 	taskIDLink string
 )
+
+var waitForTask = func(taskID string) {
+	getTaskOptions := &clouddatabasesv5.GetTaskOptions{
+		ID: &taskID,
+	}
+
+	// If the task runs for more than a minute, then we'll consider it to have succeeded.
+	for complete, attempts := false, 0; !complete && attempts < 30; attempts++ {
+		getTaskResponse, response, err := cloudDatabasesService.GetTask(getTaskOptions)
+
+		Expect(err).To(BeNil())
+		Expect(response.StatusCode).To(Equal(200))
+		Expect(getTaskResponse).ToNot(BeNil())
+
+		if getTaskResponse.Task == nil {
+			complete = true
+		} else {
+			switch *getTaskResponse.Task.Status {
+			case "completed", "failed":
+				complete = true
+				Expect(*getTaskResponse.Task.Status).To(Equal("completed"))
+			case "queued", "running":
+				break // from switch, not from for
+			default:
+				fmt.Println("status is " + *getTaskResponse.Task.Status)
+			}
+		}
+		time.Sleep(2 * time.Second)
+	}
+}
 
 func shouldSkipTest() {
 	if !configLoaded {
@@ -75,6 +120,12 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			if err != nil {
 				Skip("Error loading service properties, skipping tests: " + err.Error())
 			}
+
+			deploymentID = config["DEPLOYMENT_ID"]
+			Expect(deploymentID).ToNot(BeEmpty())
+
+			replicaID = config["REPLICA_ID"]
+			Expect(replicaID).ToNot(BeEmpty())
 
 			configLoaded = len(config) > 0
 		})
@@ -108,11 +159,18 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			shouldSkipTest()
 		})
 		It(`AddAllowlistEntry request example`, func() {
+			fmt.Println("\nAddAllowlistEntry() result:")
 			// begin-addAllowlistEntry
 
+			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
+				Address:     &IPAddress3,
+				Description: core.StringPtr("Dev IP space 3"),
+			}
+
 			addAllowlistEntryOptions := cloudDatabasesService.NewAddAllowlistEntryOptions(
-				"testString",
+				deploymentID,
 			)
+			addAllowlistEntryOptions.SetIPAddress(allowlistEntryModel)
 
 			addAllowlistEntryResponse, response, err := cloudDatabasesService.AddAllowlistEntry(addAllowlistEntryOptions)
 			if err != nil {
@@ -129,37 +187,15 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 
 			taskIDLink = *addAllowlistEntryResponse.Task.ID
 
-		})
-		It(`CreateDatabaseUser request example`, func() {
-			// begin-createDatabaseUser
-
-			createDatabaseUserOptions := cloudDatabasesService.NewCreateDatabaseUserOptions(
-				"testString",
-				"testString",
-			)
-
-			createDatabaseUserResponse, response, err := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(createDatabaseUserResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-createDatabaseUser
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(createDatabaseUserResponse).ToNot(BeNil())
-
-			taskIDLink = *createDatabaseUserResponse.Task.ID
-
+			waitForTask(taskIDLink)
 		})
 		It(`DeleteAllowlistEntry request example`, func() {
+			fmt.Println("\nDeleteAllowlistEntry() result:")
 			// begin-deleteAllowlistEntry
 
 			deleteAllowlistEntryOptions := cloudDatabasesService.NewDeleteAllowlistEntryOptions(
-				"testString",
-				"testString",
+				deploymentID,
+				IPAddress3,
 			)
 
 			deleteAllowlistEntryResponse, response, err := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptions)
@@ -177,14 +213,79 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 
 			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
 
+			waitForTask(taskIDLink)
+		})
+		It(`CreateDatabaseUser request example`, func() {
+			fmt.Println("\nCreateDatabaseUser() result:")
+			// begin-createDatabaseUser
+
+			createDatabaseUserRequestUserModel := &clouddatabasesv5.CreateDatabaseUserRequestUser{
+				Username: &username,
+				Password: &password,
+			}
+
+			createDatabaseUserOptions := cloudDatabasesService.NewCreateDatabaseUserOptions(
+				deploymentID,
+				userType,
+			)
+			createDatabaseUserOptions.SetUser(createDatabaseUserRequestUserModel)
+
+			createDatabaseUserResponse, response, err := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(createDatabaseUserResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-createDatabaseUser
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(createDatabaseUserResponse).ToNot(BeNil())
+
+			taskIDLink = *createDatabaseUserResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+		It(`ChangeUserPassword request example`, func() {
+			// begin-changeUserPassword
+
+			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
+				Password: &newPassword,
+			}
+
+			changeUserPasswordOptions := cloudDatabasesService.NewChangeUserPasswordOptions(
+				deploymentID,
+				userType,
+				username,
+			)
+			changeUserPasswordOptions.SetUser(aPasswordSettingUserModel)
+
+			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(changeUserPasswordResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-changeUserPassword
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(changeUserPasswordResponse).ToNot(BeNil())
+
+			taskIDLink = *changeUserPasswordResponse.Task.ID
+
+			waitForTask(taskIDLink)
 		})
 		It(`DeleteDatabaseUser request example`, func() {
+			fmt.Println("\nDeleteDatabaseUser() result:")
 			// begin-deleteDatabaseUser
 
 			deleteDatabaseUserOptions := cloudDatabasesService.NewDeleteDatabaseUserOptions(
-				"testString",
-				"testString",
-				"testString",
+				deploymentID,
+				userType,
+				username,
 			)
 
 			deleteDatabaseUserResponse, response, err := cloudDatabasesService.DeleteDatabaseUser(deleteDatabaseUserOptions)
@@ -202,58 +303,160 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 
 			taskIDLink = *deleteDatabaseUserResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
-		It(`ReplaceAllowlist request example`, func() {
-			// begin-replaceAllowlist
+		It(`KillConnections request example`, func() {
+			fmt.Println("\nKillConnections()) result:")
+			// begin-killConnections
 
-			replaceAllowlistOptions := cloudDatabasesService.NewReplaceAllowlistOptions(
-				"testString",
+			killConnectionsOptions := cloudDatabasesService.NewKillConnectionsOptions(
+				deploymentID,
 			)
 
-			replaceAllowlistResponse, response, err := cloudDatabasesService.ReplaceAllowlist(replaceAllowlistOptions)
+			killConnectionsResponse, response, err := cloudDatabasesService.KillConnections(killConnectionsOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(replaceAllowlistResponse, "", "  ")
+			b, _ := json.MarshalIndent(killConnectionsResponse, "", "  ")
 			fmt.Println(string(b))
 
-			// end-replaceAllowlist
+			// end-killConnections
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(replaceAllowlistResponse).ToNot(BeNil())
+			Expect(killConnectionsResponse).ToNot(BeNil())
 
-			taskIDLink = *replaceAllowlistResponse.Task.ID
+			taskIDLink = *killConnectionsResponse.Task.ID
 
+			waitForTask(taskIDLink)
 		})
-		It(`SetDeploymentScalingGroup request example`, func() {
-			// begin-setDeploymentScalingGroup
+		It(`SetAllowlist request example`, func() {
+			fmt.Println("\nSetAllowlist() result:")
+			// begin-setAllowlist
 
-			setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMembersGroup{}
+			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
+				Address:     &IPAddress1,
+				Description: core.StringPtr("Dev IP space 1"),
+			}
 
-			setDeploymentScalingGroupOptions := cloudDatabasesService.NewSetDeploymentScalingGroupOptions(
-				"testString",
-				"testString",
-				setDeploymentScalingGroupRequestModel,
+			setAllowlistOptions := cloudDatabasesService.NewSetAllowlistOptions(
+				deploymentID,
 			)
+			setAllowlistOptions.SetIPAddresses([]clouddatabasesv5.AllowlistEntry{*allowlistEntryModel})
+			setAllowlistOptions.SetIfMatch("exampleETag")
 
-			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
+			setAllowlistResponse, response, err := cloudDatabasesService.SetAllowlist(setAllowlistOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(setDeploymentScalingGroupResponse, "", "  ")
+			b, _ := json.MarshalIndent(setAllowlistResponse, "", "  ")
 			fmt.Println(string(b))
 
-			// end-setDeploymentScalingGroup
+			// end-setAllowlist
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
-			Expect(setDeploymentScalingGroupResponse).ToNot(BeNil())
+			Expect(setAllowlistResponse).ToNot(BeNil())
 
-			taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
+			taskIDLink = *setAllowlistResponse.Task.ID
 
+			waitForTask(taskIDLink)
+		})
+		It(`SetAutoscalingConditions request example`, func() {
+			fmt.Println("\nSetAutoscalingConditions() result:")
+			// begin-setAutoscalingConditions
+
+			autoscalingMemoryGroupMemoryScalersIoUtilizationModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization{
+				Enabled:      core.BoolPtr(true),
+				OverPeriod:   core.StringPtr("5m"),
+				AbovePercent: core.Int64Ptr(int64(90)),
+			}
+
+			autoscalingMemoryGroupMemoryScalersModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalers{
+				IoUtilization: autoscalingMemoryGroupMemoryScalersIoUtilizationModel,
+			}
+
+			autoscalingMemoryGroupMemoryRateModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryRate{
+				IncreasePercent:  core.Float64Ptr(float64(10.0)),
+				PeriodSeconds:    core.Int64Ptr(int64(300)),
+				LimitMbPerMember: core.Float64Ptr(float64(114432)),
+				Units:            core.StringPtr("mb"),
+			}
+
+			autoscalingMemoryGroupMemoryModel := &clouddatabasesv5.AutoscalingMemoryGroupMemory{
+				Scalers: autoscalingMemoryGroupMemoryScalersModel,
+				Rate:    autoscalingMemoryGroupMemoryRateModel,
+			}
+
+			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup{
+				Memory: autoscalingMemoryGroupMemoryModel,
+			}
+
+			setAutoscalingConditionsOptions := cloudDatabasesService.NewSetAutoscalingConditionsOptions(
+				deploymentID,
+				autoScalingGroupID,
+				autoscalingSetGroupAutoscalingModel,
+			)
+
+			setAutoscalingConditionsResponse, response, err := cloudDatabasesService.SetAutoscalingConditions(setAutoscalingConditionsOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(setAutoscalingConditionsResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-setAutoscalingConditions
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(setAutoscalingConditionsResponse).ToNot(BeNil())
+
+			taskIDLink = *setAutoscalingConditionsResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+		It(`UpdateDatabaseConfiguration request example`, func() {
+			fmt.Println("\nUpdateDatabaseConfiguration() result:")
+			// begin-updateDatabaseConfiguration
+
+			setConfigurationConfigurationModel := &clouddatabasesv5.SetConfigurationConfigurationPgConfiguration{
+				MaxConnections:          core.Int64Ptr(int64(200)),
+				MaxPreparedTransactions: core.Int64Ptr(int64(0)),
+				DeadlockTimeout:         core.Int64Ptr(int64(100)),
+				EffectiveIoConcurrency:  core.Int64Ptr(int64(1)),
+				MaxReplicationSlots:     core.Int64Ptr(int64(10)),
+				MaxWalSenders:           core.Int64Ptr(int64(12)),
+				SharedBuffers:           core.Int64Ptr(int64(16)),
+				SynchronousCommit:       core.StringPtr("local"),
+				WalLevel:                core.StringPtr("hot_standby"),
+				ArchiveTimeout:          core.Int64Ptr(int64(300)),
+				LogMinDurationStatement: core.Int64Ptr(int64(100)),
+			}
+
+			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
+				deploymentID,
+				setConfigurationConfigurationModel,
+			)
+
+			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(updateDatabaseConfigurationResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-updateDatabaseConfiguration
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
+
+			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
+
+			waitForTask(taskIDLink)
 		})
 		It(`ListDeployables request example`, func() {
+			fmt.Println("\nListDeployables() result:")
 			// begin-listDeployables
 
 			listDeployablesOptions := cloudDatabasesService.NewListDeployablesOptions()
@@ -270,9 +473,9 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listDeployablesResponse).ToNot(BeNil())
-
 		})
 		It(`ListRegions request example`, func() {
+			fmt.Println("\nListRegions() result:")
 			// begin-listRegions
 
 			listRegionsOptions := cloudDatabasesService.NewListRegionsOptions()
@@ -289,13 +492,13 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listRegionsResponse).ToNot(BeNil())
-
 		})
 		It(`GetDeploymentInfo request example`, func() {
+			fmt.Println("\nGetDeploymentInfo() result:")
 			// begin-getDeploymentInfo
 
 			getDeploymentInfoOptions := cloudDatabasesService.NewGetDeploymentInfoOptions(
-				"testString",
+				deploymentID,
 			)
 
 			getDeploymentInfoResponse, response, err := cloudDatabasesService.GetDeploymentInfo(getDeploymentInfoOptions)
@@ -310,103 +513,13 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getDeploymentInfoResponse).ToNot(BeNil())
-
-		})
-		It(`ChangeUserPassword request example`, func() {
-			// begin-changeUserPassword
-
-			changeUserPasswordOptions := cloudDatabasesService.NewChangeUserPasswordOptions(
-				"testString",
-				"testString",
-				"testString",
-			)
-
-			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(changeUserPasswordResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-changeUserPassword
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(changeUserPasswordResponse).ToNot(BeNil())
-
-		})
-		It(`GetUser request example`, func() {
-			// begin-getUser
-
-			getUserOptions := cloudDatabasesService.NewGetUserOptions(
-				"testString",
-				"testString",
-			)
-
-			task, response, err := cloudDatabasesService.GetUser(getUserOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(task, "", "  ")
-			fmt.Println(string(b))
-
-			// end-getUser
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(task).ToNot(BeNil())
-
-		})
-		It(`SetDatabaseConfiguration request example`, func() {
-			// begin-setDatabaseConfiguration
-
-			setConfigurationConfigurationModel := &clouddatabasesv5.SetConfigurationConfigurationPgConfiguration{}
-
-			setDatabaseConfigurationOptions := cloudDatabasesService.NewSetDatabaseConfigurationOptions(
-				"testString",
-				setConfigurationConfigurationModel,
-			)
-
-			setDatabaseConfigurationResponse, response, err := cloudDatabasesService.SetDatabaseConfiguration(setDatabaseConfigurationOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(setDatabaseConfigurationResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-setDatabaseConfiguration
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(setDatabaseConfigurationResponse).ToNot(BeNil())
-
-		})
-		It(`GetDatabaseConfigurationSchema request example`, func() {
-			// begin-getDatabaseConfigurationSchema
-
-			getDatabaseConfigurationSchemaOptions := cloudDatabasesService.NewGetDatabaseConfigurationSchemaOptions(
-				"testString",
-			)
-
-			configurationSchema, response, err := cloudDatabasesService.GetDatabaseConfigurationSchema(getDatabaseConfigurationSchemaOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(configurationSchema, "", "  ")
-			fmt.Println(string(b))
-
-			// end-getDatabaseConfigurationSchema
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(configurationSchema).ToNot(BeNil())
-
 		})
 		It(`ListRemotes request example`, func() {
+			fmt.Println("\nListRemotes() result:")
 			// begin-listRemotes
 
 			listRemotesOptions := cloudDatabasesService.NewListRemotesOptions(
-				"testString",
+				deploymentID,
 			)
 
 			listRemotesResponse, response, err := cloudDatabasesService.ListRemotes(listRemotesOptions)
@@ -421,36 +534,46 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listRemotesResponse).ToNot(BeNil())
-
 		})
-		It(`GetRemotesSchema request example`, func() {
-			// begin-getRemotesSchema
+		It(`ResyncReplica request example`, func() {
+			fmt.Println("\nResyncReplica() result:")
+			// begin-resyncReplica
 
-			getRemotesSchemaOptions := cloudDatabasesService.NewGetRemotesSchemaOptions(
-				"testString",
+			resyncReplicaOptions := cloudDatabasesService.NewResyncReplicaOptions(
+				replicaID,
 			)
 
-			getRemotesSchemaResponse, response, err := cloudDatabasesService.GetRemotesSchema(getRemotesSchemaOptions)
+			resyncReplicaResponse, response, err := cloudDatabasesService.ResyncReplica(resyncReplicaOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(getRemotesSchemaResponse, "", "  ")
+			b, _ := json.MarshalIndent(resyncReplicaResponse, "", "  ")
 			fmt.Println(string(b))
 
-			// end-getRemotesSchema
+			// end-resyncReplica
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(getRemotesSchemaResponse).ToNot(BeNil())
+			Expect(resyncReplicaResponse).ToNot(BeNil())
 
+			taskIDLink = *resyncReplicaResponse.Task.ID
+
+			waitForTask(taskIDLink)
 		})
 		It(`SetPromotion request example`, func() {
+			fmt.Println("\nSetPromotion() result:")
 			// begin-setPromotion
 
-			setPromotionPromotionModel := &clouddatabasesv5.SetPromotionPromotionPromote{}
+			promotion := map[string]interface{}{
+				"skip_initial_backup": false,
+			}
+
+			setPromotionPromotionModel := &clouddatabasesv5.SetPromotionPromotionPromote{
+				Promotion: promotion,
+			}
 
 			setPromotionOptions := cloudDatabasesService.NewSetPromotionOptions(
-				"testString",
+				replicaID,
 				setPromotionPromotionModel,
 			)
 
@@ -467,12 +590,16 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(setPromotionResponse).ToNot(BeNil())
 
+			taskIDLink = *setPromotionResponse.Task.ID
+
+			waitForTask(taskIDLink)
 		})
 		It(`ListDeploymentTasks request example`, func() {
+			fmt.Println("\nListDeploymentTasks() result:")
 			// begin-listDeploymentTasks
 
 			listDeploymentTasksOptions := cloudDatabasesService.NewListDeploymentTasksOptions(
-				"testString",
+				deploymentID,
 			)
 
 			tasks, response, err := cloudDatabasesService.ListDeploymentTasks(listDeploymentTasksOptions)
@@ -487,9 +614,9 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(tasks).ToNot(BeNil())
-
 		})
 		It(`GetTask request example`, func() {
+			fmt.Println("\nGetTask() result:")
 			// begin-getTask
 
 			getTaskOptions := cloudDatabasesService.NewGetTaskOptions(
@@ -510,32 +637,12 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(getTaskResponse).ToNot(BeNil())
 
 		})
-		It(`GetBackupInfo request example`, func() {
-			// begin-getBackupInfo
-
-			getBackupInfoOptions := cloudDatabasesService.NewGetBackupInfoOptions(
-				"testString",
-			)
-
-			getBackupInfoResponse, response, err := cloudDatabasesService.GetBackupInfo(getBackupInfoOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(getBackupInfoResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-getBackupInfo
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(getBackupInfoResponse).ToNot(BeNil())
-
-		})
 		It(`ListDeploymentBackups request example`, func() {
+			fmt.Println("\nListDeploymentBackups() result:")
 			// begin-listDeploymentBackups
 
 			listDeploymentBackupsOptions := cloudDatabasesService.NewListDeploymentBackupsOptions(
-				"testString",
+				deploymentID,
 			)
 
 			backups, response, err := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptions)
@@ -551,12 +658,35 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(backups).ToNot(BeNil())
 
+			backupIDLink = *backups.Backups[0].ID
+		})
+		It(`GetBackupInfo request example`, func() {
+			fmt.Println("\nGetBackupInfo() result:")
+			// begin-getBackupInfo
+
+			getBackupInfoOptions := cloudDatabasesService.NewGetBackupInfoOptions(
+				backupIDLink,
+			)
+
+			getBackupInfoResponse, response, err := cloudDatabasesService.GetBackupInfo(getBackupInfoOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(getBackupInfoResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-getBackupInfo
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getBackupInfoResponse).ToNot(BeNil())
 		})
 		It(`StartOndemandBackup request example`, func() {
+			fmt.Println("\nStartOndemangBackup() result:")
 			// begin-startOndemandBackup
 
 			startOndemandBackupOptions := cloudDatabasesService.NewStartOndemandBackupOptions(
-				"testString",
+				deploymentID,
 			)
 
 			startOndemandBackupResponse, response, err := cloudDatabasesService.StartOndemandBackup(startOndemandBackupOptions)
@@ -571,13 +701,13 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(startOndemandBackupResponse).ToNot(BeNil())
-
 		})
 		It(`GetPitRdata request example`, func() {
+			fmt.Println("\nGetPitRData() result:")
 			// begin-getPITRdata
 
 			getPitRdataOptions := cloudDatabasesService.NewGetPitRdataOptions(
-				"testString",
+				deploymentID,
 			)
 
 			pointInTimeRecoveryData, response, err := cloudDatabasesService.GetPitRdata(getPitRdataOptions)
@@ -592,17 +722,18 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(pointInTimeRecoveryData).ToNot(BeNil())
-
 		})
 		It(`GetConnection request example`, func() {
+			fmt.Println("\nGetConnection() result:")
 			// begin-getConnection
 
 			getConnectionOptions := cloudDatabasesService.NewGetConnectionOptions(
-				"testString",
-				"testString",
-				"testString",
+				deploymentID,
+				userType,
+				"exampleUserID",
 				"public",
 			)
+			getConnectionOptions.SetCertificateRoot("exampleCertRoot")
 
 			connection, response, err := cloudDatabasesService.GetConnection(getConnectionOptions)
 			if err != nil {
@@ -616,17 +747,19 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(connection).ToNot(BeNil())
-
 		})
 		It(`CompleteConnection request example`, func() {
+			fmt.Println("\nCompleteConnection() result:")
 			// begin-completeConnection
 
 			completeConnectionOptions := cloudDatabasesService.NewCompleteConnectionOptions(
-				"testString",
-				"testString",
-				"testString",
+				deploymentID,
+				userType,
+				"exampleUserID",
 				"public",
 			)
+			completeConnectionOptions.SetPassword("examplePassword")
+			completeConnectionOptions.SetCertificateRoot("exampleCertRoot")
 
 			connection, response, err := cloudDatabasesService.CompleteConnection(completeConnectionOptions)
 			if err != nil {
@@ -640,13 +773,13 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(connection).ToNot(BeNil())
-
 		})
 		It(`ListDeploymentScalingGroups request example`, func() {
+			fmt.Println("\nListDeploymentScalingGroups() result:")
 			// begin-listDeploymentScalingGroups
 
 			listDeploymentScalingGroupsOptions := cloudDatabasesService.NewListDeploymentScalingGroupsOptions(
-				"testString",
+				deploymentID,
 			)
 
 			groups, response, err := cloudDatabasesService.ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions)
@@ -662,8 +795,67 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(groups).ToNot(BeNil())
 
+			scalingGroupIDLink = *groups.Groups[0].ID
+		})
+		It(`SetDeploymentScalingGroup request example`, func() {
+			fmt.Println("\nSetDeploymentScalingGroup() result:")
+
+			var handleError = func(resp *clouddatabasesv5.SetDeploymentScalingGroupResponse, r *core.DetailedResponse, err error) {
+				setMemoryGroupMemoryModel := &clouddatabasesv5.SetMemoryGroupMemory{
+					AllocationMb: core.Int64Ptr(int64(114432)),
+				}
+
+				setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup{
+					Memory: setMemoryGroupMemoryModel,
+				}
+
+				setDeploymentScalingGroupOptions := cloudDatabasesService.NewSetDeploymentScalingGroupOptions(
+					deploymentID,
+					scalingGroupIDLink,
+					setDeploymentScalingGroupRequestModel,
+				)
+
+				setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
+
+				if err != nil {
+					fmt.Printf("\nError: %s", response.Result.(map[string]interface{}))
+				}
+
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(202))
+				Expect(setDeploymentScalingGroupResponse).ToNot(BeNil())
+
+				taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
+
+				waitForTask(taskIDLink)
+			}
+			// begin-setDeploymentScalingGroup
+
+			setMemoryGroupMemoryModel := &clouddatabasesv5.SetMemoryGroupMemory{
+				AllocationMb: core.Int64Ptr(int64(114688)),
+			}
+
+			setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup{
+				Memory: setMemoryGroupMemoryModel,
+			}
+
+			setDeploymentScalingGroupOptions := cloudDatabasesService.NewSetDeploymentScalingGroupOptions(
+				deploymentID,
+				scalingGroupIDLink,
+				setDeploymentScalingGroupRequestModel,
+			)
+
+			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
+			if err != nil {
+				handleError(setDeploymentScalingGroupResponse, response, err)
+			}
+			b, _ := json.MarshalIndent(setDeploymentScalingGroupResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-setDeploymentScalingGroup
 		})
 		It(`GetDefaultScalingGroups request example`, func() {
+			fmt.Println("\nGetDefaultScalingGroups() result:")
 			// begin-getDefaultScalingGroups
 
 			getDefaultScalingGroupsOptions := cloudDatabasesService.NewGetDefaultScalingGroupsOptions(
@@ -682,14 +874,14 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(groups).ToNot(BeNil())
-
 		})
 		It(`GetAutoscalingConditions request example`, func() {
+			fmt.Println("\nGetAutoscalingConditions() result:")
 			// begin-getAutoscalingConditions
 
 			getAutoscalingConditionsOptions := cloudDatabasesService.NewGetAutoscalingConditionsOptions(
-				"testString",
-				"testString",
+				deploymentID,
+				autoScalingGroupID,
 			)
 
 			autoscalingGroup, response, err := cloudDatabasesService.GetAutoscalingConditions(getAutoscalingConditionsOptions)
@@ -704,80 +896,13 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(autoscalingGroup).ToNot(BeNil())
-
-		})
-		It(`SetAutoscalingConditions request example`, func() {
-			// begin-setAutoscalingConditions
-
-			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingDiskGroup{}
-
-			setAutoscalingConditionsOptions := cloudDatabasesService.NewSetAutoscalingConditionsOptions(
-				"testString",
-				"testString",
-				autoscalingSetGroupAutoscalingModel,
-			)
-
-			setAutoscalingConditionsResponse, response, err := cloudDatabasesService.SetAutoscalingConditions(setAutoscalingConditionsOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(setAutoscalingConditionsResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-setAutoscalingConditions
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(setAutoscalingConditionsResponse).ToNot(BeNil())
-
-		})
-		It(`FileSync request example`, func() {
-			// begin-fileSync
-
-			fileSyncOptions := cloudDatabasesService.NewFileSyncOptions(
-				"testString",
-			)
-
-			fileSyncResponse, response, err := cloudDatabasesService.FileSync(fileSyncOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(fileSyncResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-fileSync
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(fileSyncResponse).ToNot(BeNil())
-
-		})
-		It(`CreateLogicalReplicationSlot request example`, func() {
-			// begin-createLogicalReplicationSlot
-
-			createLogicalReplicationSlotOptions := cloudDatabasesService.NewCreateLogicalReplicationSlotOptions(
-				"testString",
-			)
-
-			createLogicalReplicationSlotResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(createLogicalReplicationSlotResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-createLogicalReplicationSlot
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(createLogicalReplicationSlotResponse).ToNot(BeNil())
-
 		})
 		It(`GetAllowlist request example`, func() {
+			fmt.Println("\nGetAllowlist() result:")
 			// begin-getAllowlist
 
 			getAllowlistOptions := cloudDatabasesService.NewGetAllowlistOptions(
-				"testString",
+				deploymentID,
 			)
 
 			allowlist, response, err := cloudDatabasesService.GetAllowlist(getAllowlistOptions)
@@ -792,99 +917,6 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(allowlist).ToNot(BeNil())
-
-		})
-		It(`KillConnections request example`, func() {
-			// begin-killConnections
-
-			killConnectionsOptions := cloudDatabasesService.NewKillConnectionsOptions(
-				"testString",
-			)
-
-			killConnectionsResponse, response, err := cloudDatabasesService.KillConnections(killConnectionsOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(killConnectionsResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-killConnections
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(killConnectionsResponse).ToNot(BeNil())
-
-		})
-		It(`DeleteLogicalReplicationSlot request example`, func() {
-			// begin-deleteLogicalReplicationSlot
-
-			deleteLogicalReplicationSlotOptions := cloudDatabasesService.NewDeleteLogicalReplicationSlotOptions(
-				"testString",
-				"testString",
-			)
-
-			deleteLogicalReplicationSlotResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(deleteLogicalReplicationSlotResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-deleteLogicalReplicationSlot
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(deleteLogicalReplicationSlotResponse).ToNot(BeNil())
-
-		})
-		It(`DeleteDatabaseUser request example`, func() {
-			// begin-deleteDatabaseUser
-
-			deleteDatabaseUserOptions := cloudDatabasesService.NewDeleteDatabaseUserOptions(
-				"testString",
-				"testString",
-				"testString",
-			)
-
-			deleteDatabaseUserResponse, response, err := cloudDatabasesService.DeleteDatabaseUser(deleteDatabaseUserOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(deleteDatabaseUserResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-deleteDatabaseUser
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(deleteDatabaseUserResponse).ToNot(BeNil())
-
-			taskIDLink = *deleteDatabaseUserResponse.Task.ID
-
-		})
-		It(`DeleteAllowlistEntry request example`, func() {
-			// begin-deleteAllowlistEntry
-
-			deleteAllowlistEntryOptions := cloudDatabasesService.NewDeleteAllowlistEntryOptions(
-				"testString",
-				"testString",
-			)
-
-			deleteAllowlistEntryResponse, response, err := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptions)
-			if err != nil {
-				panic(err)
-			}
-			b, _ := json.MarshalIndent(deleteAllowlistEntryResponse, "", "  ")
-			fmt.Println(string(b))
-
-			// end-deleteAllowlistEntry
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(deleteAllowlistEntryResponse).ToNot(BeNil())
-
-			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
-
 		})
 	})
 })
