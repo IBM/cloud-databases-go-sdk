@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2019, 2020.
+ * (C) Copyright IBM Corp. 2019, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import (
 )
 
 const (
-	sdkName = "icd-go-sdk"
+	sdkName             = "cloud-databases-go-sdk"
 	headerNameUserAgent = "User-Agent"
 )
 
@@ -41,11 +41,11 @@ const (
 //
 // If you plan to gather metrics for your SDK, the User-Agent header value must
 // be a string similar to the following:
-// icd-go-sdk/0.0.1 (lang=go; arch=x86_64; os=Linux; go.version=1.12.9)
+// cloud-databases-go-sdk/0.0.1 (lang=go; arch=x86_64; os=Linux; go.version=1.12.9)
 //
 // In the example above, the analytics tool will parse the user-agent header and
 // use the following properties:
-// "icd-go-sdk" - the name of your sdk
+// "cloud-databases-go-sdk" - the name of your sdk
 // "0.0.1"- the version of your sdk
 // "lang=go" - the language of the current sdk
 // "arch=x86_64; os=Linux; go.version=1.12.9" - system information

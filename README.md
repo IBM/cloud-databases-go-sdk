@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.com/ibmcloud/icd-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis.ibm.com/ibmcloud/icd-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)
+[![Build Status](https://travis-ci.com/IBM/cloud-databases-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis-ci.com/IBM/cloud-databases-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-# IBM Cloud Databases Go SDK 0.2.0
+# IBM Cloud Databases Go SDK 0.0.1
 Go client library to interact with the various [IBM Cloud Cloud Databases APIs](https://cloud.ibm.com/apidocs?category=cloud-databases).
 
 Disclaimer: this SDK is being released initially as a **pre-release** version.
@@ -52,44 +52,32 @@ Service Name | Package name
 * Go version 1.14 or above.
 
 ## Installation
-The current version of this SDK: 0.2.0
+The current version of this SDK: 0.0.1
 
-There are a few different ways to download and install the Cloud Databases Go SDK project for use by your
-Go application:
-
-#### `go get` command  
-Use this command to download and install the SDK to allow your Go application to
-use it:
-
-```
-go get -u github.ibm.com/ibmcloud/icd-go-sdk
-```
-
-#### Go modules  
-If your application is using Go modules, you can add a suitable import to your
-Go application, like this:
+### Go modules  
+If your application uses Go modules for dependency management (recommended), just add an import for each service 
+that you will use in your application.  
+Here is an example:
 
 ```go
 import (
-	"github.ibm.com/ibmcloud/icd-go-sdk/exampleservicev1"
+	"github.com/IBM/cloud-databases-go-sdk/clouddatabasesv5"
 )
 ```
+Next, run `go build` or `go mod tidy` to download and install the new dependencies and update your application's
+`go.mod` file.  
 
-then run `go mod tidy` to download and install the new dependency and update your Go application's
-`go.mod` file.
+In the example above, the `clouddatabasesv5` part of the import path is the package name
+associated with the IBM Cloud Databases service.
+See the service table above to find the approprate package name for the services used by your application.
 
-#### `dep` dependency manager  
-If your application is using the `dep` dependency management tool, you can add a dependency
-to your `Gopkg.toml` file.  Here is an example:
-
+### `go get` command  
+Alternatively, you can use the `go get` command to download and install the appropriate packages needed by your application:
 ```
-[[constraint]]
-  name = "github.ibm.com/ibmcloud/icd-go-sdk"
-  version = "0.2.0"
-
+go get -u github.com/IBM/cloud-databases-go-sdk/clouddatabasesv5
 ```
+Be sure to use the appropriate package name from the service table above for the services used by your application.
 
-then run `dep ensure`.
 
 ## Using the SDK
 For general SDK usage information, please see [this link](https://github.com/IBM/ibm-cloud-sdk-common/blob/main/README.md)
@@ -102,7 +90,7 @@ please ask a question at
 
 ## Issues
 If you encounter an issue with the project, you are welcome to submit a
-[bug report](github.ibm.com/ibmcloud/icd-go-sdk/issues).
+[bug report](github.com/IBM/cloud-databases-go-sdk/issues).
 Before that, please search for similar issues. It's possible that someone has already reported the problem.
 
 ## Open source @ IBM
