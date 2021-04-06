@@ -37,9 +37,9 @@ before_deploy:
   - npm install @semantic-release/git
   - npm install @semantic-release/github
 
-# deploy:
-#   - provider: script
-#     script: npx semantic-release
-#     skip_cleanup: true
-#     on:
-#       branch: main
+deploy:
+  - provider: script
+    script: npx semantic-release
+    skip_cleanup: true
+    on:
+      branch: main
