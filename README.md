@@ -1,5 +1,11 @@
-[![Build Status](https://travis-ci.com/IBM/cloud-databases-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)](https://travis-ci.com/IBM/cloud-databases-go-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=main)
+[![Build Status](https://travis-ci.com/IBM/cloud-databases-go-sdk.svg?branch=main)](https://travis-ci.com/IBM/cloud-databases-go-sdk)
+[![Release](https://img.shields.io/github/v/release/IBM/cloud-databases-go-sdk)](https://github.com/IBM/cloud-databases-go-sdk/releases/latest)
+[![Go Reference](https://pkg.go.dev/badge/github.com/IBM/cloud-databases-go-sdk.svg)](https://pkg.go.dev/github.com/IBM/cloud-databases-go-sdk)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/IBM/cloud-databases-go-sdk)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![codecov](https://codecov.io/gh/IBM/cloud-databases-go-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/IBM/cloud-databases-go-sdk)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+[![CLA assistant](https://cla-assistant.io/readme/badge/ibm/cloud-databases-go-sdk)](https://cla-assistant.io/ibm/cloud-databases-go-sdk)
 
 # IBM Cloud Databases Go SDK 0.1.0
 Go client library to interact with the various [IBM Cloud Cloud Databases APIs](https://cloud.ibm.com/apidocs?category=cloud-databases).
@@ -23,9 +29,8 @@ Changes might occur which impact applications that use this SDK.
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-    + [`go get` command](#go-get-command)
-    + [Go modules](#go-modules)
-    + [`dep` dependency manager](#dep-dependency-manager)
+  * [Go modules](#go-modules)
+  * [`go get` command](#go-get-command)
 - [Using the SDK](#using-the-sdk)
 - [Questions](#questions)
 - [Issues](#issues)
