@@ -29,9 +29,10 @@ import (
 	"reflect"
 	"time"
 
+	common "github.com/IBM/cloud-databases-go-sdk/common"
+
 	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/go-openapi/strfmt"
-	common "github.ibm.com/ibmcloud/icd-go-sdk/common"
 )
 
 // CloudDatabasesV5 : The IBM Cloud Databases API enables interaction between applications and Cloud Databases database

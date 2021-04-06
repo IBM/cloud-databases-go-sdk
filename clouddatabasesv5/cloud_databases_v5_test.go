@@ -27,11 +27,11 @@ import (
 	"os"
 	"time"
 
+	"github.com/IBM/cloud-databases-go-sdk/clouddatabasesv5"
 	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/go-openapi/strfmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"github.ibm.com/ibmcloud/icd-go-sdk/clouddatabasesv5"
 )
 
 var _ = Describe(`CloudDatabasesV5`, func() {
