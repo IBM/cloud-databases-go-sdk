@@ -10,9 +10,6 @@
 # IBM Cloud Databases Go SDK 0.1.0
 Go client library to interact with the various [IBM Cloud Cloud Databases APIs](https://cloud.ibm.com/apidocs?category=cloud-databases).
 
-Disclaimer: this SDK is being released initially as a **pre-release** version.
-Changes might occur which impact applications that use this SDK.
-
 ## Table of Contents
 <!--
   The TOC below is generated using the `markdown-toc` node package.
