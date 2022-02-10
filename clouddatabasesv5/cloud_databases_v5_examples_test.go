@@ -1,7 +1,8 @@
+//go:build examples
 // +build examples
 
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +36,9 @@ import (
 //
 // The following configuration properties are assumed to be defined:
 // CLOUD_DATABASES_URL=<service base url>
+// CLOUD_DATABASES_AUTH_TYPE=iam
 // CLOUD_DATABASES_APIKEY=<IAM apikey>
+// CLOUD_DATABASES_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
 // CLOUD_DATABASES_DEPLOYMENT_ID=<ID of an example deployment>
 // CLOUD_DATABASES_REPLICA_ID=<ID of an example replica>
 //
@@ -57,10 +60,8 @@ var (
 	newPassword        string = "exampleNewPassword"
 	userType           string = "database"
 	autoScalingGroupID string = "member"
-
-	deploymentID string
-	replicaID    string
-
+	deploymentID       string
+	replicaID          string
 	backupIDLink       string
 	scalingGroupIDLink string
 )
@@ -132,9 +133,6 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 	})
 
 	Describe(`Client initialization`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
 		It("Successfully construct the service client instance", func() {
 			var err error
 
@@ -219,7 +217,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			fmt.Println("\nCreateDatabaseUser() result:")
 			// begin-createDatabaseUser
 
-			createDatabaseUserRequestUserModel := &clouddatabasesv5.CreateDatabaseUserRequestUser{
+			userModel := &clouddatabasesv5.User{
 				Username: &username,
 				Password: &password,
 			}
@@ -228,7 +226,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 				deploymentID,
 				userType,
 			)
-			createDatabaseUserOptions.SetUser(createDatabaseUserRequestUserModel)
+			createDatabaseUserOptions.SetUser(userModel)
 
 			createDatabaseUserResponse, response, err := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptions)
 			if err != nil {
@@ -248,6 +246,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			waitForTask(taskIDLink)
 		})
 		It(`ChangeUserPassword request example`, func() {
+			fmt.Println("\nChangeUserPassword() result:")
 			// begin-changeUserPassword
 
 			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
@@ -306,7 +305,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			waitForTask(taskIDLink)
 		})
 		It(`KillConnections request example`, func() {
-			fmt.Println("\nKillConnections()) result:")
+			fmt.Println("\nKillConnections() result:")
 			// begin-killConnections
 
 			killConnectionsOptions := cloudDatabasesService.NewKillConnectionsOptions(
@@ -343,7 +342,6 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 				deploymentID,
 			)
 			setAllowlistOptions.SetIPAddresses([]clouddatabasesv5.AllowlistEntry{*allowlistEntryModel})
-			setAllowlistOptions.SetIfMatch("exampleETag")
 
 			setAllowlistResponse, response, err := cloudDatabasesService.SetAllowlist(setAllowlistOptions)
 			if err != nil {
@@ -419,24 +417,14 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			fmt.Println("\nUpdateDatabaseConfiguration() result:")
 			// begin-updateDatabaseConfiguration
 
-			setConfigurationConfigurationModel := &clouddatabasesv5.SetConfigurationConfigurationPgConfiguration{
-				MaxConnections:          core.Int64Ptr(int64(200)),
-				MaxPreparedTransactions: core.Int64Ptr(int64(0)),
-				DeadlockTimeout:         core.Int64Ptr(int64(100)),
-				EffectiveIoConcurrency:  core.Int64Ptr(int64(1)),
-				MaxReplicationSlots:     core.Int64Ptr(int64(10)),
-				MaxWalSenders:           core.Int64Ptr(int64(12)),
-				SharedBuffers:           core.Int64Ptr(int64(16)),
-				SynchronousCommit:       core.StringPtr("local"),
-				WalLevel:                core.StringPtr("hot_standby"),
-				ArchiveTimeout:          core.Int64Ptr(int64(300)),
-				LogMinDurationStatement: core.Int64Ptr(int64(100)),
+			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
+				MaxConnections: core.Int64Ptr(int64(200)),
 			}
 
 			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
 				deploymentID,
-				setConfigurationConfigurationModel,
 			)
+			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
 
 			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
 			if err != nil {
@@ -556,41 +544,34 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(resyncReplicaResponse).ToNot(BeNil())
 
-			taskIDLink = *resyncReplicaResponse.Task.ID
-
-			waitForTask(taskIDLink)
 		})
-		It(`SetPromotion request example`, func() {
-			fmt.Println("\nSetPromotion() result:")
-			// begin-setPromotion
+		It(`PromoteReadOnlyReplica request example`, func() {
+			fmt.Println("\nPromoteReadOnlyReplica() result:")
+			// begin-promoteReadOnlyReplica
 
 			promotion := map[string]interface{}{
 				"skip_initial_backup": false,
 			}
 
-			setPromotionPromotionModel := &clouddatabasesv5.SetPromotionPromotionPromote{
-				Promotion: promotion,
-			}
-
-			setPromotionOptions := cloudDatabasesService.NewSetPromotionOptions(
+			promoteReadOnlyReplicaOptions := cloudDatabasesService.NewPromoteReadOnlyReplicaOptions(
 				replicaID,
-				setPromotionPromotionModel,
 			)
+			promoteReadOnlyReplicaOptions.SetPromotion(promotion)
 
-			setPromotionResponse, response, err := cloudDatabasesService.SetPromotion(setPromotionOptions)
+			promoteReadOnlyReplicaResponse, response, err := cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(setPromotionResponse, "", "  ")
+			b, _ := json.MarshalIndent(promoteReadOnlyReplicaResponse, "", "  ")
 			fmt.Println(string(b))
 
-			// end-setPromotion
+			// end-promoteReadOnlyReplica
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(setPromotionResponse).ToNot(BeNil())
+			Expect(promoteReadOnlyReplicaResponse).ToNot(BeNil())
 
-			taskIDLink = *setPromotionResponse.Task.ID
+			taskIDLink = *promoteReadOnlyReplicaResponse.Task.ID
 
 			waitForTask(taskIDLink)
 		})
@@ -645,20 +626,20 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 				deploymentID,
 			)
 
-			backups, response, err := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptions)
+			backupsResponse, response, err := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(backups, "", "  ")
+			b, _ := json.MarshalIndent(backupsResponse, "", "  ")
 			fmt.Println(string(b))
 
 			// end-listDeploymentBackups
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(backups).ToNot(BeNil())
+			Expect(backupsResponse.Backups).ToNot(BeNil())
 
-			backupIDLink = *backups.Backups[0].ID
+			backupIDLink = *backupsResponse.Backups[0].ID
 		})
 		It(`GetBackupInfo request example`, func() {
 			fmt.Println("\nGetBackupInfo() result:")
@@ -682,7 +663,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(getBackupInfoResponse).ToNot(BeNil())
 		})
 		It(`StartOndemandBackup request example`, func() {
-			fmt.Println("\nStartOndemangBackup() result:")
+			fmt.Println("\nStartOndemandBackup() result:")
 			// begin-startOndemandBackup
 
 			startOndemandBackupOptions := cloudDatabasesService.NewStartOndemandBackupOptions(
@@ -702,26 +683,26 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(startOndemandBackupResponse).ToNot(BeNil())
 		})
-		It(`GetPitRdata request example`, func() {
-			fmt.Println("\nGetPitRData() result:")
-			// begin-getPITRdata
+		It(`GetPitrData request example`, func() {
+			fmt.Println("\nGetPitrData() result:")
+			// begin-getPITRData
 
-			getPitRdataOptions := cloudDatabasesService.NewGetPitRdataOptions(
+			getPitrDataOptions := cloudDatabasesService.NewGetPitrDataOptions(
 				deploymentID,
 			)
 
-			pointInTimeRecoveryData, response, err := cloudDatabasesService.GetPitRdata(getPitRdataOptions)
+			getPitrDataResponse, response, err := cloudDatabasesService.GetPitrData(getPitrDataOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(pointInTimeRecoveryData, "", "  ")
+			b, _ := json.MarshalIndent(getPitrDataResponse, "", "  ")
 			fmt.Println(string(b))
 
-			// end-getPITRdata
+			// end-getPITRData
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(pointInTimeRecoveryData).ToNot(BeNil())
+			Expect(getPitrDataResponse.PointInTimeRecoveryData).ToNot(BeNil())
 		})
 		It(`GetConnection request example`, func() {
 			fmt.Println("\nGetConnection() result:")
@@ -735,18 +716,18 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			)
 			getConnectionOptions.SetCertificateRoot("exampleCertRoot")
 
-			connection, response, err := cloudDatabasesService.GetConnection(getConnectionOptions)
+			getConnectionResponse, response, err := cloudDatabasesService.GetConnection(getConnectionOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(connection, "", "  ")
+			b, _ := json.MarshalIndent(getConnectionResponse, "", "  ")
 			fmt.Println(string(b))
 
 			// end-getConnection
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(connection).ToNot(BeNil())
+			Expect(getConnectionResponse).ToNot(BeNil())
 		})
 		It(`CompleteConnection request example`, func() {
 			fmt.Println("\nCompleteConnection() result:")
@@ -758,21 +739,21 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 				"exampleUserID",
 				"public",
 			)
-			completeConnectionOptions.SetPassword("examplePassword")
+			completeConnectionOptions.SetPassword(password)
 			completeConnectionOptions.SetCertificateRoot("exampleCertRoot")
 
-			connection, response, err := cloudDatabasesService.CompleteConnection(completeConnectionOptions)
+			completeConnectionResponse, response, err := cloudDatabasesService.CompleteConnection(completeConnectionOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(connection, "", "  ")
+			b, _ := json.MarshalIndent(completeConnectionResponse, "", "  ")
 			fmt.Println(string(b))
 
 			// end-completeConnection
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(connection).ToNot(BeNil())
+			Expect(completeConnectionResponse).ToNot(BeNil())
 		})
 		It(`ListDeploymentScalingGroups request example`, func() {
 			fmt.Println("\nListDeploymentScalingGroups() result:")
@@ -782,44 +763,48 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 				deploymentID,
 			)
 
-			groups, response, err := cloudDatabasesService.ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions)
+			groupsResponse, response, err := cloudDatabasesService.ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(groups, "", "  ")
+			b, _ := json.MarshalIndent(groupsResponse, "", "  ")
 			fmt.Println(string(b))
 
 			// end-listDeploymentScalingGroups
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(groups).ToNot(BeNil())
+			Expect(groupsResponse).ToNot(BeNil())
 
-			scalingGroupIDLink = *groups.Groups[0].ID
+			scalingGroupIDLink = *groupsResponse.Groups[0].ID
 		})
 		It(`SetDeploymentScalingGroup request example`, func() {
 			fmt.Println("\nSetDeploymentScalingGroup() result:")
+			// begin-setDeploymentScalingGroup
 
 			var handleError = func(resp *clouddatabasesv5.SetDeploymentScalingGroupResponse, r *core.DetailedResponse, err error) {
-				setMemoryGroupMemoryModel := &clouddatabasesv5.SetMemoryGroupMemory{
+				groupScalingMemory := &clouddatabasesv5.GroupScalingMemory{
 					AllocationMb: core.Int64Ptr(int64(114432)),
 				}
 
-				setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup{
-					Memory: setMemoryGroupMemoryModel,
+				groupScaling := &clouddatabasesv5.GroupScaling{
+					Memory: groupScalingMemory,
 				}
 
-				setDeploymentScalingGroupOptions := cloudDatabasesService.NewSetDeploymentScalingGroupOptions(
-					deploymentID,
-					scalingGroupIDLink,
-					setDeploymentScalingGroupRequestModel,
-				)
+				setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
+					ID:      &deploymentID,
+					GroupID: &scalingGroupIDLink,
+					Group:   groupScaling,
+				}
 
 				setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
-
 				if err != nil {
 					fmt.Printf("\nError: %s", response.Result.(map[string]interface{}))
 				}
+				b, _ := json.MarshalIndent(setDeploymentScalingGroupResponse, "", "  ")
+				fmt.Println(string(b))
+
+				// end-setDeploymentScalingGroup
 
 				Expect(err).To(BeNil())
 				Expect(response.StatusCode).To(Equal(202))
@@ -829,21 +814,20 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 
 				waitForTask(taskIDLink)
 			}
-			// begin-setDeploymentScalingGroup
 
-			setMemoryGroupMemoryModel := &clouddatabasesv5.SetMemoryGroupMemory{
+			groupScalingMemory := &clouddatabasesv5.GroupScalingMemory{
 				AllocationMb: core.Int64Ptr(int64(114688)),
 			}
 
-			setDeploymentScalingGroupRequestModel := &clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup{
-				Memory: setMemoryGroupMemoryModel,
+			groupScaling := &clouddatabasesv5.GroupScaling{
+				Memory: groupScalingMemory,
 			}
 
-			setDeploymentScalingGroupOptions := cloudDatabasesService.NewSetDeploymentScalingGroupOptions(
-				deploymentID,
-				scalingGroupIDLink,
-				setDeploymentScalingGroupRequestModel,
-			)
+			setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
+				ID:      &deploymentID,
+				GroupID: &scalingGroupIDLink,
+				Group:   groupScaling,
+			}
 
 			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
 			if err != nil {
@@ -862,18 +846,18 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 				"postgresql",
 			)
 
-			groups, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(groups, "", "  ")
+			b, _ := json.MarshalIndent(getDefaultScalingGroupsResponse, "", "  ")
 			fmt.Println(string(b))
 
 			// end-getDefaultScalingGroups
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(groups).ToNot(BeNil())
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
 		})
 		It(`GetAutoscalingConditions request example`, func() {
 			fmt.Println("\nGetAutoscalingConditions() result:")
@@ -905,18 +889,18 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 				deploymentID,
 			)
 
-			allowlist, response, err := cloudDatabasesService.GetAllowlist(getAllowlistOptions)
+			getAllowlistResponse, response, err := cloudDatabasesService.GetAllowlist(getAllowlistOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(allowlist, "", "  ")
+			b, _ := json.MarshalIndent(getAllowlistResponse, "", "  ")
 			fmt.Println(string(b))
 
 			// end-getAllowlist
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(allowlist).ToNot(BeNil())
+			Expect(getAllowlistResponse).ToNot(BeNil())
 		})
 	})
 })

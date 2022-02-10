@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -161,9 +161,25 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
+	Describe(`Parameterized URL tests`, func() {
+		It(`Format parameterized URL with all default values`, func() {
+			constructedURL, err := clouddatabasesv5.ConstructServiceURL(nil)
+			Expect(constructedURL).To(Equal("https://api.us-south.databases.cloud.ibm.com/v5/ibm"))
+			Expect(constructedURL).ToNot(BeNil())
+			Expect(err).To(BeNil())
+		})
+		It(`Return an error if a provided variable name is invalid`, func() {
+			var providedUrlVariables = map[string]string{
+				"invalid_variable_name": "value",
+			}
+			constructedURL, err := clouddatabasesv5.ConstructServiceURL(providedUrlVariables)
+			Expect(constructedURL).To(Equal(""))
+			Expect(err).ToNot(BeNil())
+		})
+	})
 	Describe(`ListDeployables(listDeployablesOptions *ListDeployablesOptions) - Operation response error`, func() {
 		listDeployablesPath := "/deployables"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -173,7 +189,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ListDeployables with error: Operation response processing error`, func() {
@@ -205,7 +221,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ListDeployables(listDeployablesOptions *ListDeployablesOptions)`, func() {
 		listDeployablesPath := "/deployables"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -328,10 +343,43 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke ListDeployables successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the ListDeployablesOptions model
+				listDeployablesOptionsModel := new(clouddatabasesv5.ListDeployablesOptions)
+				listDeployablesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ListDeployables(listDeployablesOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`ListRegions(listRegionsOptions *ListRegionsOptions) - Operation response error`, func() {
 		listRegionsPath := "/regions"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -341,7 +389,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ListRegions with error: Operation response processing error`, func() {
@@ -373,7 +421,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ListRegions(listRegionsOptions *ListRegionsOptions)`, func() {
 		listRegionsPath := "/regions"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -496,10 +543,43 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke ListRegions successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the ListRegionsOptions model
+				listRegionsOptionsModel := new(clouddatabasesv5.ListRegionsOptions)
+				listRegionsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ListRegions(listRegionsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`GetDeploymentInfo(getDeploymentInfoOptions *GetDeploymentInfoOptions) - Operation response error`, func() {
 		getDeploymentInfoPath := "/deployments/testString"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -509,7 +589,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetDeploymentInfo with error: Operation response processing error`, func() {
@@ -542,7 +622,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`GetDeploymentInfo(getDeploymentInfoOptions *GetDeploymentInfoOptions)`, func() {
 		getDeploymentInfoPath := "/deployments/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -560,7 +639,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform_options": {"anyKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
+					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform": "satellite, classic", "platform_options": {"mapKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
 				}))
 			})
 			It(`Invoke GetDeploymentInfo successfully with retries`, func() {
@@ -614,7 +693,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform_options": {"anyKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
+					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform": "satellite, classic", "platform_options": {"mapKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
 				}))
 			})
 			It(`Invoke GetDeploymentInfo successfully`, func() {
@@ -675,135 +754,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke GetDeploymentInfo successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the GetDeploymentInfoOptions model
+				getDeploymentInfoOptionsModel := new(clouddatabasesv5.GetDeploymentInfoOptions)
+				getDeploymentInfoOptionsModel.ID = core.StringPtr("testString")
+				getDeploymentInfoOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetDeploymentInfo(getDeploymentInfoOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`CreateDatabaseUser(createDatabaseUserOptions *CreateDatabaseUserOptions) - Operation response error`, func() {
-		createDatabaseUserPath := "/deployments/testString/users/database"
-		Context(`Using mock server endpoint`, func() {
+		createDatabaseUserPath := "/deployments/testString/users/testString"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -813,7 +801,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("POST"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke CreateDatabaseUser with error: Operation response processing error`, func() {
@@ -824,17 +812,17 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the CreateDatabaseUserRequestUser model
-				createDatabaseUserRequestUserModel := new(clouddatabasesv5.CreateDatabaseUserRequestUser)
-				createDatabaseUserRequestUserModel.UserType = core.StringPtr("database")
-				createDatabaseUserRequestUserModel.Username = core.StringPtr("james")
-				createDatabaseUserRequestUserModel.Password = core.StringPtr("kickoutthe")
+				// Construct an instance of the User model
+				userModel := new(clouddatabasesv5.User)
+				userModel.Username = core.StringPtr("user")
+				userModel.Password = core.StringPtr("password123")
+				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
 				createDatabaseUserOptionsModel.ID = core.StringPtr("testString")
-				createDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				createDatabaseUserOptionsModel.User = createDatabaseUserRequestUserModel
+				createDatabaseUserOptionsModel.UserType = core.StringPtr("testString")
+				createDatabaseUserOptionsModel.User = userModel
 				createDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptionsModel)
@@ -854,9 +842,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`CreateDatabaseUser(createDatabaseUserOptions *CreateDatabaseUserOptions)`, func() {
-		createDatabaseUserPath := "/deployments/testString/users/database"
+		createDatabaseUserPath := "/deployments/testString/users/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -900,17 +887,17 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
-				// Construct an instance of the CreateDatabaseUserRequestUser model
-				createDatabaseUserRequestUserModel := new(clouddatabasesv5.CreateDatabaseUserRequestUser)
-				createDatabaseUserRequestUserModel.UserType = core.StringPtr("database")
-				createDatabaseUserRequestUserModel.Username = core.StringPtr("james")
-				createDatabaseUserRequestUserModel.Password = core.StringPtr("kickoutthe")
+				// Construct an instance of the User model
+				userModel := new(clouddatabasesv5.User)
+				userModel.Username = core.StringPtr("user")
+				userModel.Password = core.StringPtr("password123")
+				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
 				createDatabaseUserOptionsModel.ID = core.StringPtr("testString")
-				createDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				createDatabaseUserOptionsModel.User = createDatabaseUserRequestUserModel
+				createDatabaseUserOptionsModel.UserType = core.StringPtr("testString")
+				createDatabaseUserOptionsModel.User = userModel
 				createDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -983,17 +970,17 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the CreateDatabaseUserRequestUser model
-				createDatabaseUserRequestUserModel := new(clouddatabasesv5.CreateDatabaseUserRequestUser)
-				createDatabaseUserRequestUserModel.UserType = core.StringPtr("database")
-				createDatabaseUserRequestUserModel.Username = core.StringPtr("james")
-				createDatabaseUserRequestUserModel.Password = core.StringPtr("kickoutthe")
+				// Construct an instance of the User model
+				userModel := new(clouddatabasesv5.User)
+				userModel.Username = core.StringPtr("user")
+				userModel.Password = core.StringPtr("password123")
+				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
 				createDatabaseUserOptionsModel.ID = core.StringPtr("testString")
-				createDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				createDatabaseUserOptionsModel.User = createDatabaseUserRequestUserModel
+				createDatabaseUserOptionsModel.UserType = core.StringPtr("testString")
+				createDatabaseUserOptionsModel.User = userModel
 				createDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -1011,17 +998,17 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the CreateDatabaseUserRequestUser model
-				createDatabaseUserRequestUserModel := new(clouddatabasesv5.CreateDatabaseUserRequestUser)
-				createDatabaseUserRequestUserModel.UserType = core.StringPtr("database")
-				createDatabaseUserRequestUserModel.Username = core.StringPtr("james")
-				createDatabaseUserRequestUserModel.Password = core.StringPtr("kickoutthe")
+				// Construct an instance of the User model
+				userModel := new(clouddatabasesv5.User)
+				userModel.Username = core.StringPtr("user")
+				userModel.Password = core.StringPtr("password123")
+				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
 				createDatabaseUserOptionsModel.ID = core.StringPtr("testString")
-				createDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				createDatabaseUserOptionsModel.User = createDatabaseUserRequestUserModel
+				createDatabaseUserOptionsModel.UserType = core.StringPtr("testString")
+				createDatabaseUserOptionsModel.User = userModel
 				createDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -1043,10 +1030,52 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
+			})
+			It(`Invoke CreateDatabaseUser successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the User model
+				userModel := new(clouddatabasesv5.User)
+				userModel.Username = core.StringPtr("user")
+				userModel.Password = core.StringPtr("password123")
+				userModel.Role = core.StringPtr("group_data_access_admin")
+
+				// Construct an instance of the CreateDatabaseUserOptions model
+				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
+				createDatabaseUserOptionsModel.ID = core.StringPtr("testString")
+				createDatabaseUserOptionsModel.UserType = core.StringPtr("testString")
+				createDatabaseUserOptionsModel.User = userModel
+				createDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions) - Operation response error`, func() {
-		changeUserPasswordPath := "/deployments/testString/users/database/james"
-		Context(`Using mock server endpoint`, func() {
+		changeUserPasswordPath := "/deployments/testString/users/database/user"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -1056,7 +1085,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("PATCH"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ChangeUserPassword with error: Operation response processing error`, func() {
@@ -1075,7 +1104,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
 				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
 				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("james")
+				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
 				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
 				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
@@ -1096,9 +1125,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
-		changeUserPasswordPath := "/deployments/testString/users/database/james"
+		changeUserPasswordPath := "/deployments/testString/users/database/user"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1150,7 +1178,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
 				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
 				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("james")
+				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
 				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
 				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
@@ -1232,7 +1260,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
 				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
 				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("james")
+				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
 				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
 				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
@@ -1259,7 +1287,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
 				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
 				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("james")
+				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
 				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
 				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
@@ -1282,10 +1310,51 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
+			})
+			It(`Invoke ChangeUserPassword successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the APasswordSettingUser model
+				aPasswordSettingUserModel := new(clouddatabasesv5.APasswordSettingUser)
+				aPasswordSettingUserModel.Password = core.StringPtr("xyzzyyzzyx")
+
+				// Construct an instance of the ChangeUserPasswordOptions model
+				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
+				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
+				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
+				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
+				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
+				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`DeleteDatabaseUser(deleteDatabaseUserOptions *DeleteDatabaseUserOptions) - Operation response error`, func() {
-		deleteDatabaseUserPath := "/deployments/testString/users/database/james"
-		Context(`Using mock server endpoint`, func() {
+		deleteDatabaseUserPath := "/deployments/testString/users/database/user"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -1295,7 +1364,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("DELETE"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke DeleteDatabaseUser with error: Operation response processing error`, func() {
@@ -1310,7 +1379,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				deleteDatabaseUserOptionsModel := new(clouddatabasesv5.DeleteDatabaseUserOptions)
 				deleteDatabaseUserOptionsModel.ID = core.StringPtr("testString")
 				deleteDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				deleteDatabaseUserOptionsModel.Username = core.StringPtr("james")
+				deleteDatabaseUserOptionsModel.Username = core.StringPtr("user")
 				deleteDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.DeleteDatabaseUser(deleteDatabaseUserOptionsModel)
@@ -1330,9 +1399,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`DeleteDatabaseUser(deleteDatabaseUserOptions *DeleteDatabaseUserOptions)`, func() {
-		deleteDatabaseUserPath := "/deployments/testString/users/database/james"
+		deleteDatabaseUserPath := "/deployments/testString/users/database/user"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -1364,7 +1432,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				deleteDatabaseUserOptionsModel := new(clouddatabasesv5.DeleteDatabaseUserOptions)
 				deleteDatabaseUserOptionsModel.ID = core.StringPtr("testString")
 				deleteDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				deleteDatabaseUserOptionsModel.Username = core.StringPtr("james")
+				deleteDatabaseUserOptionsModel.Username = core.StringPtr("user")
 				deleteDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -1425,7 +1493,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				deleteDatabaseUserOptionsModel := new(clouddatabasesv5.DeleteDatabaseUserOptions)
 				deleteDatabaseUserOptionsModel.ID = core.StringPtr("testString")
 				deleteDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				deleteDatabaseUserOptionsModel.Username = core.StringPtr("james")
+				deleteDatabaseUserOptionsModel.Username = core.StringPtr("user")
 				deleteDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -1447,7 +1515,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				deleteDatabaseUserOptionsModel := new(clouddatabasesv5.DeleteDatabaseUserOptions)
 				deleteDatabaseUserOptionsModel.ID = core.StringPtr("testString")
 				deleteDatabaseUserOptionsModel.UserType = core.StringPtr("database")
-				deleteDatabaseUserOptionsModel.Username = core.StringPtr("james")
+				deleteDatabaseUserOptionsModel.Username = core.StringPtr("user")
 				deleteDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -1469,135 +1537,46 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke DeleteDatabaseUser successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the DeleteDatabaseUserOptions model
+				deleteDatabaseUserOptionsModel := new(clouddatabasesv5.DeleteDatabaseUserOptions)
+				deleteDatabaseUserOptionsModel.ID = core.StringPtr("testString")
+				deleteDatabaseUserOptionsModel.UserType = core.StringPtr("database")
+				deleteDatabaseUserOptionsModel.Username = core.StringPtr("user")
+				deleteDatabaseUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.DeleteDatabaseUser(deleteDatabaseUserOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions) - Operation response error`, func() {
 		updateDatabaseConfigurationPath := "/deployments/testString/configuration"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -1607,7 +1586,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("PATCH"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke UpdateDatabaseConfiguration with error: Operation response processing error`, func() {
@@ -1618,24 +1597,24 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the SetConfigurationConfigurationPgConfiguration model
-				setConfigurationConfigurationModel := new(clouddatabasesv5.SetConfigurationConfigurationPgConfiguration)
-				setConfigurationConfigurationModel.MaxConnections = core.Int64Ptr(int64(200))
-				setConfigurationConfigurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
-				setConfigurationConfigurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
-				setConfigurationConfigurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
-				setConfigurationConfigurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
-				setConfigurationConfigurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
-				setConfigurationConfigurationModel.SharedBuffers = core.Int64Ptr(int64(16))
-				setConfigurationConfigurationModel.SynchronousCommit = core.StringPtr("local")
-				setConfigurationConfigurationModel.WalLevel = core.StringPtr("hot_standby")
-				setConfigurationConfigurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
-				setConfigurationConfigurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
+				// Construct an instance of the ConfigurationPgConfiguration model
+				configurationModel := new(clouddatabasesv5.ConfigurationPgConfiguration)
+				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+				configurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
+				configurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
+				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
+				configurationModel.SharedBuffers = core.Int64Ptr(int64(16))
+				configurationModel.SynchronousCommit = core.StringPtr("local")
+				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
+				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
 				updateDatabaseConfigurationOptionsModel.ID = core.StringPtr("testString")
-				updateDatabaseConfigurationOptionsModel.Configuration = setConfigurationConfigurationModel
+				updateDatabaseConfigurationOptionsModel.Configuration = configurationModel
 				updateDatabaseConfigurationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptionsModel)
@@ -1655,7 +1634,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions)`, func() {
 		updateDatabaseConfigurationPath := "/deployments/testString/configuration"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -1701,24 +1679,24 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
-				// Construct an instance of the SetConfigurationConfigurationPgConfiguration model
-				setConfigurationConfigurationModel := new(clouddatabasesv5.SetConfigurationConfigurationPgConfiguration)
-				setConfigurationConfigurationModel.MaxConnections = core.Int64Ptr(int64(200))
-				setConfigurationConfigurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
-				setConfigurationConfigurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
-				setConfigurationConfigurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
-				setConfigurationConfigurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
-				setConfigurationConfigurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
-				setConfigurationConfigurationModel.SharedBuffers = core.Int64Ptr(int64(16))
-				setConfigurationConfigurationModel.SynchronousCommit = core.StringPtr("local")
-				setConfigurationConfigurationModel.WalLevel = core.StringPtr("hot_standby")
-				setConfigurationConfigurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
-				setConfigurationConfigurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
+				// Construct an instance of the ConfigurationPgConfiguration model
+				configurationModel := new(clouddatabasesv5.ConfigurationPgConfiguration)
+				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+				configurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
+				configurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
+				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
+				configurationModel.SharedBuffers = core.Int64Ptr(int64(16))
+				configurationModel.SynchronousCommit = core.StringPtr("local")
+				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
+				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
 				updateDatabaseConfigurationOptionsModel.ID = core.StringPtr("testString")
-				updateDatabaseConfigurationOptionsModel.Configuration = setConfigurationConfigurationModel
+				updateDatabaseConfigurationOptionsModel.Configuration = configurationModel
 				updateDatabaseConfigurationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -1791,24 +1769,24 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the SetConfigurationConfigurationPgConfiguration model
-				setConfigurationConfigurationModel := new(clouddatabasesv5.SetConfigurationConfigurationPgConfiguration)
-				setConfigurationConfigurationModel.MaxConnections = core.Int64Ptr(int64(200))
-				setConfigurationConfigurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
-				setConfigurationConfigurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
-				setConfigurationConfigurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
-				setConfigurationConfigurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
-				setConfigurationConfigurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
-				setConfigurationConfigurationModel.SharedBuffers = core.Int64Ptr(int64(16))
-				setConfigurationConfigurationModel.SynchronousCommit = core.StringPtr("local")
-				setConfigurationConfigurationModel.WalLevel = core.StringPtr("hot_standby")
-				setConfigurationConfigurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
-				setConfigurationConfigurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
+				// Construct an instance of the ConfigurationPgConfiguration model
+				configurationModel := new(clouddatabasesv5.ConfigurationPgConfiguration)
+				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+				configurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
+				configurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
+				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
+				configurationModel.SharedBuffers = core.Int64Ptr(int64(16))
+				configurationModel.SynchronousCommit = core.StringPtr("local")
+				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
+				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
 				updateDatabaseConfigurationOptionsModel.ID = core.StringPtr("testString")
-				updateDatabaseConfigurationOptionsModel.Configuration = setConfigurationConfigurationModel
+				updateDatabaseConfigurationOptionsModel.Configuration = configurationModel
 				updateDatabaseConfigurationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -1826,24 +1804,24 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the SetConfigurationConfigurationPgConfiguration model
-				setConfigurationConfigurationModel := new(clouddatabasesv5.SetConfigurationConfigurationPgConfiguration)
-				setConfigurationConfigurationModel.MaxConnections = core.Int64Ptr(int64(200))
-				setConfigurationConfigurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
-				setConfigurationConfigurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
-				setConfigurationConfigurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
-				setConfigurationConfigurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
-				setConfigurationConfigurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
-				setConfigurationConfigurationModel.SharedBuffers = core.Int64Ptr(int64(16))
-				setConfigurationConfigurationModel.SynchronousCommit = core.StringPtr("local")
-				setConfigurationConfigurationModel.WalLevel = core.StringPtr("hot_standby")
-				setConfigurationConfigurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
-				setConfigurationConfigurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
+				// Construct an instance of the ConfigurationPgConfiguration model
+				configurationModel := new(clouddatabasesv5.ConfigurationPgConfiguration)
+				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+				configurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
+				configurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
+				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
+				configurationModel.SharedBuffers = core.Int64Ptr(int64(16))
+				configurationModel.SynchronousCommit = core.StringPtr("local")
+				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
+				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
 				updateDatabaseConfigurationOptionsModel.ID = core.StringPtr("testString")
-				updateDatabaseConfigurationOptionsModel.Configuration = setConfigurationConfigurationModel
+				updateDatabaseConfigurationOptionsModel.Configuration = configurationModel
 				updateDatabaseConfigurationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -1865,135 +1843,59 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke UpdateDatabaseConfiguration successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the ConfigurationPgConfiguration model
+				configurationModel := new(clouddatabasesv5.ConfigurationPgConfiguration)
+				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+				configurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
+				configurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
+				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
+				configurationModel.SharedBuffers = core.Int64Ptr(int64(16))
+				configurationModel.SynchronousCommit = core.StringPtr("local")
+				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
+				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
+
+				// Construct an instance of the UpdateDatabaseConfigurationOptions model
+				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
+				updateDatabaseConfigurationOptionsModel.ID = core.StringPtr("testString")
+				updateDatabaseConfigurationOptionsModel.Configuration = configurationModel
+				updateDatabaseConfigurationOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`ListRemotes(listRemotesOptions *ListRemotesOptions) - Operation response error`, func() {
 		listRemotesPath := "/deployments/testString/remotes"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -2003,7 +1905,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ListRemotes with error: Operation response processing error`, func() {
@@ -2036,7 +1938,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ListRemotes(listRemotesOptions *ListRemotesOptions)`, func() {
 		listRemotesPath := "/deployments/testString/remotes"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -2169,10 +2070,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke ListRemotes successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the ListRemotesOptions model
+				listRemotesOptionsModel := new(clouddatabasesv5.ListRemotesOptions)
+				listRemotesOptionsModel.ID = core.StringPtr("testString")
+				listRemotesOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ListRemotes(listRemotesOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`ResyncReplica(resyncReplicaOptions *ResyncReplicaOptions) - Operation response error`, func() {
 		resyncReplicaPath := "/deployments/testString/remotes/resync"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -2182,7 +2117,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("POST"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ResyncReplica with error: Operation response processing error`, func() {
@@ -2215,7 +2150,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ResyncReplica(resyncReplicaOptions *ResyncReplicaOptions)`, func() {
 		resyncReplicaPath := "/deployments/testString/remotes/resync"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -2348,23 +2282,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`SetPromotion(setPromotionOptions *SetPromotionOptions) - Operation response error`, func() {
-		setPromotionPath := "/deployments/testString/remotes/promotion"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with missing response body`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(setPromotionPath))
-					Expect(req.Method).To(Equal("POST"))
-					res.Header().Set("Content-type", "application/json")
+					// Set success status code with no respoonse body
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
 				}))
 			})
-			It(`Invoke SetPromotion with error: Operation response processing error`, func() {
+			It(`Invoke ResyncReplica successfully`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -2372,24 +2299,61 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the SetPromotionPromotionPromote model
-				setPromotionPromotionModel := new(clouddatabasesv5.SetPromotionPromotionPromote)
-				setPromotionPromotionModel.Promotion = make(map[string]interface{})
+				// Construct an instance of the ResyncReplicaOptions model
+				resyncReplicaOptionsModel := new(clouddatabasesv5.ResyncReplicaOptions)
+				resyncReplicaOptionsModel.ID = core.StringPtr("testString")
+				resyncReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
-				// Construct an instance of the SetPromotionOptions model
-				setPromotionOptionsModel := new(clouddatabasesv5.SetPromotionOptions)
-				setPromotionOptionsModel.ID = core.StringPtr("testString")
-				setPromotionOptionsModel.Promotion = setPromotionPromotionModel
-				setPromotionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ResyncReplica(resyncReplicaOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`PromoteReadOnlyReplica(promoteReadOnlyReplicaOptions *PromoteReadOnlyReplicaOptions) - Operation response error`, func() {
+		promoteReadOnlyReplicaPath := "/deployments/testString/remotes/promotion"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(promoteReadOnlyReplicaPath))
+					Expect(req.Method).To(Equal("POST"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprint(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke PromoteReadOnlyReplica with error: Operation response processing error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the PromoteReadOnlyReplicaOptions model
+				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
+				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
+				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := cloudDatabasesService.SetPromotion(setPromotionOptionsModel)
+				result, response, operationErr := cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
 				cloudDatabasesService.EnableRetries(0, 0)
-				result, response, operationErr = cloudDatabasesService.SetPromotion(setPromotionOptionsModel)
+				result, response, operationErr = cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -2399,16 +2363,15 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
-	Describe(`SetPromotion(setPromotionOptions *SetPromotionOptions)`, func() {
-		setPromotionPath := "/deployments/testString/remotes/promotion"
+	Describe(`PromoteReadOnlyReplica(promoteReadOnlyReplicaOptions *PromoteReadOnlyReplicaOptions)`, func() {
+		promoteReadOnlyReplicaPath := "/deployments/testString/remotes/promotion"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(setPromotionPath))
+					Expect(req.URL.EscapedPath()).To(Equal(promoteReadOnlyReplicaPath))
 					Expect(req.Method).To(Equal("POST"))
 
 					// For gzip-disabled operation, verify Content-Encoding is not set.
@@ -2436,7 +2399,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
-			It(`Invoke SetPromotion successfully with retries`, func() {
+			It(`Invoke PromoteReadOnlyReplica successfully with retries`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -2445,26 +2408,22 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
-				// Construct an instance of the SetPromotionPromotionPromote model
-				setPromotionPromotionModel := new(clouddatabasesv5.SetPromotionPromotionPromote)
-				setPromotionPromotionModel.Promotion = make(map[string]interface{})
-
-				// Construct an instance of the SetPromotionOptions model
-				setPromotionOptionsModel := new(clouddatabasesv5.SetPromotionOptions)
-				setPromotionOptionsModel.ID = core.StringPtr("testString")
-				setPromotionOptionsModel.Promotion = setPromotionPromotionModel
-				setPromotionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PromoteReadOnlyReplicaOptions model
+				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
+				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
+				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := cloudDatabasesService.SetPromotionWithContext(ctx, setPromotionOptionsModel)
+				_, _, operationErr := cloudDatabasesService.PromoteReadOnlyReplicaWithContext(ctx, promoteReadOnlyReplicaOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
 				cloudDatabasesService.DisableRetries()
-				result, response, operationErr := cloudDatabasesService.SetPromotion(setPromotionOptionsModel)
+				result, response, operationErr := cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -2472,7 +2431,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = cloudDatabasesService.SetPromotionWithContext(ctx, setPromotionOptionsModel)
+				_, _, operationErr = cloudDatabasesService.PromoteReadOnlyReplicaWithContext(ctx, promoteReadOnlyReplicaOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -2486,7 +2445,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(setPromotionPath))
+					Expect(req.URL.EscapedPath()).To(Equal(promoteReadOnlyReplicaPath))
 					Expect(req.Method).To(Equal("POST"))
 
 					// For gzip-disabled operation, verify Content-Encoding is not set.
@@ -2511,7 +2470,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
-			It(`Invoke SetPromotion successfully`, func() {
+			It(`Invoke PromoteReadOnlyReplica successfully`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -2520,29 +2479,25 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := cloudDatabasesService.SetPromotion(nil)
+				result, response, operationErr := cloudDatabasesService.PromoteReadOnlyReplica(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the SetPromotionPromotionPromote model
-				setPromotionPromotionModel := new(clouddatabasesv5.SetPromotionPromotionPromote)
-				setPromotionPromotionModel.Promotion = make(map[string]interface{})
-
-				// Construct an instance of the SetPromotionOptions model
-				setPromotionOptionsModel := new(clouddatabasesv5.SetPromotionOptions)
-				setPromotionOptionsModel.ID = core.StringPtr("testString")
-				setPromotionOptionsModel.Promotion = setPromotionPromotionModel
-				setPromotionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PromoteReadOnlyReplicaOptions model
+				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
+				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
+				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = cloudDatabasesService.SetPromotion(setPromotionOptionsModel)
+				result, response, operationErr = cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke SetPromotion with error: Operation validation and request error`, func() {
+			It(`Invoke PromoteReadOnlyReplica with error: Operation validation and request error`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -2550,27 +2505,23 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the SetPromotionPromotionPromote model
-				setPromotionPromotionModel := new(clouddatabasesv5.SetPromotionPromotionPromote)
-				setPromotionPromotionModel.Promotion = make(map[string]interface{})
-
-				// Construct an instance of the SetPromotionOptions model
-				setPromotionOptionsModel := new(clouddatabasesv5.SetPromotionOptions)
-				setPromotionOptionsModel.ID = core.StringPtr("testString")
-				setPromotionOptionsModel.Promotion = setPromotionPromotionModel
-				setPromotionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the PromoteReadOnlyReplicaOptions model
+				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
+				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
+				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := cloudDatabasesService.SetPromotion(setPromotionOptionsModel)
+				result, response, operationErr := cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
-				// Construct a second instance of the SetPromotionOptions model with no property values
-				setPromotionOptionsModelNew := new(clouddatabasesv5.SetPromotionOptions)
+				// Construct a second instance of the PromoteReadOnlyReplicaOptions model with no property values
+				promoteReadOnlyReplicaOptionsModelNew := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = cloudDatabasesService.SetPromotion(setPromotionOptionsModelNew)
+				result, response, operationErr = cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -2579,135 +2530,45 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke PromoteReadOnlyReplica successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the PromoteReadOnlyReplicaOptions model
+				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
+				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
+				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`ListDeploymentTasks(listDeploymentTasksOptions *ListDeploymentTasksOptions) - Operation response error`, func() {
 		listDeploymentTasksPath := "/deployments/testString/tasks"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -2717,7 +2578,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ListDeploymentTasks with error: Operation response processing error`, func() {
@@ -2750,7 +2611,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ListDeploymentTasks(listDeploymentTasksOptions *ListDeploymentTasksOptions)`, func() {
 		listDeploymentTasksPath := "/deployments/testString/tasks"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -2883,10 +2743,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke ListDeploymentTasks successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the ListDeploymentTasksOptions model
+				listDeploymentTasksOptionsModel := new(clouddatabasesv5.ListDeploymentTasksOptions)
+				listDeploymentTasksOptionsModel.ID = core.StringPtr("testString")
+				listDeploymentTasksOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ListDeploymentTasks(listDeploymentTasksOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`GetTask(getTaskOptions *GetTaskOptions) - Operation response error`, func() {
 		getTaskPath := "/tasks/testString"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -2896,7 +2790,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetTask with error: Operation response processing error`, func() {
@@ -2929,7 +2823,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`GetTask(getTaskOptions *GetTaskOptions)`, func() {
 		getTaskPath := "/tasks/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -3062,135 +2955,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke GetTask successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the GetTaskOptions model
+				getTaskOptionsModel := new(clouddatabasesv5.GetTaskOptions)
+				getTaskOptionsModel.ID = core.StringPtr("testString")
+				getTaskOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetTask(getTaskOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`GetBackupInfo(getBackupInfoOptions *GetBackupInfoOptions) - Operation response error`, func() {
 		getBackupInfoPath := "/backups/testString"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -3200,7 +3002,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetBackupInfo with error: Operation response processing error`, func() {
@@ -3233,7 +3035,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`GetBackupInfo(getBackupInfoOptions *GetBackupInfoOptions)`, func() {
 		getBackupInfoPath := "/backups/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -3251,7 +3052,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"backup": {"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "created_at": "2018-02-28T19:25:12.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"backup": {"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "download_link": "https://securedownloadservice.com/backup-2018-02-28T19:25:12Z.tgz", "created_at": "2018-02-28T19:25:12.000Z"}}`)
 				}))
 			})
 			It(`Invoke GetBackupInfo successfully with retries`, func() {
@@ -3305,7 +3106,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"backup": {"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "created_at": "2018-02-28T19:25:12.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"backup": {"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "download_link": "https://securedownloadservice.com/backup-2018-02-28T19:25:12Z.tgz", "created_at": "2018-02-28T19:25:12.000Z"}}`)
 				}))
 			})
 			It(`Invoke GetBackupInfo successfully`, func() {
@@ -3366,10 +3167,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetBackupInfo successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the GetBackupInfoOptions model
+				getBackupInfoOptionsModel := new(clouddatabasesv5.GetBackupInfoOptions)
+				getBackupInfoOptionsModel.BackupID = core.StringPtr("testString")
+				getBackupInfoOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetBackupInfo(getBackupInfoOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`ListDeploymentBackups(listDeploymentBackupsOptions *ListDeploymentBackupsOptions) - Operation response error`, func() {
 		listDeploymentBackupsPath := "/deployments/testString/backups"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -3379,7 +3214,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ListDeploymentBackups with error: Operation response processing error`, func() {
@@ -3412,7 +3247,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ListDeploymentBackups(listDeploymentBackupsOptions *ListDeploymentBackupsOptions)`, func() {
 		listDeploymentBackupsPath := "/deployments/testString/backups"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -3430,7 +3264,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"backups": [{"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "created_at": "2018-02-28T19:25:12.000Z"}]}`)
+					fmt.Fprintf(res, "%s", `{"backups": [{"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "download_link": "https://securedownloadservice.com/backup-2018-02-28T19:25:12Z.tgz", "created_at": "2018-02-28T19:25:12.000Z"}]}`)
 				}))
 			})
 			It(`Invoke ListDeploymentBackups successfully with retries`, func() {
@@ -3484,7 +3318,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"backups": [{"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "created_at": "2018-02-28T19:25:12.000Z"}]}`)
+					fmt.Fprintf(res, "%s", `{"backups": [{"id": "5a970218cb7544000671c094", "deployment_id": "595eada310b7ac00116dd48b", "type": "scheduled", "status": "running", "is_downloadable": true, "is_restorable": true, "download_link": "https://securedownloadservice.com/backup-2018-02-28T19:25:12Z.tgz", "created_at": "2018-02-28T19:25:12.000Z"}]}`)
 				}))
 			})
 			It(`Invoke ListDeploymentBackups successfully`, func() {
@@ -3545,10 +3379,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke ListDeploymentBackups successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the ListDeploymentBackupsOptions model
+				listDeploymentBackupsOptionsModel := new(clouddatabasesv5.ListDeploymentBackupsOptions)
+				listDeploymentBackupsOptionsModel.ID = core.StringPtr("testString")
+				listDeploymentBackupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`StartOndemandBackup(startOndemandBackupOptions *StartOndemandBackupOptions) - Operation response error`, func() {
 		startOndemandBackupPath := "/deployments/testString/backups"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -3558,7 +3426,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("POST"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke StartOndemandBackup with error: Operation response processing error`, func() {
@@ -3591,7 +3459,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`StartOndemandBackup(startOndemandBackupOptions *StartOndemandBackupOptions)`, func() {
 		startOndemandBackupPath := "/deployments/testString/backups"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -3724,23 +3591,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`GetPitRdata(getPitRdataOptions *GetPitRdataOptions) - Operation response error`, func() {
-		getPitRdataPath := "/deployments/testString/point_in_time_recovery_data"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with missing response body`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
-					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getPitRdataPath))
-					Expect(req.Method).To(Equal("GET"))
-					res.Header().Set("Content-type", "application/json")
+					// Set success status code with no respoonse body
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
 				}))
 			})
-			It(`Invoke GetPitRdata with error: Operation response processing error`, func() {
+			It(`Invoke StartOndemandBackup successfully`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -3748,19 +3608,60 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the GetPitRdataOptions model
-				getPitRdataOptionsModel := new(clouddatabasesv5.GetPitRdataOptions)
-				getPitRdataOptionsModel.ID = core.StringPtr("testString")
-				getPitRdataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the StartOndemandBackupOptions model
+				startOndemandBackupOptionsModel := new(clouddatabasesv5.StartOndemandBackupOptions)
+				startOndemandBackupOptionsModel.ID = core.StringPtr("testString")
+				startOndemandBackupOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.StartOndemandBackup(startOndemandBackupOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`GetPitrData(getPitrDataOptions *GetPitrDataOptions) - Operation response error`, func() {
+		getPitrDataPath := "/deployments/testString/point_in_time_recovery_data"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(getPitrDataPath))
+					Expect(req.Method).To(Equal("GET"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprint(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke GetPitrData with error: Operation response processing error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the GetPitrDataOptions model
+				getPitrDataOptionsModel := new(clouddatabasesv5.GetPitrDataOptions)
+				getPitrDataOptionsModel.ID = core.StringPtr("testString")
+				getPitrDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := cloudDatabasesService.GetPitRdata(getPitRdataOptionsModel)
+				result, response, operationErr := cloudDatabasesService.GetPitrData(getPitrDataOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
 				cloudDatabasesService.EnableRetries(0, 0)
-				result, response, operationErr = cloudDatabasesService.GetPitRdata(getPitRdataOptionsModel)
+				result, response, operationErr = cloudDatabasesService.GetPitrData(getPitrDataOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -3770,16 +3671,15 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
-	Describe(`GetPitRdata(getPitRdataOptions *GetPitRdataOptions)`, func() {
-		getPitRdataPath := "/deployments/testString/point_in_time_recovery_data"
+	Describe(`GetPitrData(getPitrDataOptions *GetPitrDataOptions)`, func() {
+		getPitrDataPath := "/deployments/testString/point_in_time_recovery_data"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getPitRdataPath))
+					Expect(req.URL.EscapedPath()).To(Equal(getPitrDataPath))
 					Expect(req.Method).To(Equal("GET"))
 
 					// Sleep a short time to support a timeout test
@@ -3788,10 +3688,10 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"earliest_point_in_time_recovery_time": "EarliestPointInTimeRecoveryTime"}`)
+					fmt.Fprintf(res, "%s", `{"point_in_time_recovery_data": {"earliest_point_in_time_recovery_time": "EarliestPointInTimeRecoveryTime"}}`)
 				}))
 			})
-			It(`Invoke GetPitRdata successfully with retries`, func() {
+			It(`Invoke GetPitrData successfully with retries`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -3800,21 +3700,21 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
-				// Construct an instance of the GetPitRdataOptions model
-				getPitRdataOptionsModel := new(clouddatabasesv5.GetPitRdataOptions)
-				getPitRdataOptionsModel.ID = core.StringPtr("testString")
-				getPitRdataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the GetPitrDataOptions model
+				getPitrDataOptionsModel := new(clouddatabasesv5.GetPitrDataOptions)
+				getPitrDataOptionsModel.ID = core.StringPtr("testString")
+				getPitrDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := cloudDatabasesService.GetPitRdataWithContext(ctx, getPitRdataOptionsModel)
+				_, _, operationErr := cloudDatabasesService.GetPitrDataWithContext(ctx, getPitrDataOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
 				cloudDatabasesService.DisableRetries()
-				result, response, operationErr := cloudDatabasesService.GetPitRdata(getPitRdataOptionsModel)
+				result, response, operationErr := cloudDatabasesService.GetPitrData(getPitrDataOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -3822,7 +3722,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = cloudDatabasesService.GetPitRdataWithContext(ctx, getPitRdataOptionsModel)
+				_, _, operationErr = cloudDatabasesService.GetPitrDataWithContext(ctx, getPitrDataOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -3836,16 +3736,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(getPitRdataPath))
+					Expect(req.URL.EscapedPath()).To(Equal(getPitrDataPath))
 					Expect(req.Method).To(Equal("GET"))
 
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"earliest_point_in_time_recovery_time": "EarliestPointInTimeRecoveryTime"}`)
+					fmt.Fprintf(res, "%s", `{"point_in_time_recovery_data": {"earliest_point_in_time_recovery_time": "EarliestPointInTimeRecoveryTime"}}`)
 				}))
 			})
-			It(`Invoke GetPitRdata successfully`, func() {
+			It(`Invoke GetPitrData successfully`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -3854,24 +3754,24 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := cloudDatabasesService.GetPitRdata(nil)
+				result, response, operationErr := cloudDatabasesService.GetPitrData(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the GetPitRdataOptions model
-				getPitRdataOptionsModel := new(clouddatabasesv5.GetPitRdataOptions)
-				getPitRdataOptionsModel.ID = core.StringPtr("testString")
-				getPitRdataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the GetPitrDataOptions model
+				getPitrDataOptionsModel := new(clouddatabasesv5.GetPitrDataOptions)
+				getPitrDataOptionsModel.ID = core.StringPtr("testString")
+				getPitrDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = cloudDatabasesService.GetPitRdata(getPitRdataOptionsModel)
+				result, response, operationErr = cloudDatabasesService.GetPitrData(getPitrDataOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke GetPitRdata with error: Operation validation and request error`, func() {
+			It(`Invoke GetPitrData with error: Operation validation and request error`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -3879,22 +3779,22 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the GetPitRdataOptions model
-				getPitRdataOptionsModel := new(clouddatabasesv5.GetPitRdataOptions)
-				getPitRdataOptionsModel.ID = core.StringPtr("testString")
-				getPitRdataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the GetPitrDataOptions model
+				getPitrDataOptionsModel := new(clouddatabasesv5.GetPitrDataOptions)
+				getPitrDataOptionsModel.ID = core.StringPtr("testString")
+				getPitrDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := cloudDatabasesService.GetPitRdata(getPitRdataOptionsModel)
+				result, response, operationErr := cloudDatabasesService.GetPitrData(getPitrDataOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
-				// Construct a second instance of the GetPitRdataOptions model with no property values
-				getPitRdataOptionsModelNew := new(clouddatabasesv5.GetPitRdataOptions)
+				// Construct a second instance of the GetPitrDataOptions model with no property values
+				getPitrDataOptionsModelNew := new(clouddatabasesv5.GetPitrDataOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = cloudDatabasesService.GetPitRdata(getPitRdataOptionsModelNew)
+				result, response, operationErr = cloudDatabasesService.GetPitrData(getPitrDataOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -3903,135 +3803,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke GetPitrData successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the GetPitrDataOptions model
+				getPitrDataOptionsModel := new(clouddatabasesv5.GetPitrDataOptions)
+				getPitrDataOptionsModel.ID = core.StringPtr("testString")
+				getPitrDataOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetPitrData(getPitrDataOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`GetConnection(getConnectionOptions *GetConnectionOptions) - Operation response error`, func() {
 		getConnectionPath := "/deployments/testString/users/database/testString/connections/public"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -4042,7 +3851,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.URL.Query()["certificate_root"]).To(Equal([]string{"testString"}))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetConnection with error: Operation response processing error`, func() {
@@ -4079,7 +3888,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`GetConnection(getConnectionOptions *GetConnectionOptions)`, func() {
 		getConnectionPath := "/deployments/testString/users/database/testString/connections/public"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -4098,7 +3906,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "/ibmclouddb", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "Inner"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke GetConnection successfully with retries`, func() {
@@ -4157,7 +3965,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "/ibmclouddb", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "Inner"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke GetConnection successfully`, func() {
@@ -4226,10 +4034,48 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetConnection successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the GetConnectionOptions model
+				getConnectionOptionsModel := new(clouddatabasesv5.GetConnectionOptions)
+				getConnectionOptionsModel.ID = core.StringPtr("testString")
+				getConnectionOptionsModel.UserType = core.StringPtr("database")
+				getConnectionOptionsModel.UserID = core.StringPtr("testString")
+				getConnectionOptionsModel.EndpointType = core.StringPtr("public")
+				getConnectionOptionsModel.CertificateRoot = core.StringPtr("testString")
+				getConnectionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetConnection(getConnectionOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`CompleteConnection(completeConnectionOptions *CompleteConnectionOptions) - Operation response error`, func() {
 		completeConnectionPath := "/deployments/testString/users/database/testString/connections/public"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -4239,7 +4085,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("POST"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke CompleteConnection with error: Operation response processing error`, func() {
@@ -4277,7 +4123,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`CompleteConnection(completeConnectionOptions *CompleteConnectionOptions)`, func() {
 		completeConnectionPath := "/deployments/testString/users/database/testString/connections/public"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -4311,7 +4156,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "/ibmclouddb", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "Inner"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke CompleteConnection successfully with retries`, func() {
@@ -4386,7 +4231,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "/ibmclouddb", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "Inner"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke CompleteConnection successfully`, func() {
@@ -4457,135 +4302,49 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke CompleteConnection successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the CompleteConnectionOptions model
+				completeConnectionOptionsModel := new(clouddatabasesv5.CompleteConnectionOptions)
+				completeConnectionOptionsModel.ID = core.StringPtr("testString")
+				completeConnectionOptionsModel.UserType = core.StringPtr("database")
+				completeConnectionOptionsModel.UserID = core.StringPtr("testString")
+				completeConnectionOptionsModel.EndpointType = core.StringPtr("public")
+				completeConnectionOptionsModel.Password = core.StringPtr("providedpassword")
+				completeConnectionOptionsModel.CertificateRoot = core.StringPtr("testString")
+				completeConnectionOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.CompleteConnection(completeConnectionOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions) - Operation response error`, func() {
 		listDeploymentScalingGroupsPath := "/deployments/testString/groups"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -4595,7 +4354,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke ListDeploymentScalingGroups with error: Operation response processing error`, func() {
@@ -4628,7 +4387,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions)`, func() {
 		listDeploymentScalingGroupsPath := "/deployments/testString/groups"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -4761,10 +4519,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke ListDeploymentScalingGroups successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the ListDeploymentScalingGroupsOptions model
+				listDeploymentScalingGroupsOptionsModel := new(clouddatabasesv5.ListDeploymentScalingGroupsOptions)
+				listDeploymentScalingGroupsOptionsModel.ID = core.StringPtr("testString")
+				listDeploymentScalingGroupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.ListDeploymentScalingGroups(listDeploymentScalingGroupsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`GetDefaultScalingGroups(getDefaultScalingGroupsOptions *GetDefaultScalingGroupsOptions) - Operation response error`, func() {
 		getDefaultScalingGroupsPath := "/deployables/postgresql/groups"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -4774,7 +4566,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetDefaultScalingGroups with error: Operation response processing error`, func() {
@@ -4807,7 +4599,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`GetDefaultScalingGroups(getDefaultScalingGroupsOptions *GetDefaultScalingGroupsOptions)`, func() {
 		getDefaultScalingGroupsPath := "/deployables/postgresql/groups"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -4940,10 +4731,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetDefaultScalingGroups successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the GetDefaultScalingGroupsOptions model
+				getDefaultScalingGroupsOptionsModel := new(clouddatabasesv5.GetDefaultScalingGroupsOptions)
+				getDefaultScalingGroupsOptionsModel.Type = core.StringPtr("postgresql")
+				getDefaultScalingGroupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions) - Operation response error`, func() {
 		setDeploymentScalingGroupPath := "/deployments/testString/groups/testString"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -4953,7 +4778,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("PATCH"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke SetDeploymentScalingGroup with error: Operation response processing error`, func() {
@@ -4964,19 +4789,34 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the SetMemoryGroupMemory model
-				setMemoryGroupMemoryModel := new(clouddatabasesv5.SetMemoryGroupMemory)
-				setMemoryGroupMemoryModel.AllocationMb = core.Int64Ptr(int64(4096))
+				// Construct an instance of the GroupScalingMembers model
+				groupScalingMembersModel := new(clouddatabasesv5.GroupScalingMembers)
+				groupScalingMembersModel.AllocationCount = core.Int64Ptr(int64(4))
 
-				// Construct an instance of the SetDeploymentScalingGroupRequestSetMemoryGroup model
-				setDeploymentScalingGroupRequestModel := new(clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup)
-				setDeploymentScalingGroupRequestModel.Memory = setMemoryGroupMemoryModel
+				// Construct an instance of the GroupScalingMemory model
+				groupScalingMemoryModel := new(clouddatabasesv5.GroupScalingMemory)
+				groupScalingMemoryModel.AllocationMb = core.Int64Ptr(int64(12288))
+
+				// Construct an instance of the GroupScalingCPU model
+				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
+				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
+
+				// Construct an instance of the GroupScalingDisk model
+				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
+				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
+
+				// Construct an instance of the GroupScaling model
+				groupScalingModel := new(clouddatabasesv5.GroupScaling)
+				groupScalingModel.Members = groupScalingMembersModel
+				groupScalingModel.Memory = groupScalingMemoryModel
+				groupScalingModel.CPU = groupScalingCPUModel
+				groupScalingModel.Disk = groupScalingDiskModel
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
 				setDeploymentScalingGroupOptionsModel.ID = core.StringPtr("testString")
 				setDeploymentScalingGroupOptionsModel.GroupID = core.StringPtr("testString")
-				setDeploymentScalingGroupOptionsModel.SetDeploymentScalingGroupRequest = setDeploymentScalingGroupRequestModel
+				setDeploymentScalingGroupOptionsModel.Group = groupScalingModel
 				setDeploymentScalingGroupOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptionsModel)
@@ -4996,7 +4836,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions)`, func() {
 		setDeploymentScalingGroupPath := "/deployments/testString/groups/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -5042,19 +4881,34 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
-				// Construct an instance of the SetMemoryGroupMemory model
-				setMemoryGroupMemoryModel := new(clouddatabasesv5.SetMemoryGroupMemory)
-				setMemoryGroupMemoryModel.AllocationMb = core.Int64Ptr(int64(4096))
+				// Construct an instance of the GroupScalingMembers model
+				groupScalingMembersModel := new(clouddatabasesv5.GroupScalingMembers)
+				groupScalingMembersModel.AllocationCount = core.Int64Ptr(int64(4))
 
-				// Construct an instance of the SetDeploymentScalingGroupRequestSetMemoryGroup model
-				setDeploymentScalingGroupRequestModel := new(clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup)
-				setDeploymentScalingGroupRequestModel.Memory = setMemoryGroupMemoryModel
+				// Construct an instance of the GroupScalingMemory model
+				groupScalingMemoryModel := new(clouddatabasesv5.GroupScalingMemory)
+				groupScalingMemoryModel.AllocationMb = core.Int64Ptr(int64(12288))
+
+				// Construct an instance of the GroupScalingCPU model
+				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
+				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
+
+				// Construct an instance of the GroupScalingDisk model
+				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
+				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
+
+				// Construct an instance of the GroupScaling model
+				groupScalingModel := new(clouddatabasesv5.GroupScaling)
+				groupScalingModel.Members = groupScalingMembersModel
+				groupScalingModel.Memory = groupScalingMemoryModel
+				groupScalingModel.CPU = groupScalingCPUModel
+				groupScalingModel.Disk = groupScalingDiskModel
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
 				setDeploymentScalingGroupOptionsModel.ID = core.StringPtr("testString")
 				setDeploymentScalingGroupOptionsModel.GroupID = core.StringPtr("testString")
-				setDeploymentScalingGroupOptionsModel.SetDeploymentScalingGroupRequest = setDeploymentScalingGroupRequestModel
+				setDeploymentScalingGroupOptionsModel.Group = groupScalingModel
 				setDeploymentScalingGroupOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -5127,19 +4981,34 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the SetMemoryGroupMemory model
-				setMemoryGroupMemoryModel := new(clouddatabasesv5.SetMemoryGroupMemory)
-				setMemoryGroupMemoryModel.AllocationMb = core.Int64Ptr(int64(4096))
+				// Construct an instance of the GroupScalingMembers model
+				groupScalingMembersModel := new(clouddatabasesv5.GroupScalingMembers)
+				groupScalingMembersModel.AllocationCount = core.Int64Ptr(int64(4))
 
-				// Construct an instance of the SetDeploymentScalingGroupRequestSetMemoryGroup model
-				setDeploymentScalingGroupRequestModel := new(clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup)
-				setDeploymentScalingGroupRequestModel.Memory = setMemoryGroupMemoryModel
+				// Construct an instance of the GroupScalingMemory model
+				groupScalingMemoryModel := new(clouddatabasesv5.GroupScalingMemory)
+				groupScalingMemoryModel.AllocationMb = core.Int64Ptr(int64(12288))
+
+				// Construct an instance of the GroupScalingCPU model
+				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
+				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
+
+				// Construct an instance of the GroupScalingDisk model
+				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
+				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
+
+				// Construct an instance of the GroupScaling model
+				groupScalingModel := new(clouddatabasesv5.GroupScaling)
+				groupScalingModel.Members = groupScalingMembersModel
+				groupScalingModel.Memory = groupScalingMemoryModel
+				groupScalingModel.CPU = groupScalingCPUModel
+				groupScalingModel.Disk = groupScalingDiskModel
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
 				setDeploymentScalingGroupOptionsModel.ID = core.StringPtr("testString")
 				setDeploymentScalingGroupOptionsModel.GroupID = core.StringPtr("testString")
-				setDeploymentScalingGroupOptionsModel.SetDeploymentScalingGroupRequest = setDeploymentScalingGroupRequestModel
+				setDeploymentScalingGroupOptionsModel.Group = groupScalingModel
 				setDeploymentScalingGroupOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -5157,19 +5026,34 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the SetMemoryGroupMemory model
-				setMemoryGroupMemoryModel := new(clouddatabasesv5.SetMemoryGroupMemory)
-				setMemoryGroupMemoryModel.AllocationMb = core.Int64Ptr(int64(4096))
+				// Construct an instance of the GroupScalingMembers model
+				groupScalingMembersModel := new(clouddatabasesv5.GroupScalingMembers)
+				groupScalingMembersModel.AllocationCount = core.Int64Ptr(int64(4))
 
-				// Construct an instance of the SetDeploymentScalingGroupRequestSetMemoryGroup model
-				setDeploymentScalingGroupRequestModel := new(clouddatabasesv5.SetDeploymentScalingGroupRequestSetMemoryGroup)
-				setDeploymentScalingGroupRequestModel.Memory = setMemoryGroupMemoryModel
+				// Construct an instance of the GroupScalingMemory model
+				groupScalingMemoryModel := new(clouddatabasesv5.GroupScalingMemory)
+				groupScalingMemoryModel.AllocationMb = core.Int64Ptr(int64(12288))
+
+				// Construct an instance of the GroupScalingCPU model
+				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
+				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
+
+				// Construct an instance of the GroupScalingDisk model
+				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
+				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
+
+				// Construct an instance of the GroupScaling model
+				groupScalingModel := new(clouddatabasesv5.GroupScaling)
+				groupScalingModel.Members = groupScalingMembersModel
+				groupScalingModel.Memory = groupScalingMemoryModel
+				groupScalingModel.CPU = groupScalingCPUModel
+				groupScalingModel.Disk = groupScalingDiskModel
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
 				setDeploymentScalingGroupOptionsModel.ID = core.StringPtr("testString")
 				setDeploymentScalingGroupOptionsModel.GroupID = core.StringPtr("testString")
-				setDeploymentScalingGroupOptionsModel.SetDeploymentScalingGroupRequest = setDeploymentScalingGroupRequestModel
+				setDeploymentScalingGroupOptionsModel.Group = groupScalingModel
 				setDeploymentScalingGroupOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -5191,135 +5075,69 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke SetDeploymentScalingGroup successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the GroupScalingMembers model
+				groupScalingMembersModel := new(clouddatabasesv5.GroupScalingMembers)
+				groupScalingMembersModel.AllocationCount = core.Int64Ptr(int64(4))
+
+				// Construct an instance of the GroupScalingMemory model
+				groupScalingMemoryModel := new(clouddatabasesv5.GroupScalingMemory)
+				groupScalingMemoryModel.AllocationMb = core.Int64Ptr(int64(12288))
+
+				// Construct an instance of the GroupScalingCPU model
+				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
+				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
+
+				// Construct an instance of the GroupScalingDisk model
+				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
+				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
+
+				// Construct an instance of the GroupScaling model
+				groupScalingModel := new(clouddatabasesv5.GroupScaling)
+				groupScalingModel.Members = groupScalingMembersModel
+				groupScalingModel.Memory = groupScalingMemoryModel
+				groupScalingModel.CPU = groupScalingCPUModel
+				groupScalingModel.Disk = groupScalingDiskModel
+
+				// Construct an instance of the SetDeploymentScalingGroupOptions model
+				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
+				setDeploymentScalingGroupOptionsModel.ID = core.StringPtr("testString")
+				setDeploymentScalingGroupOptionsModel.GroupID = core.StringPtr("testString")
+				setDeploymentScalingGroupOptionsModel.Group = groupScalingModel
+				setDeploymentScalingGroupOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`GetAutoscalingConditions(getAutoscalingConditionsOptions *GetAutoscalingConditionsOptions) - Operation response error`, func() {
 		getAutoscalingConditionsPath := "/deployments/testString/groups/testString/autoscaling"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -5329,7 +5147,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetAutoscalingConditions with error: Operation response processing error`, func() {
@@ -5363,7 +5181,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`GetAutoscalingConditions(getAutoscalingConditionsOptions *GetAutoscalingConditionsOptions)`, func() {
 		getAutoscalingConditionsPath := "/deployments/testString/groups/testString/autoscaling"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -5499,10 +5316,45 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetAutoscalingConditions successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the GetAutoscalingConditionsOptions model
+				getAutoscalingConditionsOptionsModel := new(clouddatabasesv5.GetAutoscalingConditionsOptions)
+				getAutoscalingConditionsOptionsModel.ID = core.StringPtr("testString")
+				getAutoscalingConditionsOptionsModel.GroupID = core.StringPtr("testString")
+				getAutoscalingConditionsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetAutoscalingConditions(getAutoscalingConditionsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`SetAutoscalingConditions(setAutoscalingConditionsOptions *SetAutoscalingConditionsOptions) - Operation response error`, func() {
 		setAutoscalingConditionsPath := "/deployments/testString/groups/testString/autoscaling"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -5512,7 +5364,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("PATCH"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke SetAutoscalingConditions with error: Operation response processing error`, func() {
@@ -5573,7 +5425,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`SetAutoscalingConditions(setAutoscalingConditionsOptions *SetAutoscalingConditionsOptions)`, func() {
 		setAutoscalingConditionsPath := "/deployments/testString/groups/testString/autoscaling"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -5822,135 +5673,72 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke SetAutoscalingConditions successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the AutoscalingMemoryGroupMemoryScalersIoUtilization model
+				autoscalingMemoryGroupMemoryScalersIoUtilizationModel := new(clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization)
+				autoscalingMemoryGroupMemoryScalersIoUtilizationModel.Enabled = core.BoolPtr(true)
+				autoscalingMemoryGroupMemoryScalersIoUtilizationModel.OverPeriod = core.StringPtr("5m")
+				autoscalingMemoryGroupMemoryScalersIoUtilizationModel.AbovePercent = core.Int64Ptr(int64(90))
+
+				// Construct an instance of the AutoscalingMemoryGroupMemoryScalers model
+				autoscalingMemoryGroupMemoryScalersModel := new(clouddatabasesv5.AutoscalingMemoryGroupMemoryScalers)
+				autoscalingMemoryGroupMemoryScalersModel.IoUtilization = autoscalingMemoryGroupMemoryScalersIoUtilizationModel
+
+				// Construct an instance of the AutoscalingMemoryGroupMemoryRate model
+				autoscalingMemoryGroupMemoryRateModel := new(clouddatabasesv5.AutoscalingMemoryGroupMemoryRate)
+				autoscalingMemoryGroupMemoryRateModel.IncreasePercent = core.Float64Ptr(float64(10.0))
+				autoscalingMemoryGroupMemoryRateModel.PeriodSeconds = core.Int64Ptr(int64(300))
+				autoscalingMemoryGroupMemoryRateModel.LimitMbPerMember = core.Float64Ptr(float64(125952))
+				autoscalingMemoryGroupMemoryRateModel.Units = core.StringPtr("mb")
+
+				// Construct an instance of the AutoscalingMemoryGroupMemory model
+				autoscalingMemoryGroupMemoryModel := new(clouddatabasesv5.AutoscalingMemoryGroupMemory)
+				autoscalingMemoryGroupMemoryModel.Scalers = autoscalingMemoryGroupMemoryScalersModel
+				autoscalingMemoryGroupMemoryModel.Rate = autoscalingMemoryGroupMemoryRateModel
+
+				// Construct an instance of the AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup model
+				autoscalingSetGroupAutoscalingModel := new(clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup)
+				autoscalingSetGroupAutoscalingModel.Memory = autoscalingMemoryGroupMemoryModel
+
+				// Construct an instance of the SetAutoscalingConditionsOptions model
+				setAutoscalingConditionsOptionsModel := new(clouddatabasesv5.SetAutoscalingConditionsOptions)
+				setAutoscalingConditionsOptionsModel.ID = core.StringPtr("testString")
+				setAutoscalingConditionsOptionsModel.GroupID = core.StringPtr("testString")
+				setAutoscalingConditionsOptionsModel.Autoscaling = autoscalingSetGroupAutoscalingModel
+				setAutoscalingConditionsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.SetAutoscalingConditions(setAutoscalingConditionsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`KillConnections(killConnectionsOptions *KillConnectionsOptions) - Operation response error`, func() {
 		killConnectionsPath := "/deployments/testString/management/database_connections"
-		Context(`Using mock server endpoint`, func() {
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -5960,7 +5748,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("DELETE"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke KillConnections with error: Operation response processing error`, func() {
@@ -5993,7 +5781,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`KillConnections(killConnectionsOptions *KillConnectionsOptions)`, func() {
 		killConnectionsPath := "/deployments/testString/management/database_connections"
 		Context(`Using mock server endpoint with timeout`, func() {
@@ -6126,135 +5913,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
-	})
-	Describe(`Service constructor tests`, func() {
-		It(`Instantiate service client`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				Authenticator: &core.NoAuthAuthenticator{},
-			})
-			Expect(cloudDatabasesService).ToNot(BeNil())
-			Expect(serviceErr).To(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid URL`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-		It(`Instantiate service client with error: Invalid Auth`, func() {
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "https://clouddatabasesv5/api",
-				Authenticator: &core.BasicAuthenticator{
-					Username: "",
-					Password: "",
-				},
-			})
-			Expect(cloudDatabasesService).To(BeNil())
-			Expect(serviceErr).ToNot(BeNil())
-		})
-	})
-	Describe(`Service constructor tests using external config`, func() {
-		Context(`Using external config, construct service client instances`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
-			}
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
 
-			It(`Create service client using external config successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
 			})
-			It(`Create service client using external config and set url from constructor successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-					URL: "https://testService/api",
+			It(`Invoke KillConnections successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
 				})
-				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
-
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
-			})
-			It(`Create service client using external config and set url programatically successfully`, func() {
-				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-				err := cloudDatabasesService.SetServiceURL("https://testService/api")
-				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
-				Expect(serviceErr).To(BeNil())
-				Expect(cloudDatabasesService.Service.GetServiceURL()).To(Equal("https://testService/api"))
-				ClearTestEnvironment(testEnvironment)
 
-				clone := cloudDatabasesService.Clone()
-				Expect(clone).ToNot(BeNil())
-				Expect(clone.Service != cloudDatabasesService.Service).To(BeTrue())
-				Expect(clone.GetServiceURL()).To(Equal(cloudDatabasesService.GetServiceURL()))
-				Expect(clone.Service.Options.Authenticator).To(Equal(cloudDatabasesService.Service.Options.Authenticator))
+				// Construct an instance of the KillConnectionsOptions model
+				killConnectionsOptionsModel := new(clouddatabasesv5.KillConnectionsOptions)
+				killConnectionsOptionsModel.ID = core.StringPtr("testString")
+				killConnectionsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.KillConnections(killConnectionsOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
-				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
+			AfterEach(func() {
+				testServer.Close()
 			})
-		})
-		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
-			// Map containing environment variables used in testing.
-			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
-			}
-
-			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				URL: "{BAD_URL_STRING",
-			})
-
-			It(`Instantiate service client with error`, func() {
-				Expect(cloudDatabasesService).To(BeNil())
-				Expect(serviceErr).ToNot(BeNil())
-				ClearTestEnvironment(testEnvironment)
-			})
-		})
-	})
-	Describe(`Regional endpoint tests`, func() {
-		It(`GetServiceURLForRegion(region string)`, func() {
-			var url string
-			var err error
-			url, err = clouddatabasesv5.GetServiceURLForRegion("INVALID_REGION")
-			Expect(url).To(BeEmpty())
-			Expect(err).ToNot(BeNil())
-			fmt.Fprintf(GinkgoWriter, "Expected error: %s\n", err.Error())
 		})
 	})
 	Describe(`GetAllowlist(getAllowlistOptions *GetAllowlistOptions) - Operation response error`, func() {
-		getAllowlistPath := "/deployments/testString/whitelists/ip_addresses"
-		Context(`Using mock server endpoint`, func() {
+		getAllowlistPath := "/deployments/testString/allowlists/ip_addresses"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -6264,7 +5960,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("GET"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke GetAllowlist with error: Operation response processing error`, func() {
@@ -6297,9 +5993,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`GetAllowlist(getAllowlistOptions *GetAllowlistOptions)`, func() {
-		getAllowlistPath := "/deployments/testString/whitelists/ip_addresses"
+		getAllowlistPath := "/deployments/testString/allowlists/ip_addresses"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -6430,10 +6125,44 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke GetAllowlist successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the GetAllowlistOptions model
+				getAllowlistOptionsModel := new(clouddatabasesv5.GetAllowlistOptions)
+				getAllowlistOptionsModel.ID = core.StringPtr("testString")
+				getAllowlistOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.GetAllowlist(getAllowlistOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`SetAllowlist(setAllowlistOptions *SetAllowlistOptions) - Operation response error`, func() {
-		setAllowlistPath := "/deployments/testString/whitelists/ip_addresses"
-		Context(`Using mock server endpoint`, func() {
+		setAllowlistPath := "/deployments/testString/allowlists/ip_addresses"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -6445,7 +6174,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Header["If-Match"][0]).To(Equal(fmt.Sprintf("%v", "testString")))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke SetAllowlist with error: Operation response processing error`, func() {
@@ -6485,9 +6214,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`SetAllowlist(setAllowlistOptions *SetAllowlistOptions)`, func() {
-		setAllowlistPath := "/deployments/testString/whitelists/ip_addresses"
+		setAllowlistPath := "/deployments/testString/allowlists/ip_addresses"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -6675,10 +6403,51 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
+			})
+			It(`Invoke SetAllowlist successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the AllowlistEntry model
+				allowlistEntryModel := new(clouddatabasesv5.AllowlistEntry)
+				allowlistEntryModel.Address = core.StringPtr("195.212.0.0/16")
+				allowlistEntryModel.Description = core.StringPtr("Dev IP space 1")
+
+				// Construct an instance of the SetAllowlistOptions model
+				setAllowlistOptionsModel := new(clouddatabasesv5.SetAllowlistOptions)
+				setAllowlistOptionsModel.ID = core.StringPtr("testString")
+				setAllowlistOptionsModel.IPAddresses = []clouddatabasesv5.AllowlistEntry{*allowlistEntryModel}
+				setAllowlistOptionsModel.IfMatch = core.StringPtr("testString")
+				setAllowlistOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.SetAllowlist(setAllowlistOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`AddAllowlistEntry(addAllowlistEntryOptions *AddAllowlistEntryOptions) - Operation response error`, func() {
-		addAllowlistEntryPath := "/deployments/testString/whitelists/ip_addresses"
-		Context(`Using mock server endpoint`, func() {
+		addAllowlistEntryPath := "/deployments/testString/allowlists/ip_addresses"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -6688,7 +6457,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("POST"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke AddAllowlistEntry with error: Operation response processing error`, func() {
@@ -6727,9 +6496,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`AddAllowlistEntry(addAllowlistEntryOptions *AddAllowlistEntryOptions)`, func() {
-		addAllowlistEntryPath := "/deployments/testString/whitelists/ip_addresses"
+		addAllowlistEntryPath := "/deployments/testString/allowlists/ip_addresses"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -6910,10 +6678,50 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
+			})
+			It(`Invoke AddAllowlistEntry successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the AllowlistEntry model
+				allowlistEntryModel := new(clouddatabasesv5.AllowlistEntry)
+				allowlistEntryModel.Address = core.StringPtr("172.16.0.0/16")
+				allowlistEntryModel.Description = core.StringPtr("Dev IP space 3")
+
+				// Construct an instance of the AddAllowlistEntryOptions model
+				addAllowlistEntryOptionsModel := new(clouddatabasesv5.AddAllowlistEntryOptions)
+				addAllowlistEntryOptionsModel.ID = core.StringPtr("testString")
+				addAllowlistEntryOptionsModel.IPAddress = allowlistEntryModel
+				addAllowlistEntryOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.AddAllowlistEntry(addAllowlistEntryOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions) - Operation response error`, func() {
-		deleteAllowlistEntryPath := "/deployments/testString/whitelists/ip_addresses/testString"
-		Context(`Using mock server endpoint`, func() {
+		deleteAllowlistEntryPath := "/deployments/testString/allowlists/ip_addresses/testString"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
@@ -6923,7 +6731,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("DELETE"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke DeleteAllowlistEntry with error: Operation response processing error`, func() {
@@ -6957,9 +6765,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-
 	Describe(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions)`, func() {
-		deleteAllowlistEntryPath := "/deployments/testString/whitelists/ip_addresses/testString"
+		deleteAllowlistEntryPath := "/deployments/testString/allowlists/ip_addresses/testString"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
@@ -7093,6 +6900,41 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				testServer.Close()
 			})
 		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
+			})
+			It(`Invoke DeleteAllowlistEntry successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the DeleteAllowlistEntryOptions model
+				deleteAllowlistEntryOptionsModel := new(clouddatabasesv5.DeleteAllowlistEntryOptions)
+				deleteAllowlistEntryOptionsModel.ID = core.StringPtr("testString")
+				deleteAllowlistEntryOptionsModel.Ipaddress = core.StringPtr("testString")
+				deleteAllowlistEntryOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
 	})
 	Describe(`Model constructor tests`, func() {
 		Context(`Using a service client instance`, func() {
@@ -7130,17 +6972,17 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the ChangeUserPasswordOptions model
 				id := "testString"
 				userType := "database"
-				username := "james"
+				username := "user"
 				changeUserPasswordOptionsModel := cloudDatabasesService.NewChangeUserPasswordOptions(id, userType, username)
 				changeUserPasswordOptionsModel.SetID("testString")
 				changeUserPasswordOptionsModel.SetUserType("database")
-				changeUserPasswordOptionsModel.SetUsername("james")
+				changeUserPasswordOptionsModel.SetUsername("user")
 				changeUserPasswordOptionsModel.SetUser(aPasswordSettingUserModel)
 				changeUserPasswordOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(changeUserPasswordOptionsModel).ToNot(BeNil())
 				Expect(changeUserPasswordOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(changeUserPasswordOptionsModel.UserType).To(Equal(core.StringPtr("database")))
-				Expect(changeUserPasswordOptionsModel.Username).To(Equal(core.StringPtr("james")))
+				Expect(changeUserPasswordOptionsModel.Username).To(Equal(core.StringPtr("user")))
 				Expect(changeUserPasswordOptionsModel.User).To(Equal(aPasswordSettingUserModel))
 				Expect(changeUserPasswordOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
@@ -7168,28 +7010,28 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(completeConnectionOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewCreateDatabaseUserOptions successfully`, func() {
-				// Construct an instance of the CreateDatabaseUserRequestUser model
-				createDatabaseUserRequestUserModel := new(clouddatabasesv5.CreateDatabaseUserRequestUser)
-				Expect(createDatabaseUserRequestUserModel).ToNot(BeNil())
-				createDatabaseUserRequestUserModel.UserType = core.StringPtr("database")
-				createDatabaseUserRequestUserModel.Username = core.StringPtr("james")
-				createDatabaseUserRequestUserModel.Password = core.StringPtr("kickoutthe")
-				Expect(createDatabaseUserRequestUserModel.UserType).To(Equal(core.StringPtr("database")))
-				Expect(createDatabaseUserRequestUserModel.Username).To(Equal(core.StringPtr("james")))
-				Expect(createDatabaseUserRequestUserModel.Password).To(Equal(core.StringPtr("kickoutthe")))
+				// Construct an instance of the User model
+				userModel := new(clouddatabasesv5.User)
+				Expect(userModel).ToNot(BeNil())
+				userModel.Username = core.StringPtr("user")
+				userModel.Password = core.StringPtr("password123")
+				userModel.Role = core.StringPtr("group_data_access_admin")
+				Expect(userModel.Username).To(Equal(core.StringPtr("user")))
+				Expect(userModel.Password).To(Equal(core.StringPtr("password123")))
+				Expect(userModel.Role).To(Equal(core.StringPtr("group_data_access_admin")))
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				id := "testString"
-				userType := "database"
+				userType := "testString"
 				createDatabaseUserOptionsModel := cloudDatabasesService.NewCreateDatabaseUserOptions(id, userType)
 				createDatabaseUserOptionsModel.SetID("testString")
-				createDatabaseUserOptionsModel.SetUserType("database")
-				createDatabaseUserOptionsModel.SetUser(createDatabaseUserRequestUserModel)
+				createDatabaseUserOptionsModel.SetUserType("testString")
+				createDatabaseUserOptionsModel.SetUser(userModel)
 				createDatabaseUserOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(createDatabaseUserOptionsModel).ToNot(BeNil())
 				Expect(createDatabaseUserOptionsModel.ID).To(Equal(core.StringPtr("testString")))
-				Expect(createDatabaseUserOptionsModel.UserType).To(Equal(core.StringPtr("database")))
-				Expect(createDatabaseUserOptionsModel.User).To(Equal(createDatabaseUserRequestUserModel))
+				Expect(createDatabaseUserOptionsModel.UserType).To(Equal(core.StringPtr("testString")))
+				Expect(createDatabaseUserOptionsModel.User).To(Equal(userModel))
 				Expect(createDatabaseUserOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewDeleteAllowlistEntryOptions successfully`, func() {
@@ -7209,16 +7051,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the DeleteDatabaseUserOptions model
 				id := "testString"
 				userType := "database"
-				username := "james"
+				username := "user"
 				deleteDatabaseUserOptionsModel := cloudDatabasesService.NewDeleteDatabaseUserOptions(id, userType, username)
 				deleteDatabaseUserOptionsModel.SetID("testString")
 				deleteDatabaseUserOptionsModel.SetUserType("database")
-				deleteDatabaseUserOptionsModel.SetUsername("james")
+				deleteDatabaseUserOptionsModel.SetUsername("user")
 				deleteDatabaseUserOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(deleteDatabaseUserOptionsModel).ToNot(BeNil())
 				Expect(deleteDatabaseUserOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(deleteDatabaseUserOptionsModel.UserType).To(Equal(core.StringPtr("database")))
-				Expect(deleteDatabaseUserOptionsModel.Username).To(Equal(core.StringPtr("james")))
+				Expect(deleteDatabaseUserOptionsModel.Username).To(Equal(core.StringPtr("user")))
 				Expect(deleteDatabaseUserOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetAllowlistOptions successfully`, func() {
@@ -7295,15 +7137,15 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(getDeploymentInfoOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(getDeploymentInfoOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
-			It(`Invoke NewGetPitRdataOptions successfully`, func() {
-				// Construct an instance of the GetPitRdataOptions model
+			It(`Invoke NewGetPitrDataOptions successfully`, func() {
+				// Construct an instance of the GetPitrDataOptions model
 				id := "testString"
-				getPitRdataOptionsModel := cloudDatabasesService.NewGetPitRdataOptions(id)
-				getPitRdataOptionsModel.SetID("testString")
-				getPitRdataOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(getPitRdataOptionsModel).ToNot(BeNil())
-				Expect(getPitRdataOptionsModel.ID).To(Equal(core.StringPtr("testString")))
-				Expect(getPitRdataOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+				getPitrDataOptionsModel := cloudDatabasesService.NewGetPitrDataOptions(id)
+				getPitrDataOptionsModel.SetID("testString")
+				getPitrDataOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(getPitrDataOptionsModel).ToNot(BeNil())
+				Expect(getPitrDataOptionsModel.ID).To(Equal(core.StringPtr("testString")))
+				Expect(getPitrDataOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetTaskOptions successfully`, func() {
 				// Construct an instance of the GetTaskOptions model
@@ -7378,6 +7220,18 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(listRemotesOptionsModel).ToNot(BeNil())
 				Expect(listRemotesOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(listRemotesOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewPromoteReadOnlyReplicaOptions successfully`, func() {
+				// Construct an instance of the PromoteReadOnlyReplicaOptions model
+				id := "testString"
+				promoteReadOnlyReplicaOptionsModel := cloudDatabasesService.NewPromoteReadOnlyReplicaOptions(id)
+				promoteReadOnlyReplicaOptionsModel.SetID("testString")
+				promoteReadOnlyReplicaOptionsModel.SetPromotion(make(map[string]interface{}))
+				promoteReadOnlyReplicaOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(promoteReadOnlyReplicaOptionsModel).ToNot(BeNil())
+				Expect(promoteReadOnlyReplicaOptionsModel.ID).To(Equal(core.StringPtr("testString")))
+				Expect(promoteReadOnlyReplicaOptionsModel.Promotion).To(Equal(make(map[string]interface{})))
+				Expect(promoteReadOnlyReplicaOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewResyncReplicaOptions successfully`, func() {
 				// Construct an instance of the ResyncReplicaOptions model
@@ -7470,51 +7324,55 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(setAutoscalingConditionsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewSetDeploymentScalingGroupOptions successfully`, func() {
-				// Construct an instance of the SetMembersGroupMembers model
-				setMembersGroupMembersModel := new(clouddatabasesv5.SetMembersGroupMembers)
-				Expect(setMembersGroupMembersModel).ToNot(BeNil())
-				setMembersGroupMembersModel.AllocationCount = core.Int64Ptr(int64(4))
-				Expect(setMembersGroupMembersModel.AllocationCount).To(Equal(core.Int64Ptr(int64(4))))
+				// Construct an instance of the GroupScalingMembers model
+				groupScalingMembersModel := new(clouddatabasesv5.GroupScalingMembers)
+				Expect(groupScalingMembersModel).ToNot(BeNil())
+				groupScalingMembersModel.AllocationCount = core.Int64Ptr(int64(4))
+				Expect(groupScalingMembersModel.AllocationCount).To(Equal(core.Int64Ptr(int64(4))))
 
-				// Construct an instance of the SetDeploymentScalingGroupRequestSetMembersGroup model
-				setDeploymentScalingGroupRequestModel := new(clouddatabasesv5.SetDeploymentScalingGroupRequestSetMembersGroup)
-				Expect(setDeploymentScalingGroupRequestModel).ToNot(BeNil())
-				setDeploymentScalingGroupRequestModel.Members = setMembersGroupMembersModel
-				Expect(setDeploymentScalingGroupRequestModel.Members).To(Equal(setMembersGroupMembersModel))
+				// Construct an instance of the GroupScalingMemory model
+				groupScalingMemoryModel := new(clouddatabasesv5.GroupScalingMemory)
+				Expect(groupScalingMemoryModel).ToNot(BeNil())
+				groupScalingMemoryModel.AllocationMb = core.Int64Ptr(int64(12288))
+				Expect(groupScalingMemoryModel.AllocationMb).To(Equal(core.Int64Ptr(int64(12288))))
+
+				// Construct an instance of the GroupScalingCPU model
+				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
+				Expect(groupScalingCPUModel).ToNot(BeNil())
+				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
+				Expect(groupScalingCPUModel.AllocationCount).To(Equal(core.Int64Ptr(int64(2))))
+
+				// Construct an instance of the GroupScalingDisk model
+				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
+				Expect(groupScalingDiskModel).ToNot(BeNil())
+				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
+				Expect(groupScalingDiskModel.AllocationMb).To(Equal(core.Int64Ptr(int64(20480))))
+
+				// Construct an instance of the GroupScaling model
+				groupScalingModel := new(clouddatabasesv5.GroupScaling)
+				Expect(groupScalingModel).ToNot(BeNil())
+				groupScalingModel.Members = groupScalingMembersModel
+				groupScalingModel.Memory = groupScalingMemoryModel
+				groupScalingModel.CPU = groupScalingCPUModel
+				groupScalingModel.Disk = groupScalingDiskModel
+				Expect(groupScalingModel.Members).To(Equal(groupScalingMembersModel))
+				Expect(groupScalingModel.Memory).To(Equal(groupScalingMemoryModel))
+				Expect(groupScalingModel.CPU).To(Equal(groupScalingCPUModel))
+				Expect(groupScalingModel.Disk).To(Equal(groupScalingDiskModel))
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				id := "testString"
 				groupID := "testString"
-				var setDeploymentScalingGroupRequest clouddatabasesv5.SetDeploymentScalingGroupRequestIntf = nil
-				setDeploymentScalingGroupOptionsModel := cloudDatabasesService.NewSetDeploymentScalingGroupOptions(id, groupID, setDeploymentScalingGroupRequest)
+				setDeploymentScalingGroupOptionsModel := cloudDatabasesService.NewSetDeploymentScalingGroupOptions(id, groupID)
 				setDeploymentScalingGroupOptionsModel.SetID("testString")
 				setDeploymentScalingGroupOptionsModel.SetGroupID("testString")
-				setDeploymentScalingGroupOptionsModel.SetSetDeploymentScalingGroupRequest(setDeploymentScalingGroupRequestModel)
+				setDeploymentScalingGroupOptionsModel.SetGroup(groupScalingModel)
 				setDeploymentScalingGroupOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(setDeploymentScalingGroupOptionsModel).ToNot(BeNil())
 				Expect(setDeploymentScalingGroupOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(setDeploymentScalingGroupOptionsModel.GroupID).To(Equal(core.StringPtr("testString")))
-				Expect(setDeploymentScalingGroupOptionsModel.SetDeploymentScalingGroupRequest).To(Equal(setDeploymentScalingGroupRequestModel))
+				Expect(setDeploymentScalingGroupOptionsModel.Group).To(Equal(groupScalingModel))
 				Expect(setDeploymentScalingGroupOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
-			})
-			It(`Invoke NewSetPromotionOptions successfully`, func() {
-				// Construct an instance of the SetPromotionPromotionPromote model
-				setPromotionPromotionModel := new(clouddatabasesv5.SetPromotionPromotionPromote)
-				Expect(setPromotionPromotionModel).ToNot(BeNil())
-				setPromotionPromotionModel.Promotion = make(map[string]interface{})
-				Expect(setPromotionPromotionModel.Promotion).To(Equal(make(map[string]interface{})))
-
-				// Construct an instance of the SetPromotionOptions model
-				id := "testString"
-				var setPromotionOptionsPromotion clouddatabasesv5.SetPromotionPromotionIntf = nil
-				setPromotionOptionsModel := cloudDatabasesService.NewSetPromotionOptions(id, setPromotionOptionsPromotion)
-				setPromotionOptionsModel.SetID("testString")
-				setPromotionOptionsModel.SetPromotion(setPromotionPromotionModel)
-				setPromotionOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(setPromotionOptionsModel).ToNot(BeNil())
-				Expect(setPromotionOptionsModel.ID).To(Equal(core.StringPtr("testString")))
-				Expect(setPromotionOptionsModel.Promotion).To(Equal(setPromotionPromotionModel))
-				Expect(setPromotionOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewStartOndemandBackupOptions successfully`, func() {
 				// Construct an instance of the StartOndemandBackupOptions model
@@ -7527,43 +7385,49 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(startOndemandBackupOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewUpdateDatabaseConfigurationOptions successfully`, func() {
-				// Construct an instance of the SetConfigurationConfigurationPgConfiguration model
-				setConfigurationConfigurationModel := new(clouddatabasesv5.SetConfigurationConfigurationPgConfiguration)
-				Expect(setConfigurationConfigurationModel).ToNot(BeNil())
-				setConfigurationConfigurationModel.MaxConnections = core.Int64Ptr(int64(200))
-				setConfigurationConfigurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
-				setConfigurationConfigurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
-				setConfigurationConfigurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
-				setConfigurationConfigurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
-				setConfigurationConfigurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
-				setConfigurationConfigurationModel.SharedBuffers = core.Int64Ptr(int64(16))
-				setConfigurationConfigurationModel.SynchronousCommit = core.StringPtr("local")
-				setConfigurationConfigurationModel.WalLevel = core.StringPtr("hot_standby")
-				setConfigurationConfigurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
-				setConfigurationConfigurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
-				Expect(setConfigurationConfigurationModel.MaxConnections).To(Equal(core.Int64Ptr(int64(200))))
-				Expect(setConfigurationConfigurationModel.MaxPreparedTransactions).To(Equal(core.Int64Ptr(int64(0))))
-				Expect(setConfigurationConfigurationModel.DeadlockTimeout).To(Equal(core.Int64Ptr(int64(100))))
-				Expect(setConfigurationConfigurationModel.EffectiveIoConcurrency).To(Equal(core.Int64Ptr(int64(1))))
-				Expect(setConfigurationConfigurationModel.MaxReplicationSlots).To(Equal(core.Int64Ptr(int64(10))))
-				Expect(setConfigurationConfigurationModel.MaxWalSenders).To(Equal(core.Int64Ptr(int64(12))))
-				Expect(setConfigurationConfigurationModel.SharedBuffers).To(Equal(core.Int64Ptr(int64(16))))
-				Expect(setConfigurationConfigurationModel.SynchronousCommit).To(Equal(core.StringPtr("local")))
-				Expect(setConfigurationConfigurationModel.WalLevel).To(Equal(core.StringPtr("hot_standby")))
-				Expect(setConfigurationConfigurationModel.ArchiveTimeout).To(Equal(core.Int64Ptr(int64(300))))
-				Expect(setConfigurationConfigurationModel.LogMinDurationStatement).To(Equal(core.Int64Ptr(int64(100))))
+				// Construct an instance of the ConfigurationPgConfiguration model
+				configurationModel := new(clouddatabasesv5.ConfigurationPgConfiguration)
+				Expect(configurationModel).ToNot(BeNil())
+				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+				configurationModel.DeadlockTimeout = core.Int64Ptr(int64(100))
+				configurationModel.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
+				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
+				configurationModel.SharedBuffers = core.Int64Ptr(int64(16))
+				configurationModel.SynchronousCommit = core.StringPtr("local")
+				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.ArchiveTimeout = core.Int64Ptr(int64(300))
+				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
+				Expect(configurationModel.MaxConnections).To(Equal(core.Int64Ptr(int64(200))))
+				Expect(configurationModel.MaxPreparedTransactions).To(Equal(core.Int64Ptr(int64(0))))
+				Expect(configurationModel.DeadlockTimeout).To(Equal(core.Int64Ptr(int64(100))))
+				Expect(configurationModel.EffectiveIoConcurrency).To(Equal(core.Int64Ptr(int64(1))))
+				Expect(configurationModel.MaxReplicationSlots).To(Equal(core.Int64Ptr(int64(10))))
+				Expect(configurationModel.MaxWalSenders).To(Equal(core.Int64Ptr(int64(12))))
+				Expect(configurationModel.SharedBuffers).To(Equal(core.Int64Ptr(int64(16))))
+				Expect(configurationModel.SynchronousCommit).To(Equal(core.StringPtr("local")))
+				Expect(configurationModel.WalLevel).To(Equal(core.StringPtr("hot_standby")))
+				Expect(configurationModel.ArchiveTimeout).To(Equal(core.Int64Ptr(int64(300))))
+				Expect(configurationModel.LogMinDurationStatement).To(Equal(core.Int64Ptr(int64(100))))
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				id := "testString"
-				var updateDatabaseConfigurationOptionsConfiguration clouddatabasesv5.SetConfigurationConfigurationIntf = nil
-				updateDatabaseConfigurationOptionsModel := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(id, updateDatabaseConfigurationOptionsConfiguration)
+				updateDatabaseConfigurationOptionsModel := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(id)
 				updateDatabaseConfigurationOptionsModel.SetID("testString")
-				updateDatabaseConfigurationOptionsModel.SetConfiguration(setConfigurationConfigurationModel)
+				updateDatabaseConfigurationOptionsModel.SetConfiguration(configurationModel)
 				updateDatabaseConfigurationOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(updateDatabaseConfigurationOptionsModel).ToNot(BeNil())
 				Expect(updateDatabaseConfigurationOptionsModel.ID).To(Equal(core.StringPtr("testString")))
-				Expect(updateDatabaseConfigurationOptionsModel.Configuration).To(Equal(setConfigurationConfigurationModel))
+				Expect(updateDatabaseConfigurationOptionsModel.Configuration).To(Equal(configurationModel))
 				Expect(updateDatabaseConfigurationOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewUser successfully`, func() {
+				username := "user"
+				password := "password123"
+				_model, err := cloudDatabasesService.NewUser(username, password)
+				Expect(_model).ToNot(BeNil())
+				Expect(err).To(BeNil())
 			})
 		})
 	})
@@ -7581,11 +7445,11 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			Expect(mockReader).ToNot(BeNil())
 		})
 		It(`Invoke CreateMockDate() successfully`, func() {
-			mockDate := CreateMockDate()
+			mockDate := CreateMockDate("2019-01-01")
 			Expect(mockDate).ToNot(BeNil())
 		})
 		It(`Invoke CreateMockDateTime() successfully`, func() {
-			mockDateTime := CreateMockDateTime()
+			mockDateTime := CreateMockDateTime("2019-01-01T12:00:00.000Z")
 			Expect(mockDateTime).ToNot(BeNil())
 		})
 	})
@@ -7610,13 +7474,19 @@ func CreateMockReader(mockData string) io.ReadCloser {
 	return ioutil.NopCloser(bytes.NewReader([]byte(mockData)))
 }
 
-func CreateMockDate() *strfmt.Date {
-	d := strfmt.Date(time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC))
+func CreateMockDate(mockData string) *strfmt.Date {
+	d, err := core.ParseDate(mockData)
+	if err != nil {
+		return nil
+	}
 	return &d
 }
 
-func CreateMockDateTime() *strfmt.DateTime {
-	d := strfmt.DateTime(time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC))
+func CreateMockDateTime(mockData string) *strfmt.DateTime {
+	d, err := core.ParseDateTime(mockData)
+	if err != nil {
+		return nil
+	}
 	return &d
 }
 
