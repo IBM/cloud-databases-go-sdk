@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 99-SNAPSHOT-f9bb1b47-20210329-151039
+ * IBM OpenAPI SDK Code Generator Version: 3.45.1-632ec580-20220210-190638
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -30,7 +30,6 @@ import (
 	"time"
 
 	common "github.com/IBM/cloud-databases-go-sdk/common"
-
 	"github.com/IBM/go-sdk-core/v5/core"
 	"github.com/go-openapi/strfmt"
 )
@@ -45,13 +44,23 @@ import (
 //
 // When you use CRNs, remember to URL escape the CRN value as they can include the forward-slash (/) character.
 //
-// Version: 5.0.0
+// API Version: 5.0.0
 type CloudDatabasesV5 struct {
 	Service *core.BaseService
 }
 
+// DefaultServiceURL is the default URL to make service requests to.
+const DefaultServiceURL = "https://api.us-south.databases.cloud.ibm.com/v5/ibm"
+
 // DefaultServiceName is the default key used to find external configuration information.
 const DefaultServiceName = "cloud_databases"
+
+const ParameterizedServiceURL = "https://api.{region}.databases.cloud.ibm.com/v5/{platform}"
+
+var defaultUrlVariables = map[string]string{
+	"platform": "ibm",
+	"region":   "us-south",
+}
 
 // CloudDatabasesV5Options : Service options
 type CloudDatabasesV5Options struct {
@@ -92,6 +101,7 @@ func NewCloudDatabasesV5UsingExternalConfig(options *CloudDatabasesV5Options) (c
 // NewCloudDatabasesV5 : constructs an instance of CloudDatabasesV5 with passed in options.
 func NewCloudDatabasesV5(options *CloudDatabasesV5Options) (service *CloudDatabasesV5, err error) {
 	serviceOptions := &core.ServiceOptions{
+		URL:           DefaultServiceURL,
 		Authenticator: options.Authenticator,
 	}
 
@@ -127,6 +137,11 @@ func (cloudDatabases *CloudDatabasesV5) Clone() *CloudDatabasesV5 {
 	clone := *cloudDatabases
 	clone.Service = cloudDatabases.Service.Clone()
 	return &clone
+}
+
+// ConstructServiceURL constructs a service URL from the parameterized URL.
+func ConstructServiceURL(providedUrlVariables map[string]string) (string, error) {
+	return core.ConstructServiceURL(ParameterizedServiceURL, defaultUrlVariables, providedUrlVariables)
 }
 
 // SetServiceURL sets the service URL
@@ -206,11 +221,13 @@ func (cloudDatabases *CloudDatabasesV5) ListDeployablesWithContext(ctx context.C
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalListDeployablesResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalListDeployablesResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -257,11 +274,13 @@ func (cloudDatabases *CloudDatabasesV5) ListRegionsWithContext(ctx context.Conte
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalListRegionsResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalListRegionsResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -315,11 +334,13 @@ func (cloudDatabases *CloudDatabasesV5) GetDeploymentInfoWithContext(ctx context
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetDeploymentInfoResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetDeploymentInfoResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -384,11 +405,13 @@ func (cloudDatabases *CloudDatabasesV5) CreateDatabaseUserWithContext(ctx contex
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCreateDatabaseUserResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCreateDatabaseUserResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -454,11 +477,13 @@ func (cloudDatabases *CloudDatabasesV5) ChangeUserPasswordWithContext(ctx contex
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChangeUserPasswordResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalChangeUserPasswordResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -514,17 +539,19 @@ func (cloudDatabases *CloudDatabasesV5) DeleteDatabaseUserWithContext(ctx contex
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDeleteDatabaseUserResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDeleteDatabaseUserResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
 
 // UpdateDatabaseConfiguration : Change your database configuration
-// Change your database configuration. Available for PostgreSQL, EnterpriseDB, and Redis ONLY.
+// Change your database configuration. Available for PostgreSQL, EnterpriseDB, MySQL, and Redis ONLY.
 func (cloudDatabases *CloudDatabasesV5) UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions) (result *UpdateDatabaseConfigurationResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.UpdateDatabaseConfigurationWithContext(context.Background(), updateDatabaseConfigurationOptions)
 }
@@ -582,11 +609,13 @@ func (cloudDatabases *CloudDatabasesV5) UpdateDatabaseConfigurationWithContext(c
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalUpdateDatabaseConfigurationResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalUpdateDatabaseConfigurationResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -640,11 +669,13 @@ func (cloudDatabases *CloudDatabasesV5) ListRemotesWithContext(ctx context.Conte
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalListRemotesResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalListRemotesResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -698,35 +729,37 @@ func (cloudDatabases *CloudDatabasesV5) ResyncReplicaWithContext(ctx context.Con
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResyncReplicaResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalResyncReplicaResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
 
-// SetPromotion : Promote read-only replica to a full deployment
+// PromoteReadOnlyReplica : Promote read-only replica to a full deployment
 // Promote a read-only replica or upgrade and promote a read-only replica. Available for PostgreSQL and EnterpriseDB
 // ONLY.
-func (cloudDatabases *CloudDatabasesV5) SetPromotion(setPromotionOptions *SetPromotionOptions) (result *SetPromotionResponse, response *core.DetailedResponse, err error) {
-	return cloudDatabases.SetPromotionWithContext(context.Background(), setPromotionOptions)
+func (cloudDatabases *CloudDatabasesV5) PromoteReadOnlyReplica(promoteReadOnlyReplicaOptions *PromoteReadOnlyReplicaOptions) (result *PromoteReadOnlyReplicaResponse, response *core.DetailedResponse, err error) {
+	return cloudDatabases.PromoteReadOnlyReplicaWithContext(context.Background(), promoteReadOnlyReplicaOptions)
 }
 
-// SetPromotionWithContext is an alternate form of the SetPromotion method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) SetPromotionWithContext(ctx context.Context, setPromotionOptions *SetPromotionOptions) (result *SetPromotionResponse, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(setPromotionOptions, "setPromotionOptions cannot be nil")
+// PromoteReadOnlyReplicaWithContext is an alternate form of the PromoteReadOnlyReplica method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) PromoteReadOnlyReplicaWithContext(ctx context.Context, promoteReadOnlyReplicaOptions *PromoteReadOnlyReplicaOptions) (result *PromoteReadOnlyReplicaResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(promoteReadOnlyReplicaOptions, "promoteReadOnlyReplicaOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(setPromotionOptions, "setPromotionOptions")
+	err = core.ValidateStruct(promoteReadOnlyReplicaOptions, "promoteReadOnlyReplicaOptions")
 	if err != nil {
 		return
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *setPromotionOptions.ID,
+		"id": *promoteReadOnlyReplicaOptions.ID,
 	}
 
 	builder := core.NewRequestBuilder(core.POST)
@@ -737,11 +770,11 @@ func (cloudDatabases *CloudDatabasesV5) SetPromotionWithContext(ctx context.Cont
 		return
 	}
 
-	for headerName, headerValue := range setPromotionOptions.Headers {
+	for headerName, headerValue := range promoteReadOnlyReplicaOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "SetPromotion")
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "PromoteReadOnlyReplica")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -749,8 +782,8 @@ func (cloudDatabases *CloudDatabasesV5) SetPromotionWithContext(ctx context.Cont
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
-	if setPromotionOptions.Promotion != nil {
-		body["Promotion"] = setPromotionOptions.Promotion
+	if promoteReadOnlyReplicaOptions.Promotion != nil {
+		body["promotion"] = promoteReadOnlyReplicaOptions.Promotion
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -767,11 +800,13 @@ func (cloudDatabases *CloudDatabasesV5) SetPromotionWithContext(ctx context.Cont
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetPromotionResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPromoteReadOnlyReplicaResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -826,11 +861,13 @@ func (cloudDatabases *CloudDatabasesV5) ListDeploymentTasksWithContext(ctx conte
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTasks)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalTasks)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -885,11 +922,13 @@ func (cloudDatabases *CloudDatabasesV5) GetTaskWithContext(ctx context.Context, 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetTaskResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetTaskResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -943,11 +982,13 @@ func (cloudDatabases *CloudDatabasesV5) GetBackupInfoWithContext(ctx context.Con
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetBackupInfoResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetBackupInfoResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1001,11 +1042,13 @@ func (cloudDatabases *CloudDatabasesV5) ListDeploymentBackupsWithContext(ctx con
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalBackups)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalBackups)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1060,35 +1103,37 @@ func (cloudDatabases *CloudDatabasesV5) StartOndemandBackupWithContext(ctx conte
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalStartOndemandBackupResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalStartOndemandBackupResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
 
-// GetPitRdata : Get earliest point-in-time-recovery timestamp
+// GetPitrData : Get earliest point-in-time-recovery timestamp
 // Returns the earliest available time for point-in-time-recovery in ISO8601 UTC format. PostgreSQL and EnterpriseDB
 // only.
-func (cloudDatabases *CloudDatabasesV5) GetPitRdata(getPitRdataOptions *GetPitRdataOptions) (result *PointInTimeRecoveryData, response *core.DetailedResponse, err error) {
-	return cloudDatabases.GetPitRdataWithContext(context.Background(), getPitRdataOptions)
+func (cloudDatabases *CloudDatabasesV5) GetPitrData(getPitrDataOptions *GetPitrDataOptions) (result *GetPitrDataResponse, response *core.DetailedResponse, err error) {
+	return cloudDatabases.GetPitrDataWithContext(context.Background(), getPitrDataOptions)
 }
 
-// GetPitRdataWithContext is an alternate form of the GetPitRdata method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) GetPitRdataWithContext(ctx context.Context, getPitRdataOptions *GetPitRdataOptions) (result *PointInTimeRecoveryData, response *core.DetailedResponse, err error) {
-	err = core.ValidateNotNil(getPitRdataOptions, "getPitRdataOptions cannot be nil")
+// GetPitrDataWithContext is an alternate form of the GetPitrData method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) GetPitrDataWithContext(ctx context.Context, getPitrDataOptions *GetPitrDataOptions) (result *GetPitrDataResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(getPitrDataOptions, "getPitrDataOptions cannot be nil")
 	if err != nil {
 		return
 	}
-	err = core.ValidateStruct(getPitRdataOptions, "getPitRdataOptions")
+	err = core.ValidateStruct(getPitrDataOptions, "getPitrDataOptions")
 	if err != nil {
 		return
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *getPitRdataOptions.ID,
+		"id": *getPitrDataOptions.ID,
 	}
 
 	builder := core.NewRequestBuilder(core.GET)
@@ -1099,11 +1144,11 @@ func (cloudDatabases *CloudDatabasesV5) GetPitRdataWithContext(ctx context.Conte
 		return
 	}
 
-	for headerName, headerValue := range getPitRdataOptions.Headers {
+	for headerName, headerValue := range getPitrDataOptions.Headers {
 		builder.AddHeader(headerName, headerValue)
 	}
 
-	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "GetPitRdata")
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "GetPitrData")
 	for headerName, headerValue := range sdkHeaders {
 		builder.AddHeader(headerName, headerValue)
 	}
@@ -1119,23 +1164,25 @@ func (cloudDatabases *CloudDatabasesV5) GetPitRdataWithContext(ctx context.Conte
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalPointInTimeRecoveryData)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetPitrDataResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
 
 // GetConnection : Discover connection information for a deployment for a user with an endpoint type
 // Discover connection information for a deployment for a user with an endpoint type.
-func (cloudDatabases *CloudDatabasesV5) GetConnection(getConnectionOptions *GetConnectionOptions) (result *Connection, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) GetConnection(getConnectionOptions *GetConnectionOptions) (result *GetConnectionResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.GetConnectionWithContext(context.Background(), getConnectionOptions)
 }
 
 // GetConnectionWithContext is an alternate form of the GetConnection method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) GetConnectionWithContext(ctx context.Context, getConnectionOptions *GetConnectionOptions) (result *Connection, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) GetConnectionWithContext(ctx context.Context, getConnectionOptions *GetConnectionOptions) (result *GetConnectionResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getConnectionOptions, "getConnectionOptions cannot be nil")
 	if err != nil {
 		return
@@ -1184,11 +1231,13 @@ func (cloudDatabases *CloudDatabasesV5) GetConnectionWithContext(ctx context.Con
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalConnection)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetConnectionResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1196,12 +1245,12 @@ func (cloudDatabases *CloudDatabasesV5) GetConnectionWithContext(ctx context.Con
 // CompleteConnection : Discover connection information for a deployment for a user with substitutions and an endpoint type
 // Discover connection information for a deployment for a user. Behaves the same as the GET method but substitutes the
 // provided password parameter into the returned connection information.
-func (cloudDatabases *CloudDatabasesV5) CompleteConnection(completeConnectionOptions *CompleteConnectionOptions) (result *Connection, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) CompleteConnection(completeConnectionOptions *CompleteConnectionOptions) (result *CompleteConnectionResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.CompleteConnectionWithContext(context.Background(), completeConnectionOptions)
 }
 
 // CompleteConnectionWithContext is an alternate form of the CompleteConnection method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) CompleteConnectionWithContext(ctx context.Context, completeConnectionOptions *CompleteConnectionOptions) (result *Connection, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) CompleteConnectionWithContext(ctx context.Context, completeConnectionOptions *CompleteConnectionOptions) (result *CompleteConnectionResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(completeConnectionOptions, "completeConnectionOptions cannot be nil")
 	if err != nil {
 		return
@@ -1259,11 +1308,13 @@ func (cloudDatabases *CloudDatabasesV5) CompleteConnectionWithContext(ctx contex
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalConnection)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCompleteConnectionResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1271,12 +1322,12 @@ func (cloudDatabases *CloudDatabasesV5) CompleteConnectionWithContext(ctx contex
 // ListDeploymentScalingGroups : List currently available scaling groups from a deployment
 // Scaling groups represent the various resources that are allocated to a deployment. This command allows for the
 // retrieval of all of the groups for a particular deployment.
-func (cloudDatabases *CloudDatabasesV5) ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions) (result *Groups, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions) (result *ListDeploymentScalingGroupsResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.ListDeploymentScalingGroupsWithContext(context.Background(), listDeploymentScalingGroupsOptions)
 }
 
 // ListDeploymentScalingGroupsWithContext is an alternate form of the ListDeploymentScalingGroups method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) ListDeploymentScalingGroupsWithContext(ctx context.Context, listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions) (result *Groups, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) ListDeploymentScalingGroupsWithContext(ctx context.Context, listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions) (result *ListDeploymentScalingGroupsResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(listDeploymentScalingGroupsOptions, "listDeploymentScalingGroupsOptions cannot be nil")
 	if err != nil {
 		return
@@ -1318,11 +1369,13 @@ func (cloudDatabases *CloudDatabasesV5) ListDeploymentScalingGroupsWithContext(c
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGroups)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalListDeploymentScalingGroupsResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1330,12 +1383,12 @@ func (cloudDatabases *CloudDatabasesV5) ListDeploymentScalingGroupsWithContext(c
 // GetDefaultScalingGroups : Get default scaling groups for a new deployment
 // Scaling groups represent the various resources allocated to a deployment. When a new deployment is created, there are
 // a set of defaults for each database type. This endpoint returns them for a particular database.
-func (cloudDatabases *CloudDatabasesV5) GetDefaultScalingGroups(getDefaultScalingGroupsOptions *GetDefaultScalingGroupsOptions) (result *Groups, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) GetDefaultScalingGroups(getDefaultScalingGroupsOptions *GetDefaultScalingGroupsOptions) (result *GetDefaultScalingGroupsResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.GetDefaultScalingGroupsWithContext(context.Background(), getDefaultScalingGroupsOptions)
 }
 
 // GetDefaultScalingGroupsWithContext is an alternate form of the GetDefaultScalingGroups method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) GetDefaultScalingGroupsWithContext(ctx context.Context, getDefaultScalingGroupsOptions *GetDefaultScalingGroupsOptions) (result *Groups, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) GetDefaultScalingGroupsWithContext(ctx context.Context, getDefaultScalingGroupsOptions *GetDefaultScalingGroupsOptions) (result *GetDefaultScalingGroupsResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getDefaultScalingGroupsOptions, "getDefaultScalingGroupsOptions cannot be nil")
 	if err != nil {
 		return
@@ -1377,11 +1430,13 @@ func (cloudDatabases *CloudDatabasesV5) GetDefaultScalingGroupsWithContext(ctx c
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGroups)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetDefaultScalingGroupsResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1429,7 +1484,11 @@ func (cloudDatabases *CloudDatabasesV5) SetDeploymentScalingGroupWithContext(ctx
 	builder.AddHeader("Accept", "application/json")
 	builder.AddHeader("Content-Type", "application/json")
 
-	_, err = builder.SetBodyContentJSON(setDeploymentScalingGroupOptions.SetDeploymentScalingGroupRequest)
+	body := make(map[string]interface{})
+	if setDeploymentScalingGroupOptions.Group != nil {
+		body["group"] = setDeploymentScalingGroupOptions.Group
+	}
+	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
 		return
 	}
@@ -1444,11 +1503,13 @@ func (cloudDatabases *CloudDatabasesV5) SetDeploymentScalingGroupWithContext(ctx
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetDeploymentScalingGroupResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetDeploymentScalingGroupResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1504,11 +1565,13 @@ func (cloudDatabases *CloudDatabasesV5) GetAutoscalingConditionsWithContext(ctx 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAutoscalingGroup)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAutoscalingGroup)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1574,11 +1637,13 @@ func (cloudDatabases *CloudDatabasesV5) SetAutoscalingConditionsWithContext(ctx 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetAutoscalingConditionsResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetAutoscalingConditionsResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1632,23 +1697,25 @@ func (cloudDatabases *CloudDatabasesV5) KillConnectionsWithContext(ctx context.C
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalKillConnectionsResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalKillConnectionsResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
 
 // GetAllowlist : Retrieve the allowlisted addresses and ranges for a deployment
 // Retrieve the allowlisted addresses and ranges for a deployment.
-func (cloudDatabases *CloudDatabasesV5) GetAllowlist(getAllowlistOptions *GetAllowlistOptions) (result *Allowlist, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) GetAllowlist(getAllowlistOptions *GetAllowlistOptions) (result *GetAllowlistResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.GetAllowlistWithContext(context.Background(), getAllowlistOptions)
 }
 
 // GetAllowlistWithContext is an alternate form of the GetAllowlist method which supports a Context parameter
-func (cloudDatabases *CloudDatabasesV5) GetAllowlistWithContext(ctx context.Context, getAllowlistOptions *GetAllowlistOptions) (result *Allowlist, response *core.DetailedResponse, err error) {
+func (cloudDatabases *CloudDatabasesV5) GetAllowlistWithContext(ctx context.Context, getAllowlistOptions *GetAllowlistOptions) (result *GetAllowlistResponse, response *core.DetailedResponse, err error) {
 	err = core.ValidateNotNil(getAllowlistOptions, "getAllowlistOptions cannot be nil")
 	if err != nil {
 		return
@@ -1665,7 +1732,7 @@ func (cloudDatabases *CloudDatabasesV5) GetAllowlistWithContext(ctx context.Cont
 	builder := core.NewRequestBuilder(core.GET)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/whitelists/ip_addresses`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/allowlists/ip_addresses`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -1690,11 +1757,13 @@ func (cloudDatabases *CloudDatabasesV5) GetAllowlistWithContext(ctx context.Cont
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAllowlist)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetAllowlistResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1725,7 +1794,7 @@ func (cloudDatabases *CloudDatabasesV5) SetAllowlistWithContext(ctx context.Cont
 	builder := core.NewRequestBuilder(core.PUT)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/whitelists/ip_addresses`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/allowlists/ip_addresses`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -1763,11 +1832,13 @@ func (cloudDatabases *CloudDatabasesV5) SetAllowlistWithContext(ctx context.Cont
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetAllowlistResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetAllowlistResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1796,7 +1867,7 @@ func (cloudDatabases *CloudDatabasesV5) AddAllowlistEntryWithContext(ctx context
 	builder := core.NewRequestBuilder(core.POST)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/whitelists/ip_addresses`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/allowlists/ip_addresses`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -1831,11 +1902,13 @@ func (cloudDatabases *CloudDatabasesV5) AddAllowlistEntryWithContext(ctx context
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAddAllowlistEntryResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalAddAllowlistEntryResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1865,7 +1938,7 @@ func (cloudDatabases *CloudDatabasesV5) DeleteAllowlistEntryWithContext(ctx cont
 	builder := core.NewRequestBuilder(core.DELETE)
 	builder = builder.WithContext(ctx)
 	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
-	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/whitelists/ip_addresses/{ipaddress}`, pathParamsMap)
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/allowlists/ip_addresses/{ipaddress}`, pathParamsMap)
 	if err != nil {
 		return
 	}
@@ -1890,11 +1963,13 @@ func (cloudDatabases *CloudDatabasesV5) DeleteAllowlistEntryWithContext(ctx cont
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDeleteAllowlistEntryResponse)
-	if err != nil {
-		return
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDeleteAllowlistEntryResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
 	}
-	response.Result = result
 
 	return
 }
@@ -1918,9 +1993,9 @@ func UnmarshalAPasswordSettingUser(m map[string]json.RawMessage, result interfac
 // AddAllowlistEntryOptions : The AddAllowlistEntry options.
 type AddAllowlistEntryOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
-	IPAddress *AllowlistEntry
+	IPAddress *AllowlistEntry `json:"ip_address,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -1934,15 +2009,15 @@ func (*CloudDatabasesV5) NewAddAllowlistEntryOptions(id string) *AddAllowlistEnt
 }
 
 // SetID : Allow user to set ID
-func (options *AddAllowlistEntryOptions) SetID(id string) *AddAllowlistEntryOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *AddAllowlistEntryOptions) SetID(id string) *AddAllowlistEntryOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetIPAddress : Allow user to set IPAddress
-func (options *AddAllowlistEntryOptions) SetIPAddress(ipAddress *AllowlistEntry) *AddAllowlistEntryOptions {
-	options.IPAddress = ipAddress
-	return options
+func (_options *AddAllowlistEntryOptions) SetIPAddress(ipAddress *AllowlistEntry) *AddAllowlistEntryOptions {
+	_options.IPAddress = ipAddress
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -1960,23 +2035,6 @@ type AddAllowlistEntryResponse struct {
 func UnmarshalAddAllowlistEntryResponse(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(AddAllowlistEntryResponse)
 	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// Allowlist : Allowlist struct
-type Allowlist struct {
-	// An array of allowlist entries.
-	IPAddresses []AllowlistEntry `json:"ip_addresses,omitempty"`
-}
-
-// UnmarshalAllowlist unmarshals an instance of Allowlist from the specified map of raw messages.
-func UnmarshalAllowlist(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(Allowlist)
-	err = core.UnmarshalModel(m, "ip_addresses", &obj.IPAddresses, UnmarshalAllowlistEntry)
 	if err != nil {
 		return
 	}
@@ -2396,6 +2454,9 @@ type Backup struct {
 	// Can this backup be used to restore an instance?.
 	IsRestorable *bool `json:"is_restorable,omitempty"`
 
+	// URI which is currently available for file downloading.
+	DownloadLink *string `json:"download_link,omitempty"`
+
 	// Date and time when this backup was created.
 	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
 }
@@ -2442,6 +2503,10 @@ func UnmarshalBackup(m map[string]json.RawMessage, result interface{}) (err erro
 	if err != nil {
 		return
 	}
+	err = core.UnmarshalPrimitive(m, "download_link", &obj.DownloadLink)
+	if err != nil {
+		return
+	}
 	err = core.UnmarshalPrimitive(m, "created_at", &obj.CreatedAt)
 	if err != nil {
 		return
@@ -2469,15 +2534,15 @@ func UnmarshalBackups(m map[string]json.RawMessage, result interface{}) (err err
 // ChangeUserPasswordOptions : The ChangeUserPassword options.
 type ChangeUserPasswordOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// User type.
-	UserType *string `validate:"required,ne="`
+	UserType *string `json:"user_type" validate:"required,ne="`
 
 	// User ID.
-	Username *string `validate:"required,ne="`
+	Username *string `json:"username" validate:"required,ne="`
 
-	User *APasswordSettingUser
+	User *APasswordSettingUser `json:"user,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2493,27 +2558,27 @@ func (*CloudDatabasesV5) NewChangeUserPasswordOptions(id string, userType string
 }
 
 // SetID : Allow user to set ID
-func (options *ChangeUserPasswordOptions) SetID(id string) *ChangeUserPasswordOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *ChangeUserPasswordOptions) SetID(id string) *ChangeUserPasswordOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetUserType : Allow user to set UserType
-func (options *ChangeUserPasswordOptions) SetUserType(userType string) *ChangeUserPasswordOptions {
-	options.UserType = core.StringPtr(userType)
-	return options
+func (_options *ChangeUserPasswordOptions) SetUserType(userType string) *ChangeUserPasswordOptions {
+	_options.UserType = core.StringPtr(userType)
+	return _options
 }
 
 // SetUsername : Allow user to set Username
-func (options *ChangeUserPasswordOptions) SetUsername(username string) *ChangeUserPasswordOptions {
-	options.Username = core.StringPtr(username)
-	return options
+func (_options *ChangeUserPasswordOptions) SetUsername(username string) *ChangeUserPasswordOptions {
+	_options.Username = core.StringPtr(username)
+	return _options
 }
 
 // SetUser : Allow user to set User
-func (options *ChangeUserPasswordOptions) SetUser(user *APasswordSettingUser) *ChangeUserPasswordOptions {
-	options.User = user
-	return options
+func (_options *ChangeUserPasswordOptions) SetUser(user *APasswordSettingUser) *ChangeUserPasswordOptions {
+	_options.User = user
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -2541,24 +2606,24 @@ func UnmarshalChangeUserPasswordResponse(m map[string]json.RawMessage, result in
 // CompleteConnectionOptions : The CompleteConnection options.
 type CompleteConnectionOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// User type of `database` is the only currently supported value.
-	UserType *string `validate:"required,ne="`
+	UserType *string `json:"user_type" validate:"required,ne="`
 
 	// User ID.
-	UserID *string `validate:"required,ne="`
+	UserID *string `json:"user_id" validate:"required,ne="`
 
 	// Endpoint Type. The select endpoint must be enabled on the deployment before its connection information can be
 	// fetched.
-	EndpointType *string `validate:"required,ne="`
+	EndpointType *string `json:"endpoint_type" validate:"required,ne="`
 
 	// Password to be substituted into the response.
-	Password *string
+	Password *string `json:"password,omitempty"`
 
 	// Optional certificate root path to prepend certificate names. Certificates would be stored in this directory for use
 	// by other commands.
-	CertificateRoot *string
+	CertificateRoot *string `json:"certificate_root,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2583,39 +2648,39 @@ func (*CloudDatabasesV5) NewCompleteConnectionOptions(id string, userType string
 }
 
 // SetID : Allow user to set ID
-func (options *CompleteConnectionOptions) SetID(id string) *CompleteConnectionOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *CompleteConnectionOptions) SetID(id string) *CompleteConnectionOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetUserType : Allow user to set UserType
-func (options *CompleteConnectionOptions) SetUserType(userType string) *CompleteConnectionOptions {
-	options.UserType = core.StringPtr(userType)
-	return options
+func (_options *CompleteConnectionOptions) SetUserType(userType string) *CompleteConnectionOptions {
+	_options.UserType = core.StringPtr(userType)
+	return _options
 }
 
 // SetUserID : Allow user to set UserID
-func (options *CompleteConnectionOptions) SetUserID(userID string) *CompleteConnectionOptions {
-	options.UserID = core.StringPtr(userID)
-	return options
+func (_options *CompleteConnectionOptions) SetUserID(userID string) *CompleteConnectionOptions {
+	_options.UserID = core.StringPtr(userID)
+	return _options
 }
 
 // SetEndpointType : Allow user to set EndpointType
-func (options *CompleteConnectionOptions) SetEndpointType(endpointType string) *CompleteConnectionOptions {
-	options.EndpointType = core.StringPtr(endpointType)
-	return options
+func (_options *CompleteConnectionOptions) SetEndpointType(endpointType string) *CompleteConnectionOptions {
+	_options.EndpointType = core.StringPtr(endpointType)
+	return _options
 }
 
 // SetPassword : Allow user to set Password
-func (options *CompleteConnectionOptions) SetPassword(password string) *CompleteConnectionOptions {
-	options.Password = core.StringPtr(password)
-	return options
+func (_options *CompleteConnectionOptions) SetPassword(password string) *CompleteConnectionOptions {
+	_options.Password = core.StringPtr(password)
+	return _options
 }
 
 // SetCertificateRoot : Allow user to set CertificateRoot
-func (options *CompleteConnectionOptions) SetCertificateRoot(certificateRoot string) *CompleteConnectionOptions {
-	options.CertificateRoot = core.StringPtr(certificateRoot)
-	return options
+func (_options *CompleteConnectionOptions) SetCertificateRoot(certificateRoot string) *CompleteConnectionOptions {
+	_options.CertificateRoot = core.StringPtr(certificateRoot)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -2624,15 +2689,391 @@ func (options *CompleteConnectionOptions) SetHeaders(param map[string]string) *C
 	return options
 }
 
+// CompleteConnectionResponse : CompleteConnectionResponse struct
+type CompleteConnectionResponse struct {
+	Connection ConnectionIntf `json:"connection,omitempty"`
+}
+
+// UnmarshalCompleteConnectionResponse unmarshals an instance of CompleteConnectionResponse from the specified map of raw messages.
+func UnmarshalCompleteConnectionResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CompleteConnectionResponse)
+	err = core.UnmarshalModel(m, "connection", &obj.Connection, UnmarshalConnection)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// Configuration : Configuration struct
+// Models which "extend" this model:
+// - ConfigurationPgConfiguration
+// - ConfigurationRedisConfiguration
+// - ConfigurationMySQLConfiguration
+type Configuration struct {
+	// Maximum connections allowed.
+	MaxConnections *int64 `json:"max_connections,omitempty"`
+
+	// Max number of transactions that can be in the "prepared" state simultaneously.
+	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
+
+	// Deadlock timeout in ms. The time to wait on a lock before checking for deadlock.  Also the duration where lock waits
+	// will be logged.
+	DeadlockTimeout *int64 `json:"deadlock_timeout,omitempty"`
+
+	// Number of simultaneous requests that can be handled efficiently by the disk subsystem.
+	EffectiveIoConcurrency *int64 `json:"effective_io_concurrency,omitempty"`
+
+	// Maximum number of simultaneously defined replication slots.
+	MaxReplicationSlots *int64 `json:"max_replication_slots,omitempty"`
+
+	// Maximum number of simultaneously running WAL sender processes.
+	MaxWalSenders *int64 `json:"max_wal_senders,omitempty"`
+
+	// The number of 8kB shared memory buffers used by the server.  Set to 1/4 of memory.  Setting too high will cause
+	// crashes or prevent the database from starting.
+	SharedBuffers *int64 `json:"shared_buffers,omitempty"`
+
+	// Sets the current transaction's synchronization level.  Off can result in data loss.  remote_write with enable
+	// synchronous replication which will impact performance and availabilty.
+	SynchronousCommit *string `json:"synchronous_commit,omitempty"`
+
+	// WAL level.  Set to logical to use logical decoding or logical replication.
+	WalLevel *string `json:"wal_level,omitempty"`
+
+	// The number of seconds to wait before forces a switch to the next WAL file if a new file has not been started.
+	ArchiveTimeout *int64 `json:"archive_timeout,omitempty"`
+
+	// The minimum number of milliseconds for execution time above which statements will be logged.
+	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
+
+	// The maximum memory Redis should use, as bytes.
+	MaxmemoryRedis *int64 `json:"maxmemory-redis,omitempty"`
+
+	// The policy with which Redis evicts keys when maximum memory is reached.
+	MaxmemoryPolicy *string `json:"maxmemory-policy,omitempty"`
+
+	// If set to yes this will enable AOF persistence.
+	Appendonly *string `json:"appendonly,omitempty"`
+
+	// The maximum memory Redis should use, as bytes.
+	MaxmemorySamples *int64 `json:"maxmemory-samples,omitempty"`
+
+	// Whether or not to stop accepting writes when background persistence actions fail.
+	StopWritesOnBgsaveError *string `json:"stop-writes-on-bgsave-error,omitempty"`
+
+	// Maximum age for a binlog in seconds. If a binlog is older, it's archived.
+	MysqlMaxBinlogAgeSec *int64 `json:"mysql_max_binlog_age_sec,omitempty"`
+
+	// Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT
+	// statements that do not explicitly specify an authentication plugin.
+	MysqlDefaultAuthenticationPlugin *string `json:"mysql_default_authentication_plugin,omitempty"`
+}
+
+// Constants associated with the Configuration.SynchronousCommit property.
+// Sets the current transaction's synchronization level.  Off can result in data loss.  remote_write with enable
+// synchronous replication which will impact performance and availabilty.
+const (
+	ConfigurationSynchronousCommitLocalConst = "local"
+	ConfigurationSynchronousCommitOffConst   = "off"
+)
+
+// Constants associated with the Configuration.WalLevel property.
+// WAL level.  Set to logical to use logical decoding or logical replication.
+const (
+	ConfigurationWalLevelHotStandbyConst = "hot_standby"
+	ConfigurationWalLevelLogicalConst    = "logical"
+)
+
+// Constants associated with the Configuration.MaxmemoryPolicy property.
+// The policy with which Redis evicts keys when maximum memory is reached.
+const (
+	ConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
+	ConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
+	ConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
+	ConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
+	ConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
+	ConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
+)
+
+// Constants associated with the Configuration.Appendonly property.
+// If set to yes this will enable AOF persistence.
+const (
+	ConfigurationAppendonlyNoConst  = "no"
+	ConfigurationAppendonlyYesConst = "yes"
+)
+
+// Constants associated with the Configuration.StopWritesOnBgsaveError property.
+// Whether or not to stop accepting writes when background persistence actions fail.
+const (
+	ConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
+	ConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
+)
+
+// Constants associated with the Configuration.MysqlDefaultAuthenticationPlugin property.
+// Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT statements
+// that do not explicitly specify an authentication plugin.
+const (
+	ConfigurationMysqlDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
+	ConfigurationMysqlDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
+)
+
+func (*Configuration) isaConfiguration() bool {
+	return true
+}
+
+type ConfigurationIntf interface {
+	isaConfiguration() bool
+}
+
+// UnmarshalConfiguration unmarshals an instance of Configuration from the specified map of raw messages.
+func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(Configuration)
+	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "deadlock_timeout", &obj.DeadlockTimeout)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "effective_io_concurrency", &obj.EffectiveIoConcurrency)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_replication_slots", &obj.MaxReplicationSlots)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_wal_senders", &obj.MaxWalSenders)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "shared_buffers", &obj.SharedBuffers)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "synchronous_commit", &obj.SynchronousCommit)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "wal_level", &obj.WalLevel)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "archive_timeout", &obj.ArchiveTimeout)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "maxmemory-redis", &obj.MaxmemoryRedis)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "maxmemory-policy", &obj.MaxmemoryPolicy)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "appendonly", &obj.Appendonly)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "maxmemory-samples", &obj.MaxmemorySamples)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "stop-writes-on-bgsave-error", &obj.StopWritesOnBgsaveError)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "mysql_max_binlog_age_sec", &obj.MysqlMaxBinlogAgeSec)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "mysql_default_authentication_plugin", &obj.MysqlDefaultAuthenticationPlugin)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // Connection : Connection struct
+// Models which "extend" this model:
+// - ConnectionPostgreSQLConnection
+// - ConnectionRedisConnection
+// - ConnectionElasticsearchConnection
+// - ConnectionRabbitMqConnection
+// - ConnectionEtcdConnection
+// - ConnectionMongoDbConnection
+// - ConnectionMongoDbeeOpsManagerConnection
+// - ConnectionMongoDbeeConnection
+// - ConnectionMySQLConnection
+// - ConnectionDataStaxConnection
+// - ConnectionEnterpriseDbConnection
 type Connection struct {
-	Connection ConnectionConnectionIntf `json:"connection" validate:"required"`
+	Postgres *PostgreSQLConnectionURI `json:"postgres,omitempty"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli,omitempty"`
+
+	Rediss *RedisConnectionURI `json:"rediss,omitempty"`
+
+	HTTPS *ConnectionURI `json:"https,omitempty"`
+
+	Amqps *ConnectionURI `json:"amqps,omitempty"`
+
+	Mqtts *ConnectionURI `json:"mqtts,omitempty"`
+
+	StompSsl *ConnectionURI `json:"stomp_ssl,omitempty"`
+
+	Grpc *ConnectionURI `json:"grpc,omitempty"`
+
+	Mongodb *MongoDbConnectionURI `json:"mongodb,omitempty"`
+
+	OpsManager *ConnectionURI `json:"ops_manager,omitempty"`
+
+	BiConnector *ConnectionURI `json:"bi_connector,omitempty"`
+
+	Analytics *ConnectionURI `json:"analytics,omitempty"`
+
+	Mysql *MySQLConnectionURI `json:"mysql,omitempty"`
+
+	Secure *DataStaxConnectionURI `json:"secure,omitempty"`
+
+	Emp *ConnectionURI `json:"emp,omitempty"`
+}
+
+func (*Connection) isaConnection() bool {
+	return true
+}
+
+type ConnectionIntf interface {
+	isaConnection() bool
 }
 
 // UnmarshalConnection unmarshals an instance of Connection from the specified map of raw messages.
 func UnmarshalConnection(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(Connection)
-	err = core.UnmarshalModel(m, "connection", &obj.Connection, UnmarshalConnectionConnection)
+	err = core.UnmarshalModel(m, "postgres", &obj.Postgres, UnmarshalPostgreSQLConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "rediss", &obj.Rediss, UnmarshalRedisConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "https", &obj.HTTPS, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "amqps", &obj.Amqps, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "mqtts", &obj.Mqtts, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "stomp_ssl", &obj.StompSsl, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "grpc", &obj.Grpc, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "mongodb", &obj.Mongodb, UnmarshalMongoDbConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "ops_manager", &obj.OpsManager, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "bi_connector", &obj.BiConnector, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "analytics", &obj.Analytics, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "mysql", &obj.Mysql, UnmarshalMySQLConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "secure", &obj.Secure, UnmarshalDataStaxConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "emp", &obj.Emp, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionAuthentication : Authentication data for Connection String.
+type ConnectionAuthentication struct {
+	// Authentication method for this credential.
+	Method *string `json:"method,omitempty"`
+
+	// Username part of credential.
+	Username *string `json:"username,omitempty"`
+
+	// Password part of credential.
+	Password *string `json:"password,omitempty"`
+}
+
+// UnmarshalConnectionAuthentication unmarshals an instance of ConnectionAuthentication from the specified map of raw messages.
+func UnmarshalConnectionAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionAuthentication)
+	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionBundle : ConnectionBundle struct
+type ConnectionBundle struct {
+	// Name associated with the certificate.
+	Name *string `json:"name,omitempty"`
+
+	// Base64 encoded version of the certificate bundle.
+	BundleBase64 *string `json:"bundle_base64,omitempty"`
+}
+
+// UnmarshalConnectionBundle unmarshals an instance of ConnectionBundle from the specified map of raw messages.
+func UnmarshalConnectionBundle(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionBundle)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "bundle_base64", &obj.BundleBase64)
 	if err != nil {
 		return
 	}
@@ -2648,7 +3089,7 @@ type ConnectionCli struct {
 	Composed []string `json:"composed,omitempty"`
 
 	// A map of environment variables for a CLI connection.
-	Environment map[string]string `json:"environment,omitempty"`
+	Environment map[string]interface{} `json:"environment,omitempty"`
 
 	// The name of the executable the CLI should run.
 	Bin *string `json:"bin,omitempty"`
@@ -2657,7 +3098,7 @@ type ConnectionCli struct {
 	// inner array is the set of arguments to use with that call.
 	Arguments [][]string `json:"arguments,omitempty"`
 
-	Certificate *ConnectionCliCertificate `json:"certificate,omitempty"`
+	Certificate *ConnectionCertificate `json:"certificate,omitempty"`
 }
 
 // UnmarshalConnectionCli unmarshals an instance of ConnectionCli from the specified map of raw messages.
@@ -2683,7 +3124,7 @@ func UnmarshalConnectionCli(m map[string]json.RawMessage, result interface{}) (e
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalConnectionCliCertificate)
+	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalConnectionCertificate)
 	if err != nil {
 		return
 	}
@@ -2691,8 +3132,8 @@ func UnmarshalConnectionCli(m map[string]json.RawMessage, result interface{}) (e
 	return
 }
 
-// ConnectionCliCertificate : ConnectionCliCertificate struct
-type ConnectionCliCertificate struct {
+// ConnectionCertificate : ConnectionCertificate struct
+type ConnectionCertificate struct {
 	// Name associated with the certificate.
 	Name *string `json:"name,omitempty"`
 
@@ -2700,9 +3141,9 @@ type ConnectionCliCertificate struct {
 	CertificateBase64 *string `json:"certificate_base64,omitempty"`
 }
 
-// UnmarshalConnectionCliCertificate unmarshals an instance of ConnectionCliCertificate from the specified map of raw messages.
-func UnmarshalConnectionCliCertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionCliCertificate)
+// UnmarshalConnectionCertificate unmarshals an instance of ConnectionCertificate from the specified map of raw messages.
+func UnmarshalConnectionCertificate(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionCertificate)
 	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
 	if err != nil {
 		return
@@ -2715,87 +3156,100 @@ func UnmarshalConnectionCliCertificate(m map[string]json.RawMessage, result inte
 	return
 }
 
-// ConnectionConnection : ConnectionConnection struct
-// Models which "extend" this model:
-// - ConnectionConnectionPostgreSQLConnection
-// - ConnectionConnectionRedisConnection
-// - ConnectionConnectionElasticsearchConnection
-// - ConnectionConnectionRabbitMqConnection
-// - ConnectionConnectionEtcdConnection
-// - ConnectionConnectionMongoDbConnection
-type ConnectionConnection struct {
-	// Connection information for drivers and libraries.
-	Postgres *PostgreSQLConnectionURI `json:"postgres,omitempty"`
+// ConnectionHost : Connection hostname and port.
+type ConnectionHost struct {
+	// Hostname for connection.
+	Hostname *string `json:"hostname,omitempty"`
 
-	// Connection information for psql.
-	Cli *ConnectionCli `json:"cli,omitempty"`
-
-	// Connection information for drivers and libraries.
-	Rediss *RedisConnectionURI `json:"rediss,omitempty"`
-
-	// Elasticsearch Connection information for drivers and libraries.
-	HTTPS *ElasticsearchConnectionHTTPS `json:"https,omitempty"`
-
-	// RabbitMQ Connection information for AMQPS drivers and libraries.
-	Amqps *RabbitMqConnectionAmqps `json:"amqps,omitempty"`
-
-	// RabbitMQ Connection information for MQTTS drivers and libraries.
-	Mqtts *RabbitMqConnectionMqtts `json:"mqtts,omitempty"`
-
-	// RabbitMQ Connection information for STOMP drivers and libraries.
-	StompSsl *RabbitMqConnectionStompSsl `json:"stomp_ssl,omitempty"`
-
-	// GRPC(etcd3) Connection information for drivers and libraries.
-	Grpc *GrpcConnectionURI `json:"grpc,omitempty"`
-
-	// MongoDB Connection information for drivers and libraries.
-	Mongodb *MongoDbConnectionURI `json:"mongodb,omitempty"`
+	// Port number for connection.
+	Port *int64 `json:"port,omitempty"`
 }
 
-func (*ConnectionConnection) isaConnectionConnection() bool {
-	return true
+// UnmarshalConnectionHost unmarshals an instance of ConnectionHost from the specified map of raw messages.
+func UnmarshalConnectionHost(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionHost)
+	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
-type ConnectionConnectionIntf interface {
-	isaConnectionConnection() bool
+// ConnectionURI : ConnectionURI struct
+type ConnectionURI struct {
+	// Type of connection being described.
+	Type *string `json:"type,omitempty"`
+
+	Composed []string `json:"composed,omitempty"`
+
+	// Scheme/protocol for URI connection.
+	Scheme *string `json:"scheme,omitempty"`
+
+	Hosts []ConnectionHost `json:"hosts,omitempty"`
+
+	// Path for URI connection.
+	Path *string `json:"path,omitempty"`
+
+	// Query options to add to the URI connection.
+	QueryOptions map[string]interface{} `json:"query_options,omitempty"`
+
+	// Authentication data for Connection String.
+	Authentication *ConnectionAuthentication `json:"authentication,omitempty"`
+
+	Certificate *ConnectionCertificate `json:"certificate,omitempty"`
+
+	// Indicates ssl is required for the connection.
+	Ssl *bool `json:"ssl,omitempty"`
+
+	// Indicates the address is accessible by browser.
+	BrowserAccessible *bool `json:"browser_accessible,omitempty"`
 }
 
-// UnmarshalConnectionConnection unmarshals an instance of ConnectionConnection from the specified map of raw messages.
-func UnmarshalConnectionConnection(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionConnection)
-	err = core.UnmarshalModel(m, "postgres", &obj.Postgres, UnmarshalPostgreSQLConnectionURI)
+// UnmarshalConnectionURI unmarshals an instance of ConnectionURI from the specified map of raw messages.
+func UnmarshalConnectionURI(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionURI)
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
+	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "rediss", &obj.Rediss, UnmarshalRedisConnectionURI)
+	err = core.UnmarshalPrimitive(m, "scheme", &obj.Scheme)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "https", &obj.HTTPS, UnmarshalElasticsearchConnectionHTTPS)
+	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalConnectionHost)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "amqps", &obj.Amqps, UnmarshalRabbitMqConnectionAmqps)
+	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "mqtts", &obj.Mqtts, UnmarshalRabbitMqConnectionMqtts)
+	err = core.UnmarshalPrimitive(m, "query_options", &obj.QueryOptions)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "stomp_ssl", &obj.StompSsl, UnmarshalRabbitMqConnectionStompSsl)
+	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalConnectionAuthentication)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "grpc", &obj.Grpc, UnmarshalGrpcConnectionURI)
+	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalConnectionCertificate)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "mongodb", &obj.Mongodb, UnmarshalMongoDbConnectionURI)
+	err = core.UnmarshalPrimitive(m, "ssl", &obj.Ssl)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "browser_accessible", &obj.BrowserAccessible)
 	if err != nil {
 		return
 	}
@@ -2806,12 +3260,12 @@ func UnmarshalConnectionConnection(m map[string]json.RawMessage, result interfac
 // CreateDatabaseUserOptions : The CreateDatabaseUser options.
 type CreateDatabaseUserOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// User type.
-	UserType *string `validate:"required,ne="`
+	UserType *string `json:"user_type" validate:"required,ne="`
 
-	User *CreateDatabaseUserRequestUser
+	User *User `json:"user,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2826,58 +3280,27 @@ func (*CloudDatabasesV5) NewCreateDatabaseUserOptions(id string, userType string
 }
 
 // SetID : Allow user to set ID
-func (options *CreateDatabaseUserOptions) SetID(id string) *CreateDatabaseUserOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *CreateDatabaseUserOptions) SetID(id string) *CreateDatabaseUserOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetUserType : Allow user to set UserType
-func (options *CreateDatabaseUserOptions) SetUserType(userType string) *CreateDatabaseUserOptions {
-	options.UserType = core.StringPtr(userType)
-	return options
+func (_options *CreateDatabaseUserOptions) SetUserType(userType string) *CreateDatabaseUserOptions {
+	_options.UserType = core.StringPtr(userType)
+	return _options
 }
 
 // SetUser : Allow user to set User
-func (options *CreateDatabaseUserOptions) SetUser(user *CreateDatabaseUserRequestUser) *CreateDatabaseUserOptions {
-	options.User = user
-	return options
+func (_options *CreateDatabaseUserOptions) SetUser(user *User) *CreateDatabaseUserOptions {
+	_options.User = user
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
 func (options *CreateDatabaseUserOptions) SetHeaders(param map[string]string) *CreateDatabaseUserOptions {
 	options.Headers = param
 	return options
-}
-
-// CreateDatabaseUserRequestUser : CreateDatabaseUserRequestUser struct
-type CreateDatabaseUserRequestUser struct {
-	// User type for new user.
-	UserType *string `json:"user_type,omitempty"`
-
-	// Username for new user.
-	Username *string `json:"username,omitempty"`
-
-	// Password for new user.
-	Password *string `json:"password,omitempty"`
-}
-
-// UnmarshalCreateDatabaseUserRequestUser unmarshals an instance of CreateDatabaseUserRequestUser from the specified map of raw messages.
-func UnmarshalCreateDatabaseUserRequestUser(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CreateDatabaseUserRequestUser)
-	err = core.UnmarshalPrimitive(m, "user_type", &obj.UserType)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
 }
 
 // CreateDatabaseUserResponse : CreateDatabaseUserResponse struct
@@ -2896,13 +3319,42 @@ func UnmarshalCreateDatabaseUserResponse(m map[string]json.RawMessage, result in
 	return
 }
 
+// DataStaxConnectionURI : DataStaxConnectionURI struct
+type DataStaxConnectionURI struct {
+	Hosts []ConnectionHost `json:"hosts,omitempty"`
+
+	// Authentication data for Connection String.
+	Authentication *ConnectionAuthentication `json:"authentication,omitempty"`
+
+	Bundle *ConnectionBundle `json:"bundle,omitempty"`
+}
+
+// UnmarshalDataStaxConnectionURI unmarshals an instance of DataStaxConnectionURI from the specified map of raw messages.
+func UnmarshalDataStaxConnectionURI(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(DataStaxConnectionURI)
+	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalConnectionHost)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalConnectionAuthentication)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "bundle", &obj.Bundle, UnmarshalConnectionBundle)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // DeleteAllowlistEntryOptions : The DeleteAllowlistEntry options.
 type DeleteAllowlistEntryOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// An IPv4 address or a CIDR range (netmasked IPv4 address).
-	Ipaddress *string `validate:"required,ne="`
+	Ipaddress *string `json:"ipaddress" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2917,15 +3369,15 @@ func (*CloudDatabasesV5) NewDeleteAllowlistEntryOptions(id string, ipaddress str
 }
 
 // SetID : Allow user to set ID
-func (options *DeleteAllowlistEntryOptions) SetID(id string) *DeleteAllowlistEntryOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *DeleteAllowlistEntryOptions) SetID(id string) *DeleteAllowlistEntryOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetIpaddress : Allow user to set Ipaddress
-func (options *DeleteAllowlistEntryOptions) SetIpaddress(ipaddress string) *DeleteAllowlistEntryOptions {
-	options.Ipaddress = core.StringPtr(ipaddress)
-	return options
+func (_options *DeleteAllowlistEntryOptions) SetIpaddress(ipaddress string) *DeleteAllowlistEntryOptions {
+	_options.Ipaddress = core.StringPtr(ipaddress)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -2953,13 +3405,13 @@ func UnmarshalDeleteAllowlistEntryResponse(m map[string]json.RawMessage, result 
 // DeleteDatabaseUserOptions : The DeleteDatabaseUser options.
 type DeleteDatabaseUserOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// User type.
-	UserType *string `validate:"required,ne="`
+	UserType *string `json:"user_type" validate:"required,ne="`
 
 	// Username.
-	Username *string `validate:"required,ne="`
+	Username *string `json:"username" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -2975,21 +3427,21 @@ func (*CloudDatabasesV5) NewDeleteDatabaseUserOptions(id string, userType string
 }
 
 // SetID : Allow user to set ID
-func (options *DeleteDatabaseUserOptions) SetID(id string) *DeleteDatabaseUserOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *DeleteDatabaseUserOptions) SetID(id string) *DeleteDatabaseUserOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetUserType : Allow user to set UserType
-func (options *DeleteDatabaseUserOptions) SetUserType(userType string) *DeleteDatabaseUserOptions {
-	options.UserType = core.StringPtr(userType)
-	return options
+func (_options *DeleteDatabaseUserOptions) SetUserType(userType string) *DeleteDatabaseUserOptions {
+	_options.UserType = core.StringPtr(userType)
+	return _options
 }
 
 // SetUsername : Allow user to set Username
-func (options *DeleteDatabaseUserOptions) SetUsername(username string) *DeleteDatabaseUserOptions {
-	options.Username = core.StringPtr(username)
-	return options
+func (_options *DeleteDatabaseUserOptions) SetUsername(username string) *DeleteDatabaseUserOptions {
+	_options.Username = core.StringPtr(username)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -3133,8 +3585,11 @@ type Deployment struct {
 	// Database type within this deployment.
 	Type *string `json:"type,omitempty"`
 
+	// Platform for this deployment.
+	Platform *string `json:"platform,omitempty"`
+
 	// Platform-specific options for this deployment.
-	PlatformOptions interface{} `json:"platform_options,omitempty"`
+	PlatformOptions map[string]interface{} `json:"platform_options,omitempty"`
 
 	// Version number of the database.
 	Version *string `json:"version,omitempty"`
@@ -3166,6 +3621,10 @@ func UnmarshalDeployment(m map[string]json.RawMessage, result interface{}) (err 
 	if err != nil {
 		return
 	}
+	err = core.UnmarshalPrimitive(m, "platform", &obj.Platform)
+	if err != nil {
+		return
+	}
 	err = core.UnmarshalPrimitive(m, "platform_options", &obj.PlatformOptions)
 	if err != nil {
 		return
@@ -3190,213 +3649,10 @@ func UnmarshalDeployment(m map[string]json.RawMessage, result interface{}) (err 
 	return
 }
 
-// ElasticsearchConnectionHTTPS : ElasticsearchConnectionHTTPS struct
-type ElasticsearchConnectionHTTPS struct {
-	// Type of connection being described.
-	Type *string `json:"type,omitempty"`
-
-	Composed []string `json:"composed,omitempty"`
-
-	// Scheme/protocol for URI connection.
-	Scheme *string `json:"scheme,omitempty"`
-
-	Hosts []ElasticsearchConnectionHTTPSHostsItem `json:"hosts,omitempty"`
-
-	// Path for URI connection.
-	Path *string `json:"path,omitempty"`
-
-	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
-
-	Authentication *ElasticsearchConnectionHTTPSAuthentication `json:"authentication,omitempty"`
-
-	Certificate *ElasticsearchConnectionHTTPSCertificate `json:"certificate,omitempty"`
-}
-
-// UnmarshalElasticsearchConnectionHTTPS unmarshals an instance of ElasticsearchConnectionHTTPS from the specified map of raw messages.
-func UnmarshalElasticsearchConnectionHTTPS(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ElasticsearchConnectionHTTPS)
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "scheme", &obj.Scheme)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalElasticsearchConnectionHTTPSHostsItem)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "query_options", &obj.QueryOptions)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalElasticsearchConnectionHTTPSAuthentication)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalElasticsearchConnectionHTTPSCertificate)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ElasticsearchConnectionHTTPSAuthentication : ElasticsearchConnectionHTTPSAuthentication struct
-type ElasticsearchConnectionHTTPSAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
-
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
-
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
-}
-
-// UnmarshalElasticsearchConnectionHTTPSAuthentication unmarshals an instance of ElasticsearchConnectionHTTPSAuthentication from the specified map of raw messages.
-func UnmarshalElasticsearchConnectionHTTPSAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ElasticsearchConnectionHTTPSAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ElasticsearchConnectionHTTPSCertificate : ElasticsearchConnectionHTTPSCertificate struct
-type ElasticsearchConnectionHTTPSCertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
-}
-
-// UnmarshalElasticsearchConnectionHTTPSCertificate unmarshals an instance of ElasticsearchConnectionHTTPSCertificate from the specified map of raw messages.
-func UnmarshalElasticsearchConnectionHTTPSCertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ElasticsearchConnectionHTTPSCertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ElasticsearchConnectionHTTPSHostsItem : ElasticsearchConnectionHTTPSHostsItem struct
-type ElasticsearchConnectionHTTPSHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
-}
-
-// UnmarshalElasticsearchConnectionHTTPSHostsItem unmarshals an instance of ElasticsearchConnectionHTTPSHostsItem from the specified map of raw messages.
-func UnmarshalElasticsearchConnectionHTTPSHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ElasticsearchConnectionHTTPSHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// GrpcConnectionURI : GrpcConnectionURI struct
-type GrpcConnectionURI struct {
-	// Type of connection being described.
-	Type *string `json:"type,omitempty"`
-
-	Composed []string `json:"composed,omitempty"`
-
-	// Scheme/protocol for URI connection.
-	Scheme *string `json:"scheme,omitempty"`
-
-	Hosts []GrpcConnectionURIHostsItem `json:"hosts,omitempty"`
-
-	// Path for URI connection.
-	Path *string `json:"path,omitempty"`
-
-	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
-
-	Authentication *GrpcConnectionURIAuthentication `json:"authentication,omitempty"`
-
-	Certificate *GrpcConnectionURICertificate `json:"certificate,omitempty"`
-}
-
-// UnmarshalGrpcConnectionURI unmarshals an instance of GrpcConnectionURI from the specified map of raw messages.
-func UnmarshalGrpcConnectionURI(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(GrpcConnectionURI)
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "scheme", &obj.Scheme)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalGrpcConnectionURIHostsItem)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "query_options", &obj.QueryOptions)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalGrpcConnectionURIAuthentication)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalGrpcConnectionURICertificate)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // GetAllowlistOptions : The GetAllowlist options.
 type GetAllowlistOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3410,9 +3666,9 @@ func (*CloudDatabasesV5) NewGetAllowlistOptions(id string) *GetAllowlistOptions 
 }
 
 // SetID : Allow user to set ID
-func (options *GetAllowlistOptions) SetID(id string) *GetAllowlistOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *GetAllowlistOptions) SetID(id string) *GetAllowlistOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -3421,13 +3677,29 @@ func (options *GetAllowlistOptions) SetHeaders(param map[string]string) *GetAllo
 	return options
 }
 
+// GetAllowlistResponse : GetAllowlistResponse struct
+type GetAllowlistResponse struct {
+	IPAddresses []AllowlistEntry `json:"ip_addresses,omitempty"`
+}
+
+// UnmarshalGetAllowlistResponse unmarshals an instance of GetAllowlistResponse from the specified map of raw messages.
+func UnmarshalGetAllowlistResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GetAllowlistResponse)
+	err = core.UnmarshalModel(m, "ip_addresses", &obj.IPAddresses, UnmarshalAllowlistEntry)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // GetAutoscalingConditionsOptions : The GetAutoscalingConditions options.
 type GetAutoscalingConditionsOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Group ID.
-	GroupID *string `validate:"required,ne="`
+	GroupID *string `json:"group_id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3442,15 +3714,15 @@ func (*CloudDatabasesV5) NewGetAutoscalingConditionsOptions(id string, groupID s
 }
 
 // SetID : Allow user to set ID
-func (options *GetAutoscalingConditionsOptions) SetID(id string) *GetAutoscalingConditionsOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *GetAutoscalingConditionsOptions) SetID(id string) *GetAutoscalingConditionsOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetGroupID : Allow user to set GroupID
-func (options *GetAutoscalingConditionsOptions) SetGroupID(groupID string) *GetAutoscalingConditionsOptions {
-	options.GroupID = core.StringPtr(groupID)
-	return options
+func (_options *GetAutoscalingConditionsOptions) SetGroupID(groupID string) *GetAutoscalingConditionsOptions {
+	_options.GroupID = core.StringPtr(groupID)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -3462,7 +3734,7 @@ func (options *GetAutoscalingConditionsOptions) SetHeaders(param map[string]stri
 // GetBackupInfoOptions : The GetBackupInfo options.
 type GetBackupInfoOptions struct {
 	// Backup ID.
-	BackupID *string `validate:"required,ne="`
+	BackupID *string `json:"backup_id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3476,9 +3748,9 @@ func (*CloudDatabasesV5) NewGetBackupInfoOptions(backupID string) *GetBackupInfo
 }
 
 // SetBackupID : Allow user to set BackupID
-func (options *GetBackupInfoOptions) SetBackupID(backupID string) *GetBackupInfoOptions {
-	options.BackupID = core.StringPtr(backupID)
-	return options
+func (_options *GetBackupInfoOptions) SetBackupID(backupID string) *GetBackupInfoOptions {
+	_options.BackupID = core.StringPtr(backupID)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -3506,20 +3778,20 @@ func UnmarshalGetBackupInfoResponse(m map[string]json.RawMessage, result interfa
 // GetConnectionOptions : The GetConnection options.
 type GetConnectionOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// User type.
-	UserType *string `validate:"required,ne="`
+	UserType *string `json:"user_type" validate:"required,ne="`
 
 	// User ID.
-	UserID *string `validate:"required,ne="`
+	UserID *string `json:"user_id" validate:"required,ne="`
 
 	// Endpoint Type. The endpoint must be enabled on the deployment before its connection information can be fetched.
-	EndpointType *string `validate:"required,ne="`
+	EndpointType *string `json:"endpoint_type" validate:"required,ne="`
 
 	// Optional certificate root path to prepend certificate names. Certificates would be stored in this directory for use
 	// by other commands.
-	CertificateRoot *string
+	CertificateRoot *string `json:"certificate_root,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3543,33 +3815,33 @@ func (*CloudDatabasesV5) NewGetConnectionOptions(id string, userType string, use
 }
 
 // SetID : Allow user to set ID
-func (options *GetConnectionOptions) SetID(id string) *GetConnectionOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *GetConnectionOptions) SetID(id string) *GetConnectionOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetUserType : Allow user to set UserType
-func (options *GetConnectionOptions) SetUserType(userType string) *GetConnectionOptions {
-	options.UserType = core.StringPtr(userType)
-	return options
+func (_options *GetConnectionOptions) SetUserType(userType string) *GetConnectionOptions {
+	_options.UserType = core.StringPtr(userType)
+	return _options
 }
 
 // SetUserID : Allow user to set UserID
-func (options *GetConnectionOptions) SetUserID(userID string) *GetConnectionOptions {
-	options.UserID = core.StringPtr(userID)
-	return options
+func (_options *GetConnectionOptions) SetUserID(userID string) *GetConnectionOptions {
+	_options.UserID = core.StringPtr(userID)
+	return _options
 }
 
 // SetEndpointType : Allow user to set EndpointType
-func (options *GetConnectionOptions) SetEndpointType(endpointType string) *GetConnectionOptions {
-	options.EndpointType = core.StringPtr(endpointType)
-	return options
+func (_options *GetConnectionOptions) SetEndpointType(endpointType string) *GetConnectionOptions {
+	_options.EndpointType = core.StringPtr(endpointType)
+	return _options
 }
 
 // SetCertificateRoot : Allow user to set CertificateRoot
-func (options *GetConnectionOptions) SetCertificateRoot(certificateRoot string) *GetConnectionOptions {
-	options.CertificateRoot = core.StringPtr(certificateRoot)
-	return options
+func (_options *GetConnectionOptions) SetCertificateRoot(certificateRoot string) *GetConnectionOptions {
+	_options.CertificateRoot = core.StringPtr(certificateRoot)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -3578,10 +3850,26 @@ func (options *GetConnectionOptions) SetHeaders(param map[string]string) *GetCon
 	return options
 }
 
+// GetConnectionResponse : GetConnectionResponse struct
+type GetConnectionResponse struct {
+	Connection ConnectionIntf `json:"connection,omitempty"`
+}
+
+// UnmarshalGetConnectionResponse unmarshals an instance of GetConnectionResponse from the specified map of raw messages.
+func UnmarshalGetConnectionResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GetConnectionResponse)
+	err = core.UnmarshalModel(m, "connection", &obj.Connection, UnmarshalConnection)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // GetDefaultScalingGroupsOptions : The GetDefaultScalingGroups options.
 type GetDefaultScalingGroupsOptions struct {
 	// Database type name.
-	Type *string `validate:"required,ne="`
+	Type *string `json:"type" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3602,9 +3890,9 @@ func (*CloudDatabasesV5) NewGetDefaultScalingGroupsOptions(typeVar string) *GetD
 }
 
 // SetType : Allow user to set Type
-func (options *GetDefaultScalingGroupsOptions) SetType(typeVar string) *GetDefaultScalingGroupsOptions {
-	options.Type = core.StringPtr(typeVar)
-	return options
+func (_options *GetDefaultScalingGroupsOptions) SetType(typeVar string) *GetDefaultScalingGroupsOptions {
+	_options.Type = core.StringPtr(typeVar)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -3613,10 +3901,26 @@ func (options *GetDefaultScalingGroupsOptions) SetHeaders(param map[string]strin
 	return options
 }
 
+// GetDefaultScalingGroupsResponse : GetDefaultScalingGroupsResponse struct
+type GetDefaultScalingGroupsResponse struct {
+	Groups []Group `json:"groups,omitempty"`
+}
+
+// UnmarshalGetDefaultScalingGroupsResponse unmarshals an instance of GetDefaultScalingGroupsResponse from the specified map of raw messages.
+func UnmarshalGetDefaultScalingGroupsResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GetDefaultScalingGroupsResponse)
+	err = core.UnmarshalModel(m, "groups", &obj.Groups, UnmarshalGroup)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // GetDeploymentInfoOptions : The GetDeploymentInfo options.
 type GetDeploymentInfoOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3630,9 +3934,9 @@ func (*CloudDatabasesV5) NewGetDeploymentInfoOptions(id string) *GetDeploymentIn
 }
 
 // SetID : Allow user to set ID
-func (options *GetDeploymentInfoOptions) SetID(id string) *GetDeploymentInfoOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *GetDeploymentInfoOptions) SetID(id string) *GetDeploymentInfoOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -3657,38 +3961,54 @@ func UnmarshalGetDeploymentInfoResponse(m map[string]json.RawMessage, result int
 	return
 }
 
-// GetPitRdataOptions : The GetPitRdata options.
-type GetPitRdataOptions struct {
+// GetPitrDataOptions : The GetPitrData options.
+type GetPitrDataOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
-// NewGetPitRdataOptions : Instantiate GetPitRdataOptions
-func (*CloudDatabasesV5) NewGetPitRdataOptions(id string) *GetPitRdataOptions {
-	return &GetPitRdataOptions{
+// NewGetPitrDataOptions : Instantiate GetPitrDataOptions
+func (*CloudDatabasesV5) NewGetPitrDataOptions(id string) *GetPitrDataOptions {
+	return &GetPitrDataOptions{
 		ID: core.StringPtr(id),
 	}
 }
 
 // SetID : Allow user to set ID
-func (options *GetPitRdataOptions) SetID(id string) *GetPitRdataOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *GetPitrDataOptions) SetID(id string) *GetPitrDataOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
-func (options *GetPitRdataOptions) SetHeaders(param map[string]string) *GetPitRdataOptions {
+func (options *GetPitrDataOptions) SetHeaders(param map[string]string) *GetPitrDataOptions {
 	options.Headers = param
 	return options
+}
+
+// GetPitrDataResponse : GetPitrDataResponse struct
+type GetPitrDataResponse struct {
+	PointInTimeRecoveryData *PointInTimeRecoveryData `json:"point_in_time_recovery_data,omitempty"`
+}
+
+// UnmarshalGetPitrDataResponse unmarshals an instance of GetPitrDataResponse from the specified map of raw messages.
+func UnmarshalGetPitrDataResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GetPitrDataResponse)
+	err = core.UnmarshalModel(m, "point_in_time_recovery_data", &obj.PointInTimeRecoveryData, UnmarshalPointInTimeRecoveryData)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
 }
 
 // GetTaskOptions : The GetTask options.
 type GetTaskOptions struct {
 	// Task ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3702,9 +4022,9 @@ func (*CloudDatabasesV5) NewGetTaskOptions(id string) *GetTaskOptions {
 }
 
 // SetID : Allow user to set ID
-func (options *GetTaskOptions) SetID(id string) *GetTaskOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *GetTaskOptions) SetID(id string) *GetTaskOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -4041,15 +4361,33 @@ func UnmarshalGroupMemory(m map[string]json.RawMessage, result interface{}) (err
 	return
 }
 
-// Groups : Groups struct
-type Groups struct {
-	Groups []Group `json:"groups,omitempty"`
+// GroupScaling : GroupScaling struct
+type GroupScaling struct {
+	Members *GroupScalingMembers `json:"members,omitempty"`
+
+	Memory *GroupScalingMemory `json:"memory,omitempty"`
+
+	CPU *GroupScalingCPU `json:"cpu,omitempty"`
+
+	Disk *GroupScalingDisk `json:"disk,omitempty"`
 }
 
-// UnmarshalGroups unmarshals an instance of Groups from the specified map of raw messages.
-func UnmarshalGroups(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(Groups)
-	err = core.UnmarshalModel(m, "groups", &obj.Groups, UnmarshalGroup)
+// UnmarshalGroupScaling unmarshals an instance of GroupScaling from the specified map of raw messages.
+func UnmarshalGroupScaling(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScaling)
+	err = core.UnmarshalModel(m, "members", &obj.Members, UnmarshalGroupScalingMembers)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "memory", &obj.Memory, UnmarshalGroupScalingMemory)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cpu", &obj.CPU, UnmarshalGroupScalingCPU)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalGroupScalingDisk)
 	if err != nil {
 		return
 	}
@@ -4057,30 +4395,16 @@ func UnmarshalGroups(m map[string]json.RawMessage, result interface{}) (err erro
 	return
 }
 
-// GrpcConnectionURIAuthentication : GrpcConnectionURIAuthentication struct
-type GrpcConnectionURIAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
-
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
-
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
+// GroupScalingCPU : GroupScalingCPU struct
+type GroupScalingCPU struct {
+	// Number of allocated CPUs.
+	AllocationCount *int64 `json:"allocation_count,omitempty"`
 }
 
-// UnmarshalGrpcConnectionURIAuthentication unmarshals an instance of GrpcConnectionURIAuthentication from the specified map of raw messages.
-func UnmarshalGrpcConnectionURIAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(GrpcConnectionURIAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
+// UnmarshalGroupScalingCPU unmarshals an instance of GroupScalingCPU from the specified map of raw messages.
+func UnmarshalGroupScalingCPU(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScalingCPU)
+	err = core.UnmarshalPrimitive(m, "allocation_count", &obj.AllocationCount)
 	if err != nil {
 		return
 	}
@@ -4088,23 +4412,16 @@ func UnmarshalGrpcConnectionURIAuthentication(m map[string]json.RawMessage, resu
 	return
 }
 
-// GrpcConnectionURICertificate : GrpcConnectionURICertificate struct
-type GrpcConnectionURICertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
+// GroupScalingDisk : GroupScalingDisk struct
+type GroupScalingDisk struct {
+	// Allocated storage in MB.
+	AllocationMb *int64 `json:"allocation_mb,omitempty"`
 }
 
-// UnmarshalGrpcConnectionURICertificate unmarshals an instance of GrpcConnectionURICertificate from the specified map of raw messages.
-func UnmarshalGrpcConnectionURICertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(GrpcConnectionURICertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
+// UnmarshalGroupScalingDisk unmarshals an instance of GroupScalingDisk from the specified map of raw messages.
+func UnmarshalGroupScalingDisk(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScalingDisk)
+	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
 	if err != nil {
 		return
 	}
@@ -4112,23 +4429,33 @@ func UnmarshalGrpcConnectionURICertificate(m map[string]json.RawMessage, result 
 	return
 }
 
-// GrpcConnectionURIHostsItem : GrpcConnectionURIHostsItem struct
-type GrpcConnectionURIHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
+// GroupScalingMembers : GroupScalingMembers struct
+type GroupScalingMembers struct {
+	// Allocated number of members.
+	AllocationCount *int64 `json:"allocation_count,omitempty"`
 }
 
-// UnmarshalGrpcConnectionURIHostsItem unmarshals an instance of GrpcConnectionURIHostsItem from the specified map of raw messages.
-func UnmarshalGrpcConnectionURIHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(GrpcConnectionURIHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
+// UnmarshalGroupScalingMembers unmarshals an instance of GroupScalingMembers from the specified map of raw messages.
+func UnmarshalGroupScalingMembers(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScalingMembers)
+	err = core.UnmarshalPrimitive(m, "allocation_count", &obj.AllocationCount)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// GroupScalingMemory : GroupScalingMemory struct
+type GroupScalingMemory struct {
+	// Allocated memory in MB.
+	AllocationMb *int64 `json:"allocation_mb,omitempty"`
+}
+
+// UnmarshalGroupScalingMemory unmarshals an instance of GroupScalingMemory from the specified map of raw messages.
+func UnmarshalGroupScalingMemory(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScalingMemory)
+	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
 	if err != nil {
 		return
 	}
@@ -4139,7 +4466,7 @@ func UnmarshalGrpcConnectionURIHostsItem(m map[string]json.RawMessage, result in
 // KillConnectionsOptions : The KillConnections options.
 type KillConnectionsOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4153,9 +4480,9 @@ func (*CloudDatabasesV5) NewKillConnectionsOptions(id string) *KillConnectionsOp
 }
 
 // SetID : Allow user to set ID
-func (options *KillConnectionsOptions) SetID(id string) *KillConnectionsOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *KillConnectionsOptions) SetID(id string) *KillConnectionsOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -4217,7 +4544,7 @@ func UnmarshalListDeployablesResponse(m map[string]json.RawMessage, result inter
 // ListDeploymentBackupsOptions : The ListDeploymentBackups options.
 type ListDeploymentBackupsOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4231,9 +4558,9 @@ func (*CloudDatabasesV5) NewListDeploymentBackupsOptions(id string) *ListDeploym
 }
 
 // SetID : Allow user to set ID
-func (options *ListDeploymentBackupsOptions) SetID(id string) *ListDeploymentBackupsOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *ListDeploymentBackupsOptions) SetID(id string) *ListDeploymentBackupsOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -4245,7 +4572,7 @@ func (options *ListDeploymentBackupsOptions) SetHeaders(param map[string]string)
 // ListDeploymentScalingGroupsOptions : The ListDeploymentScalingGroups options.
 type ListDeploymentScalingGroupsOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4259,9 +4586,9 @@ func (*CloudDatabasesV5) NewListDeploymentScalingGroupsOptions(id string) *ListD
 }
 
 // SetID : Allow user to set ID
-func (options *ListDeploymentScalingGroupsOptions) SetID(id string) *ListDeploymentScalingGroupsOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *ListDeploymentScalingGroupsOptions) SetID(id string) *ListDeploymentScalingGroupsOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -4270,10 +4597,26 @@ func (options *ListDeploymentScalingGroupsOptions) SetHeaders(param map[string]s
 	return options
 }
 
+// ListDeploymentScalingGroupsResponse : ListDeploymentScalingGroupsResponse struct
+type ListDeploymentScalingGroupsResponse struct {
+	Groups []Group `json:"groups,omitempty"`
+}
+
+// UnmarshalListDeploymentScalingGroupsResponse unmarshals an instance of ListDeploymentScalingGroupsResponse from the specified map of raw messages.
+func UnmarshalListDeploymentScalingGroupsResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ListDeploymentScalingGroupsResponse)
+	err = core.UnmarshalModel(m, "groups", &obj.Groups, UnmarshalGroup)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // ListDeploymentTasksOptions : The ListDeploymentTasks options.
 type ListDeploymentTasksOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4287,9 +4630,9 @@ func (*CloudDatabasesV5) NewListDeploymentTasksOptions(id string) *ListDeploymen
 }
 
 // SetID : Allow user to set ID
-func (options *ListDeploymentTasksOptions) SetID(id string) *ListDeploymentTasksOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *ListDeploymentTasksOptions) SetID(id string) *ListDeploymentTasksOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -4336,7 +4679,7 @@ func UnmarshalListRegionsResponse(m map[string]json.RawMessage, result interface
 // ListRemotesOptions : The ListRemotes options.
 type ListRemotesOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -4350,9 +4693,9 @@ func (*CloudDatabasesV5) NewListRemotesOptions(id string) *ListRemotesOptions {
 }
 
 // SetID : Allow user to set ID
-func (options *ListRemotesOptions) SetID(id string) *ListRemotesOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *ListRemotesOptions) SetID(id string) *ListRemotesOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -4388,17 +4731,24 @@ type MongoDbConnectionURI struct {
 	// Scheme/protocol for URI connection.
 	Scheme *string `json:"scheme,omitempty"`
 
-	Hosts []MongoDbConnectionURIHostsItem `json:"hosts,omitempty"`
+	Hosts []ConnectionHost `json:"hosts,omitempty"`
 
 	// Path for URI connection.
 	Path *string `json:"path,omitempty"`
 
 	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
+	QueryOptions map[string]interface{} `json:"query_options,omitempty"`
 
-	Authentication *MongoDbConnectionURIAuthentication `json:"authentication,omitempty"`
+	// Authentication data for Connection String.
+	Authentication *ConnectionAuthentication `json:"authentication,omitempty"`
 
-	Certificate *MongoDbConnectionURICertificate `json:"certificate,omitempty"`
+	Certificate *ConnectionCertificate `json:"certificate,omitempty"`
+
+	// Indicates ssl is required for the connection.
+	Ssl *bool `json:"ssl,omitempty"`
+
+	// Indicates the address is accessible by browser.
+	BrowserAccessible *bool `json:"browser_accessible,omitempty"`
 
 	// Name of the database to use in the URI connection.
 	Database *string `json:"database,omitempty"`
@@ -4422,7 +4772,7 @@ func UnmarshalMongoDbConnectionURI(m map[string]json.RawMessage, result interfac
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalMongoDbConnectionURIHostsItem)
+	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalConnectionHost)
 	if err != nil {
 		return
 	}
@@ -4434,11 +4784,19 @@ func UnmarshalMongoDbConnectionURI(m map[string]json.RawMessage, result interfac
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalMongoDbConnectionURIAuthentication)
+	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalConnectionAuthentication)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalMongoDbConnectionURICertificate)
+	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalConnectionCertificate)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "ssl", &obj.Ssl)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "browser_accessible", &obj.BrowserAccessible)
 	if err != nil {
 		return
 	}
@@ -4454,78 +4812,83 @@ func UnmarshalMongoDbConnectionURI(m map[string]json.RawMessage, result interfac
 	return
 }
 
-// MongoDbConnectionURIAuthentication : MongoDbConnectionURIAuthentication struct
-type MongoDbConnectionURIAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
+// MySQLConnectionURI : MySQLConnectionURI struct
+type MySQLConnectionURI struct {
+	// Type of connection being described.
+	Type *string `json:"type,omitempty"`
 
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
+	Composed []string `json:"composed,omitempty"`
 
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
+	// Scheme/protocol for URI connection.
+	Scheme *string `json:"scheme,omitempty"`
+
+	Hosts []ConnectionHost `json:"hosts,omitempty"`
+
+	// Path for URI connection.
+	Path *string `json:"path,omitempty"`
+
+	// Query options to add to the URI connection.
+	QueryOptions map[string]interface{} `json:"query_options,omitempty"`
+
+	// Authentication data for Connection String.
+	Authentication *ConnectionAuthentication `json:"authentication,omitempty"`
+
+	Certificate *ConnectionCertificate `json:"certificate,omitempty"`
+
+	// Indicates ssl is required for the connection.
+	Ssl *bool `json:"ssl,omitempty"`
+
+	// Indicates the address is accessible by browser.
+	BrowserAccessible *bool `json:"browser_accessible,omitempty"`
+
+	// Name of the database to use in the URI connection.
+	Database *string `json:"database,omitempty"`
 }
 
-// UnmarshalMongoDbConnectionURIAuthentication unmarshals an instance of MongoDbConnectionURIAuthentication from the specified map of raw messages.
-func UnmarshalMongoDbConnectionURIAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(MongoDbConnectionURIAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
+// UnmarshalMySQLConnectionURI unmarshals an instance of MySQLConnectionURI from the specified map of raw messages.
+func UnmarshalMySQLConnectionURI(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(MySQLConnectionURI)
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
+	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
+	err = core.UnmarshalPrimitive(m, "scheme", &obj.Scheme)
 	if err != nil {
 		return
 	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// MongoDbConnectionURICertificate : MongoDbConnectionURICertificate struct
-type MongoDbConnectionURICertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
-}
-
-// UnmarshalMongoDbConnectionURICertificate unmarshals an instance of MongoDbConnectionURICertificate from the specified map of raw messages.
-func UnmarshalMongoDbConnectionURICertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(MongoDbConnectionURICertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalConnectionHost)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
+	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
 	if err != nil {
 		return
 	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// MongoDbConnectionURIHostsItem : MongoDbConnectionURIHostsItem struct
-type MongoDbConnectionURIHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
-}
-
-// UnmarshalMongoDbConnectionURIHostsItem unmarshals an instance of MongoDbConnectionURIHostsItem from the specified map of raw messages.
-func UnmarshalMongoDbConnectionURIHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(MongoDbConnectionURIHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
+	err = core.UnmarshalPrimitive(m, "query_options", &obj.QueryOptions)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
+	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalConnectionAuthentication)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalConnectionCertificate)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "ssl", &obj.Ssl)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "browser_accessible", &obj.BrowserAccessible)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "database", &obj.Database)
 	if err != nil {
 		return
 	}
@@ -4559,17 +4922,24 @@ type PostgreSQLConnectionURI struct {
 	// Scheme/protocol for URI connection.
 	Scheme *string `json:"scheme,omitempty"`
 
-	Hosts []PostgreSQLConnectionURIHostsItem `json:"hosts,omitempty"`
+	Hosts []ConnectionHost `json:"hosts,omitempty"`
 
 	// Path for URI connection.
 	Path *string `json:"path,omitempty"`
 
 	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
+	QueryOptions map[string]interface{} `json:"query_options,omitempty"`
 
-	Authentication *PostgreSQLConnectionURIAuthentication `json:"authentication,omitempty"`
+	// Authentication data for Connection String.
+	Authentication *ConnectionAuthentication `json:"authentication,omitempty"`
 
-	Certificate *PostgreSQLConnectionURICertificate `json:"certificate,omitempty"`
+	Certificate *ConnectionCertificate `json:"certificate,omitempty"`
+
+	// Indicates ssl is required for the connection.
+	Ssl *bool `json:"ssl,omitempty"`
+
+	// Indicates the address is accessible by browser.
+	BrowserAccessible *bool `json:"browser_accessible,omitempty"`
 
 	// Name of the database to use in the URI connection.
 	Database *string `json:"database,omitempty"`
@@ -4590,7 +4960,7 @@ func UnmarshalPostgreSQLConnectionURI(m map[string]json.RawMessage, result inter
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalPostgreSQLConnectionURIHostsItem)
+	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalConnectionHost)
 	if err != nil {
 		return
 	}
@@ -4602,11 +4972,19 @@ func UnmarshalPostgreSQLConnectionURI(m map[string]json.RawMessage, result inter
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalPostgreSQLConnectionURIAuthentication)
+	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalConnectionAuthentication)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalPostgreSQLConnectionURICertificate)
+	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalConnectionCertificate)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "ssl", &obj.Ssl)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "browser_accessible", &obj.BrowserAccessible)
 	if err != nil {
 		return
 	}
@@ -4618,635 +4996,52 @@ func UnmarshalPostgreSQLConnectionURI(m map[string]json.RawMessage, result inter
 	return
 }
 
-// PostgreSQLConnectionURIAuthentication : PostgreSQLConnectionURIAuthentication struct
-type PostgreSQLConnectionURIAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
+// PromoteReadOnlyReplicaOptions : The PromoteReadOnlyReplica options.
+type PromoteReadOnlyReplicaOptions struct {
+	// Deployment ID of the read-only replica to promote.
+	ID *string `json:"id" validate:"required,ne="`
 
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
+	// Promotion and Upgrade options.
+	Promotion map[string]interface{} `json:"promotion,omitempty"`
 
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
+	// Allows users to set headers on API requests
+	Headers map[string]string
 }
 
-// UnmarshalPostgreSQLConnectionURIAuthentication unmarshals an instance of PostgreSQLConnectionURIAuthentication from the specified map of raw messages.
-func UnmarshalPostgreSQLConnectionURIAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PostgreSQLConnectionURIAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
+// NewPromoteReadOnlyReplicaOptions : Instantiate PromoteReadOnlyReplicaOptions
+func (*CloudDatabasesV5) NewPromoteReadOnlyReplicaOptions(id string) *PromoteReadOnlyReplicaOptions {
+	return &PromoteReadOnlyReplicaOptions{
+		ID: core.StringPtr(id),
 	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
 }
 
-// PostgreSQLConnectionURICertificate : PostgreSQLConnectionURICertificate struct
-type PostgreSQLConnectionURICertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
+// SetID : Allow user to set ID
+func (_options *PromoteReadOnlyReplicaOptions) SetID(id string) *PromoteReadOnlyReplicaOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
-// UnmarshalPostgreSQLConnectionURICertificate unmarshals an instance of PostgreSQLConnectionURICertificate from the specified map of raw messages.
-func UnmarshalPostgreSQLConnectionURICertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PostgreSQLConnectionURICertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
+// SetPromotion : Allow user to set Promotion
+func (_options *PromoteReadOnlyReplicaOptions) SetPromotion(promotion map[string]interface{}) *PromoteReadOnlyReplicaOptions {
+	_options.Promotion = promotion
+	return _options
 }
 
-// PostgreSQLConnectionURIHostsItem : PostgreSQLConnectionURIHostsItem struct
-type PostgreSQLConnectionURIHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
+// SetHeaders : Allow user to set Headers
+func (options *PromoteReadOnlyReplicaOptions) SetHeaders(param map[string]string) *PromoteReadOnlyReplicaOptions {
+	options.Headers = param
+	return options
 }
 
-// UnmarshalPostgreSQLConnectionURIHostsItem unmarshals an instance of PostgreSQLConnectionURIHostsItem from the specified map of raw messages.
-func UnmarshalPostgreSQLConnectionURIHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PostgreSQLConnectionURIHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
+// PromoteReadOnlyReplicaResponse : PromoteReadOnlyReplicaResponse struct
+type PromoteReadOnlyReplicaResponse struct {
+	Task *Task `json:"task,omitempty"`
 }
 
-// RabbitMqConnectionAmqps : RabbitMqConnectionAmqps struct
-type RabbitMqConnectionAmqps struct {
-	// Type of connection being described.
-	Type *string `json:"type,omitempty"`
-
-	Composed []string `json:"composed,omitempty"`
-
-	// Scheme/protocol for URI connection.
-	Scheme *string `json:"scheme,omitempty"`
-
-	Hosts []RabbitMqConnectionAmqpsHostsItem `json:"hosts,omitempty"`
-
-	// Path for URI connection.
-	Path *string `json:"path,omitempty"`
-
-	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
-
-	Authentication *RabbitMqConnectionAmqpsAuthentication `json:"authentication,omitempty"`
-
-	Certificate *RabbitMqConnectionAmqpsCertificate `json:"certificate,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionAmqps unmarshals an instance of RabbitMqConnectionAmqps from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionAmqps(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionAmqps)
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "scheme", &obj.Scheme)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalRabbitMqConnectionAmqpsHostsItem)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "query_options", &obj.QueryOptions)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalRabbitMqConnectionAmqpsAuthentication)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalRabbitMqConnectionAmqpsCertificate)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionHTTPS : RabbitMqConnectionHTTPS struct
-type RabbitMqConnectionHTTPS struct {
-	// Type of connection being described.
-	Type *string `json:"type,omitempty"`
-
-	Composed []string `json:"composed,omitempty"`
-
-	// Scheme/protocol for URI connection.
-	Scheme *string `json:"scheme,omitempty"`
-
-	Hosts []RabbitMqConnectionHTTPSHostsItem `json:"hosts,omitempty"`
-
-	// Path for URI connection.
-	Path *string `json:"path,omitempty"`
-
-	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
-
-	Authentication *RabbitMqConnectionHTTPSAuthentication `json:"authentication,omitempty"`
-
-	Certificate *RabbitMqConnectionHTTPSCertificate `json:"certificate,omitempty"`
-
-	// Indicates the address is accessible by browser, for the RabbitMQ Management UI.
-	BrowserAccessible *bool `json:"browser_accessible,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionHTTPS unmarshals an instance of RabbitMqConnectionHTTPS from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionHTTPS(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionHTTPS)
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "scheme", &obj.Scheme)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalRabbitMqConnectionHTTPSHostsItem)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "query_options", &obj.QueryOptions)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalRabbitMqConnectionHTTPSAuthentication)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalRabbitMqConnectionHTTPSCertificate)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "browser_accessible", &obj.BrowserAccessible)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionMqtts : RabbitMqConnectionMqtts struct
-type RabbitMqConnectionMqtts struct {
-	// Type of connection being described.
-	Type *string `json:"type,omitempty"`
-
-	Composed []string `json:"composed,omitempty"`
-
-	// Scheme/protocol for URI connection.
-	Scheme *string `json:"scheme,omitempty"`
-
-	Hosts []RabbitMqConnectionMqttsHostsItem `json:"hosts,omitempty"`
-
-	// Path for URI connection.
-	Path *string `json:"path,omitempty"`
-
-	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
-
-	Authentication *RabbitMqConnectionMqttsAuthentication `json:"authentication,omitempty"`
-
-	Certificate *RabbitMqConnectionMqttsCertificate `json:"certificate,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionMqtts unmarshals an instance of RabbitMqConnectionMqtts from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionMqtts(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionMqtts)
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "scheme", &obj.Scheme)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalRabbitMqConnectionMqttsHostsItem)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "path", &obj.Path)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "query_options", &obj.QueryOptions)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalRabbitMqConnectionMqttsAuthentication)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalRabbitMqConnectionMqttsCertificate)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionStompSsl : RabbitMqConnectionStompSsl struct
-type RabbitMqConnectionStompSsl struct {
-	// Type of connection being described.
-	Type *string `json:"type,omitempty"`
-
-	Composed []string `json:"composed,omitempty"`
-
-	Hosts []RabbitMqConnectionStompSslHostsItem `json:"hosts,omitempty"`
-
-	Authentication *RabbitMqConnectionStompSslAuthentication `json:"authentication,omitempty"`
-
-	Certificate *RabbitMqConnectionStompSslCertificate `json:"certificate,omitempty"`
-
-	// Indicates ssl is required for the connection.
-	Ssl *bool `json:"ssl,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionStompSsl unmarshals an instance of RabbitMqConnectionStompSsl from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionStompSsl(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionStompSsl)
-	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "composed", &obj.Composed)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalRabbitMqConnectionStompSslHostsItem)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalRabbitMqConnectionStompSslAuthentication)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalRabbitMqConnectionStompSslCertificate)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "ssl", &obj.Ssl)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionAmqpsAuthentication : RabbitMqConnectionAmqpsAuthentication struct
-type RabbitMqConnectionAmqpsAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
-
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
-
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionAmqpsAuthentication unmarshals an instance of RabbitMqConnectionAmqpsAuthentication from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionAmqpsAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionAmqpsAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionAmqpsCertificate : RabbitMqConnectionAmqpsCertificate struct
-type RabbitMqConnectionAmqpsCertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionAmqpsCertificate unmarshals an instance of RabbitMqConnectionAmqpsCertificate from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionAmqpsCertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionAmqpsCertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionAmqpsHostsItem : RabbitMqConnectionAmqpsHostsItem struct
-type RabbitMqConnectionAmqpsHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionAmqpsHostsItem unmarshals an instance of RabbitMqConnectionAmqpsHostsItem from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionAmqpsHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionAmqpsHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionHTTPSAuthentication : RabbitMqConnectionHTTPSAuthentication struct
-type RabbitMqConnectionHTTPSAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
-
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
-
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionHTTPSAuthentication unmarshals an instance of RabbitMqConnectionHTTPSAuthentication from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionHTTPSAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionHTTPSAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionHTTPSCertificate : RabbitMqConnectionHTTPSCertificate struct
-type RabbitMqConnectionHTTPSCertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionHTTPSCertificate unmarshals an instance of RabbitMqConnectionHTTPSCertificate from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionHTTPSCertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionHTTPSCertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionHTTPSHostsItem : RabbitMqConnectionHTTPSHostsItem struct
-type RabbitMqConnectionHTTPSHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionHTTPSHostsItem unmarshals an instance of RabbitMqConnectionHTTPSHostsItem from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionHTTPSHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionHTTPSHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionMqttsAuthentication : RabbitMqConnectionMqttsAuthentication struct
-type RabbitMqConnectionMqttsAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
-
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
-
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionMqttsAuthentication unmarshals an instance of RabbitMqConnectionMqttsAuthentication from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionMqttsAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionMqttsAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionMqttsCertificate : RabbitMqConnectionMqttsCertificate struct
-type RabbitMqConnectionMqttsCertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionMqttsCertificate unmarshals an instance of RabbitMqConnectionMqttsCertificate from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionMqttsCertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionMqttsCertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionMqttsHostsItem : RabbitMqConnectionMqttsHostsItem struct
-type RabbitMqConnectionMqttsHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionMqttsHostsItem unmarshals an instance of RabbitMqConnectionMqttsHostsItem from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionMqttsHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionMqttsHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionStompSslAuthentication : RabbitMqConnectionStompSslAuthentication struct
-type RabbitMqConnectionStompSslAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
-
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
-
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionStompSslAuthentication unmarshals an instance of RabbitMqConnectionStompSslAuthentication from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionStompSslAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionStompSslAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionStompSslCertificate : RabbitMqConnectionStompSslCertificate struct
-type RabbitMqConnectionStompSslCertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionStompSslCertificate unmarshals an instance of RabbitMqConnectionStompSslCertificate from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionStompSslCertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionStompSslCertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RabbitMqConnectionStompSslHostsItem : RabbitMqConnectionStompSslHostsItem struct
-type RabbitMqConnectionStompSslHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
-}
-
-// UnmarshalRabbitMqConnectionStompSslHostsItem unmarshals an instance of RabbitMqConnectionStompSslHostsItem from the specified map of raw messages.
-func UnmarshalRabbitMqConnectionStompSslHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RabbitMqConnectionStompSslHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
+// UnmarshalPromoteReadOnlyReplicaResponse unmarshals an instance of PromoteReadOnlyReplicaResponse from the specified map of raw messages.
+func UnmarshalPromoteReadOnlyReplicaResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PromoteReadOnlyReplicaResponse)
+	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
 	if err != nil {
 		return
 	}
@@ -5264,17 +5059,24 @@ type RedisConnectionURI struct {
 	// Scheme/protocol for URI connection.
 	Scheme *string `json:"scheme,omitempty"`
 
-	Hosts []RedisConnectionURIHostsItem `json:"hosts,omitempty"`
+	Hosts []ConnectionHost `json:"hosts,omitempty"`
 
 	// Path for URI connection.
 	Path *string `json:"path,omitempty"`
 
 	// Query options to add to the URI connection.
-	QueryOptions interface{} `json:"query_options,omitempty"`
+	QueryOptions map[string]interface{} `json:"query_options,omitempty"`
 
-	Authentication *RedisConnectionURIAuthentication `json:"authentication,omitempty"`
+	// Authentication data for Connection String.
+	Authentication *ConnectionAuthentication `json:"authentication,omitempty"`
 
-	Certificate *RedisConnectionURICertificate `json:"certificate,omitempty"`
+	Certificate *ConnectionCertificate `json:"certificate,omitempty"`
+
+	// Indicates ssl is required for the connection.
+	Ssl *bool `json:"ssl,omitempty"`
+
+	// Indicates the address is accessible by browser.
+	BrowserAccessible *bool `json:"browser_accessible,omitempty"`
 
 	// Number of the database to use in the URI connection.
 	Database *int64 `json:"database,omitempty"`
@@ -5295,7 +5097,7 @@ func UnmarshalRedisConnectionURI(m map[string]json.RawMessage, result interface{
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalRedisConnectionURIHostsItem)
+	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalConnectionHost)
 	if err != nil {
 		return
 	}
@@ -5307,94 +5109,23 @@ func UnmarshalRedisConnectionURI(m map[string]json.RawMessage, result interface{
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalRedisConnectionURIAuthentication)
+	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalConnectionAuthentication)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalRedisConnectionURICertificate)
+	err = core.UnmarshalModel(m, "certificate", &obj.Certificate, UnmarshalConnectionCertificate)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "ssl", &obj.Ssl)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "browser_accessible", &obj.BrowserAccessible)
 	if err != nil {
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "database", &obj.Database)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RedisConnectionURIAuthentication : RedisConnectionURIAuthentication struct
-type RedisConnectionURIAuthentication struct {
-	// Authentication method for this credential.
-	Method *string `json:"method,omitempty"`
-
-	// Username part of credential.
-	Username *string `json:"username,omitempty"`
-
-	// Password part of credential.
-	Password *string `json:"password,omitempty"`
-}
-
-// UnmarshalRedisConnectionURIAuthentication unmarshals an instance of RedisConnectionURIAuthentication from the specified map of raw messages.
-func UnmarshalRedisConnectionURIAuthentication(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RedisConnectionURIAuthentication)
-	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RedisConnectionURICertificate : RedisConnectionURICertificate struct
-type RedisConnectionURICertificate struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate.
-	CertificateBase64 *string `json:"certificate_base64,omitempty"`
-}
-
-// UnmarshalRedisConnectionURICertificate unmarshals an instance of RedisConnectionURICertificate from the specified map of raw messages.
-func UnmarshalRedisConnectionURICertificate(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RedisConnectionURICertificate)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "certificate_base64", &obj.CertificateBase64)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RedisConnectionURIHostsItem : RedisConnectionURIHostsItem struct
-type RedisConnectionURIHostsItem struct {
-	// Hostname for connection.
-	Hostname *string `json:"hostname,omitempty"`
-
-	// Port number for connection.
-	Port *int64 `json:"port,omitempty"`
-}
-
-// UnmarshalRedisConnectionURIHostsItem unmarshals an instance of RedisConnectionURIHostsItem from the specified map of raw messages.
-func UnmarshalRedisConnectionURIHostsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RedisConnectionURIHostsItem)
-	err = core.UnmarshalPrimitive(m, "hostname", &obj.Hostname)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "port", &obj.Port)
 	if err != nil {
 		return
 	}
@@ -5429,7 +5160,7 @@ func UnmarshalRemotes(m map[string]json.RawMessage, result interface{}) (err err
 // ResyncReplicaOptions : The ResyncReplica options.
 type ResyncReplicaOptions struct {
 	// Deployment ID of the read-only replica.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5443,9 +5174,9 @@ func (*CloudDatabasesV5) NewResyncReplicaOptions(id string) *ResyncReplicaOption
 }
 
 // SetID : Allow user to set ID
-func (options *ResyncReplicaOptions) SetID(id string) *ResyncReplicaOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *ResyncReplicaOptions) SetID(id string) *ResyncReplicaOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -5473,14 +5204,13 @@ func UnmarshalResyncReplicaResponse(m map[string]json.RawMessage, result interfa
 // SetAllowlistOptions : The SetAllowlist options.
 type SetAllowlistOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
-	// An array of allowlist entries.
-	IPAddresses []AllowlistEntry
+	IPAddresses []AllowlistEntry `json:"ip_addresses,omitempty"`
 
 	// Verify that the current allowlist matches a provided ETag value. Use in conjunction with the GET operation's ETag
 	// header to ensure synchronicity between clients.
-	IfMatch *string
+	IfMatch *string `json:"If-Match,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5494,21 +5224,21 @@ func (*CloudDatabasesV5) NewSetAllowlistOptions(id string) *SetAllowlistOptions 
 }
 
 // SetID : Allow user to set ID
-func (options *SetAllowlistOptions) SetID(id string) *SetAllowlistOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *SetAllowlistOptions) SetID(id string) *SetAllowlistOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetIPAddresses : Allow user to set IPAddresses
-func (options *SetAllowlistOptions) SetIPAddresses(ipAddresses []AllowlistEntry) *SetAllowlistOptions {
-	options.IPAddresses = ipAddresses
-	return options
+func (_options *SetAllowlistOptions) SetIPAddresses(ipAddresses []AllowlistEntry) *SetAllowlistOptions {
+	_options.IPAddresses = ipAddresses
+	return _options
 }
 
 // SetIfMatch : Allow user to set IfMatch
-func (options *SetAllowlistOptions) SetIfMatch(ifMatch string) *SetAllowlistOptions {
-	options.IfMatch = core.StringPtr(ifMatch)
-	return options
+func (_options *SetAllowlistOptions) SetIfMatch(ifMatch string) *SetAllowlistOptions {
+	_options.IfMatch = core.StringPtr(ifMatch)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -5536,12 +5266,12 @@ func UnmarshalSetAllowlistResponse(m map[string]json.RawMessage, result interfac
 // SetAutoscalingConditionsOptions : The SetAutoscalingConditions options.
 type SetAutoscalingConditionsOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Group ID.
-	GroupID *string `validate:"required,ne="`
+	GroupID *string `json:"group_id" validate:"required,ne="`
 
-	Autoscaling AutoscalingSetGroupAutoscalingIntf `validate:"required"`
+	Autoscaling AutoscalingSetGroupAutoscalingIntf `json:"autoscaling" validate:"required"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -5557,21 +5287,21 @@ func (*CloudDatabasesV5) NewSetAutoscalingConditionsOptions(id string, groupID s
 }
 
 // SetID : Allow user to set ID
-func (options *SetAutoscalingConditionsOptions) SetID(id string) *SetAutoscalingConditionsOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *SetAutoscalingConditionsOptions) SetID(id string) *SetAutoscalingConditionsOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetGroupID : Allow user to set GroupID
-func (options *SetAutoscalingConditionsOptions) SetGroupID(groupID string) *SetAutoscalingConditionsOptions {
-	options.GroupID = core.StringPtr(groupID)
-	return options
+func (_options *SetAutoscalingConditionsOptions) SetGroupID(groupID string) *SetAutoscalingConditionsOptions {
+	_options.GroupID = core.StringPtr(groupID)
+	return _options
 }
 
 // SetAutoscaling : Allow user to set Autoscaling
-func (options *SetAutoscalingConditionsOptions) SetAutoscaling(autoscaling AutoscalingSetGroupAutoscalingIntf) *SetAutoscalingConditionsOptions {
-	options.Autoscaling = autoscaling
-	return options
+func (_options *SetAutoscalingConditionsOptions) SetAutoscaling(autoscaling AutoscalingSetGroupAutoscalingIntf) *SetAutoscalingConditionsOptions {
+	_options.Autoscaling = autoscaling
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -5596,292 +5326,50 @@ func UnmarshalSetAutoscalingConditionsResponse(m map[string]json.RawMessage, res
 	return
 }
 
-// SetCPUGroupCPU : SetCPUGroupCPU struct
-type SetCPUGroupCPU struct {
-	// Number of allocated CPUs.
-	AllocationCount *int64 `json:"allocation_count,omitempty"`
-}
-
-// UnmarshalSetCPUGroupCPU unmarshals an instance of SetCPUGroupCPU from the specified map of raw messages.
-func UnmarshalSetCPUGroupCPU(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetCPUGroupCPU)
-	err = core.UnmarshalPrimitive(m, "allocation_count", &obj.AllocationCount)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// SetConfigurationConfiguration : SetConfigurationConfiguration struct
-// Models which "extend" this model:
-// - SetConfigurationConfigurationPgConfiguration
-// - SetConfigurationConfigurationRedisConfiguration
-type SetConfigurationConfiguration struct {
-	// Maximum connections allowed.
-	MaxConnections *int64 `json:"max_connections,omitempty"`
-
-	// Max number of transactions that can be in the "prepared" state simultaneously.
-	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
-
-	// Deadlock timeout in ms. The time to wait on a lock before checking for deadlock.  Also the duration where lock waits
-	// will be logged.
-	DeadlockTimeout *int64 `json:"deadlock_timeout,omitempty"`
-
-	// Number of simultaneous requests that can be handled efficiently by the disk subsystem.
-	EffectiveIoConcurrency *int64 `json:"effective_io_concurrency,omitempty"`
-
-	// Maximum number of simultaneously defined replication slots.
-	MaxReplicationSlots *int64 `json:"max_replication_slots,omitempty"`
-
-	// Maximum number of simultaneously running WAL sender processes.
-	MaxWalSenders *int64 `json:"max_wal_senders,omitempty"`
-
-	// The number of 8kB shared memory buffers used by the server.  Set to 1/4 of memory.  Setting too high will cause
-	// crashes or prevent the database from starting.
-	SharedBuffers *int64 `json:"shared_buffers,omitempty"`
-
-	// Sets the current transaction's synchronization level.  Off can result in data loss.  remote_write with enable
-	// synchronous replication which will impact performance and availabilty.
-	SynchronousCommit *string `json:"synchronous_commit,omitempty"`
-
-	// WAL level.  Set to logical to use logical decoding or logical replication.
-	WalLevel *string `json:"wal_level,omitempty"`
-
-	// The number of seconds to wait before forces a switch to the next WAL file if a new file has not been started.
-	ArchiveTimeout *int64 `json:"archive_timeout,omitempty"`
-
-	// The minimum number of milliseconds for execution time above which statements will be logged.
-	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
-
-	// The maximum memory Redis should use, as bytes.
-	MaxmemoryRedis *int64 `json:"maxmemory-redis,omitempty"`
-
-	// The policy with which Redis evicts keys when maximum memory is reached.
-	MaxmemoryPolicy *string `json:"maxmemory-policy,omitempty"`
-
-	// If set to yes this will enable AOF persistence.
-	Appendonly *string `json:"appendonly,omitempty"`
-
-	// The maximum memory Redis should use, as bytes.
-	MaxmemorySamples *int64 `json:"maxmemory-samples,omitempty"`
-
-	// Whether or not to stop accepting writes when background persistence actions fail.
-	StopWritesOnBgsaveError *string `json:"stop-writes-on-bgsave-error,omitempty"`
-}
-
-// Constants associated with the SetConfigurationConfiguration.SynchronousCommit property.
-// Sets the current transaction's synchronization level.  Off can result in data loss.  remote_write with enable
-// synchronous replication which will impact performance and availabilty.
-const (
-	SetConfigurationConfigurationSynchronousCommitLocalConst = "local"
-	SetConfigurationConfigurationSynchronousCommitOffConst   = "off"
-)
-
-// Constants associated with the SetConfigurationConfiguration.WalLevel property.
-// WAL level.  Set to logical to use logical decoding or logical replication.
-const (
-	SetConfigurationConfigurationWalLevelHotStandbyConst = "hot_standby"
-	SetConfigurationConfigurationWalLevelLogicalConst    = "logical"
-)
-
-// Constants associated with the SetConfigurationConfiguration.MaxmemoryPolicy property.
-// The policy with which Redis evicts keys when maximum memory is reached.
-const (
-	SetConfigurationConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
-	SetConfigurationConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
-	SetConfigurationConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
-	SetConfigurationConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
-	SetConfigurationConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
-	SetConfigurationConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
-)
-
-// Constants associated with the SetConfigurationConfiguration.Appendonly property.
-// If set to yes this will enable AOF persistence.
-const (
-	SetConfigurationConfigurationAppendonlyNoConst  = "no"
-	SetConfigurationConfigurationAppendonlyYesConst = "yes"
-)
-
-// Constants associated with the SetConfigurationConfiguration.StopWritesOnBgsaveError property.
-// Whether or not to stop accepting writes when background persistence actions fail.
-const (
-	SetConfigurationConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
-	SetConfigurationConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
-)
-
-func (*SetConfigurationConfiguration) isaSetConfigurationConfiguration() bool {
-	return true
-}
-
-type SetConfigurationConfigurationIntf interface {
-	isaSetConfigurationConfiguration() bool
-}
-
-// UnmarshalSetConfigurationConfiguration unmarshals an instance of SetConfigurationConfiguration from the specified map of raw messages.
-func UnmarshalSetConfigurationConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetConfigurationConfiguration)
-	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "deadlock_timeout", &obj.DeadlockTimeout)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "effective_io_concurrency", &obj.EffectiveIoConcurrency)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "max_replication_slots", &obj.MaxReplicationSlots)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "max_wal_senders", &obj.MaxWalSenders)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "shared_buffers", &obj.SharedBuffers)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "synchronous_commit", &obj.SynchronousCommit)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "wal_level", &obj.WalLevel)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "archive_timeout", &obj.ArchiveTimeout)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "maxmemory-redis", &obj.MaxmemoryRedis)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "maxmemory-policy", &obj.MaxmemoryPolicy)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "appendonly", &obj.Appendonly)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "maxmemory-samples", &obj.MaxmemorySamples)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "stop-writes-on-bgsave-error", &obj.StopWritesOnBgsaveError)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // SetDeploymentScalingGroupOptions : The SetDeploymentScalingGroup options.
 type SetDeploymentScalingGroupOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Group Id.
-	GroupID *string `validate:"required,ne="`
+	GroupID *string `json:"group_id" validate:"required,ne="`
 
-	// Scaling group settings.
-	SetDeploymentScalingGroupRequest SetDeploymentScalingGroupRequestIntf `validate:"required"`
+	Group *GroupScaling `json:"group,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewSetDeploymentScalingGroupOptions : Instantiate SetDeploymentScalingGroupOptions
-func (*CloudDatabasesV5) NewSetDeploymentScalingGroupOptions(id string, groupID string, setDeploymentScalingGroupRequest SetDeploymentScalingGroupRequestIntf) *SetDeploymentScalingGroupOptions {
+func (*CloudDatabasesV5) NewSetDeploymentScalingGroupOptions(id string, groupID string) *SetDeploymentScalingGroupOptions {
 	return &SetDeploymentScalingGroupOptions{
-		ID:                               core.StringPtr(id),
-		GroupID:                          core.StringPtr(groupID),
-		SetDeploymentScalingGroupRequest: setDeploymentScalingGroupRequest,
+		ID:      core.StringPtr(id),
+		GroupID: core.StringPtr(groupID),
 	}
 }
 
 // SetID : Allow user to set ID
-func (options *SetDeploymentScalingGroupOptions) SetID(id string) *SetDeploymentScalingGroupOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *SetDeploymentScalingGroupOptions) SetID(id string) *SetDeploymentScalingGroupOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetGroupID : Allow user to set GroupID
-func (options *SetDeploymentScalingGroupOptions) SetGroupID(groupID string) *SetDeploymentScalingGroupOptions {
-	options.GroupID = core.StringPtr(groupID)
-	return options
+func (_options *SetDeploymentScalingGroupOptions) SetGroupID(groupID string) *SetDeploymentScalingGroupOptions {
+	_options.GroupID = core.StringPtr(groupID)
+	return _options
 }
 
-// SetSetDeploymentScalingGroupRequest : Allow user to set SetDeploymentScalingGroupRequest
-func (options *SetDeploymentScalingGroupOptions) SetSetDeploymentScalingGroupRequest(setDeploymentScalingGroupRequest SetDeploymentScalingGroupRequestIntf) *SetDeploymentScalingGroupOptions {
-	options.SetDeploymentScalingGroupRequest = setDeploymentScalingGroupRequest
-	return options
+// SetGroup : Allow user to set Group
+func (_options *SetDeploymentScalingGroupOptions) SetGroup(group *GroupScaling) *SetDeploymentScalingGroupOptions {
+	_options.Group = group
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
 func (options *SetDeploymentScalingGroupOptions) SetHeaders(param map[string]string) *SetDeploymentScalingGroupOptions {
 	options.Headers = param
 	return options
-}
-
-// SetDeploymentScalingGroupRequest : SetDeploymentScalingGroupRequest struct
-// Models which "extend" this model:
-// - SetDeploymentScalingGroupRequestSetMembersGroup
-// - SetDeploymentScalingGroupRequestSetMemoryGroup
-// - SetDeploymentScalingGroupRequestSetCPUGroup
-// - SetDeploymentScalingGroupRequestSetDiskGroup
-type SetDeploymentScalingGroupRequest struct {
-	Members *SetMembersGroupMembers `json:"members,omitempty"`
-
-	Memory *SetMemoryGroupMemory `json:"memory,omitempty"`
-
-	CPU *SetCPUGroupCPU `json:"cpu,omitempty"`
-
-	Disk *SetDiskGroupDisk `json:"disk,omitempty"`
-}
-
-func (*SetDeploymentScalingGroupRequest) isaSetDeploymentScalingGroupRequest() bool {
-	return true
-}
-
-type SetDeploymentScalingGroupRequestIntf interface {
-	isaSetDeploymentScalingGroupRequest() bool
-}
-
-// UnmarshalSetDeploymentScalingGroupRequest unmarshals an instance of SetDeploymentScalingGroupRequest from the specified map of raw messages.
-func UnmarshalSetDeploymentScalingGroupRequest(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetDeploymentScalingGroupRequest)
-	err = core.UnmarshalModel(m, "members", &obj.Members, UnmarshalSetMembersGroupMembers)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "memory", &obj.Memory, UnmarshalSetMemoryGroupMemory)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "cpu", &obj.CPU, UnmarshalSetCPUGroupCPU)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalSetDiskGroupDisk)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
 }
 
 // SetDeploymentScalingGroupResponse : SetDeploymentScalingGroupResponse struct
@@ -5900,142 +5388,10 @@ func UnmarshalSetDeploymentScalingGroupResponse(m map[string]json.RawMessage, re
 	return
 }
 
-// SetDiskGroupDisk : SetDiskGroupDisk struct
-type SetDiskGroupDisk struct {
-	// Allocated storage in MB.
-	AllocationMb *int64 `json:"allocation_mb,omitempty"`
-}
-
-// UnmarshalSetDiskGroupDisk unmarshals an instance of SetDiskGroupDisk from the specified map of raw messages.
-func UnmarshalSetDiskGroupDisk(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetDiskGroupDisk)
-	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// SetMembersGroupMembers : SetMembersGroupMembers struct
-type SetMembersGroupMembers struct {
-	// Allocated number of members.
-	AllocationCount *int64 `json:"allocation_count,omitempty"`
-}
-
-// UnmarshalSetMembersGroupMembers unmarshals an instance of SetMembersGroupMembers from the specified map of raw messages.
-func UnmarshalSetMembersGroupMembers(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetMembersGroupMembers)
-	err = core.UnmarshalPrimitive(m, "allocation_count", &obj.AllocationCount)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// SetMemoryGroupMemory : SetMemoryGroupMemory struct
-type SetMemoryGroupMemory struct {
-	// Allocated memory in MB.
-	AllocationMb *int64 `json:"allocation_mb,omitempty"`
-}
-
-// UnmarshalSetMemoryGroupMemory unmarshals an instance of SetMemoryGroupMemory from the specified map of raw messages.
-func UnmarshalSetMemoryGroupMemory(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetMemoryGroupMemory)
-	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// SetPromotionOptions : The SetPromotion options.
-type SetPromotionOptions struct {
-	// Deployment ID of the read-only replica to promote.
-	ID *string `validate:"required,ne="`
-
-	Promotion SetPromotionPromotionIntf `validate:"required"`
-
-	// Allows users to set headers on API requests
-	Headers map[string]string
-}
-
-// NewSetPromotionOptions : Instantiate SetPromotionOptions
-func (*CloudDatabasesV5) NewSetPromotionOptions(id string, promotion SetPromotionPromotionIntf) *SetPromotionOptions {
-	return &SetPromotionOptions{
-		ID:        core.StringPtr(id),
-		Promotion: promotion,
-	}
-}
-
-// SetID : Allow user to set ID
-func (options *SetPromotionOptions) SetID(id string) *SetPromotionOptions {
-	options.ID = core.StringPtr(id)
-	return options
-}
-
-// SetPromotion : Allow user to set Promotion
-func (options *SetPromotionOptions) SetPromotion(promotion SetPromotionPromotionIntf) *SetPromotionOptions {
-	options.Promotion = promotion
-	return options
-}
-
-// SetHeaders : Allow user to set Headers
-func (options *SetPromotionOptions) SetHeaders(param map[string]string) *SetPromotionOptions {
-	options.Headers = param
-	return options
-}
-
-// SetPromotionPromotion : SetPromotionPromotion struct
-// Models which "extend" this model:
-// - SetPromotionPromotionPromote
-// - SetPromotionPromotionUpgradePromote
-type SetPromotionPromotion struct {
-	// Promotion options.
-	Promotion map[string]interface{} `json:"promotion,omitempty"`
-}
-
-func (*SetPromotionPromotion) isaSetPromotionPromotion() bool {
-	return true
-}
-
-type SetPromotionPromotionIntf interface {
-	isaSetPromotionPromotion() bool
-}
-
-// UnmarshalSetPromotionPromotion unmarshals an instance of SetPromotionPromotion from the specified map of raw messages.
-func UnmarshalSetPromotionPromotion(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetPromotionPromotion)
-	err = core.UnmarshalPrimitive(m, "promotion", &obj.Promotion)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// SetPromotionResponse : SetPromotionResponse struct
-type SetPromotionResponse struct {
-	Task *Task `json:"task,omitempty"`
-}
-
-// UnmarshalSetPromotionResponse unmarshals an instance of SetPromotionResponse from the specified map of raw messages.
-func UnmarshalSetPromotionResponse(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetPromotionResponse)
-	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
 // StartOndemandBackupOptions : The StartOndemandBackup options.
 type StartOndemandBackupOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -6049,9 +5405,9 @@ func (*CloudDatabasesV5) NewStartOndemandBackupOptions(id string) *StartOndemand
 }
 
 // SetID : Allow user to set ID
-func (options *StartOndemandBackupOptions) SetID(id string) *StartOndemandBackupOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *StartOndemandBackupOptions) SetID(id string) *StartOndemandBackupOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -6155,32 +5511,31 @@ func UnmarshalTasks(m map[string]json.RawMessage, result interface{}) (err error
 // UpdateDatabaseConfigurationOptions : The UpdateDatabaseConfiguration options.
 type UpdateDatabaseConfigurationOptions struct {
 	// Deployment ID.
-	ID *string `validate:"required,ne="`
+	ID *string `json:"id" validate:"required,ne="`
 
-	Configuration SetConfigurationConfigurationIntf `validate:"required"`
+	Configuration ConfigurationIntf `json:"configuration,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewUpdateDatabaseConfigurationOptions : Instantiate UpdateDatabaseConfigurationOptions
-func (*CloudDatabasesV5) NewUpdateDatabaseConfigurationOptions(id string, configuration SetConfigurationConfigurationIntf) *UpdateDatabaseConfigurationOptions {
+func (*CloudDatabasesV5) NewUpdateDatabaseConfigurationOptions(id string) *UpdateDatabaseConfigurationOptions {
 	return &UpdateDatabaseConfigurationOptions{
-		ID:            core.StringPtr(id),
-		Configuration: configuration,
+		ID: core.StringPtr(id),
 	}
 }
 
 // SetID : Allow user to set ID
-func (options *UpdateDatabaseConfigurationOptions) SetID(id string) *UpdateDatabaseConfigurationOptions {
-	options.ID = core.StringPtr(id)
-	return options
+func (_options *UpdateDatabaseConfigurationOptions) SetID(id string) *UpdateDatabaseConfigurationOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
 }
 
 // SetConfiguration : Allow user to set Configuration
-func (options *UpdateDatabaseConfigurationOptions) SetConfiguration(configuration SetConfigurationConfigurationIntf) *UpdateDatabaseConfigurationOptions {
-	options.Configuration = configuration
-	return options
+func (_options *UpdateDatabaseConfigurationOptions) SetConfiguration(configuration ConfigurationIntf) *UpdateDatabaseConfigurationOptions {
+	_options.Configuration = configuration
+	return _options
 }
 
 // SetHeaders : Allow user to set Headers
@@ -6198,6 +5553,54 @@ type UpdateDatabaseConfigurationResponse struct {
 func UnmarshalUpdateDatabaseConfigurationResponse(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(UpdateDatabaseConfigurationResponse)
 	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// User : User struct
+type User struct {
+	// Username for new user.
+	Username *string `json:"username" validate:"required"`
+
+	// Password for new user.
+	Password *string `json:"password" validate:"required"`
+
+	// Role for new user. Available for MongoDB Enterprise Ops Manager users ONLY.
+	Role *string `json:"role,omitempty"`
+}
+
+// Constants associated with the User.Role property.
+// Role for new user. Available for MongoDB Enterprise Ops Manager users ONLY.
+const (
+	UserRoleGroupDataAccessAdminConst = "group_data_access_admin"
+	UserRoleGroupReadOnlyConst        = "group_read_only"
+)
+
+// NewUser : Instantiate User (Generic Model Constructor)
+func (*CloudDatabasesV5) NewUser(username string, password string) (_model *User, err error) {
+	_model = &User{
+		Username: core.StringPtr(username),
+		Password: core.StringPtr(password),
+	}
+	err = core.ValidateStruct(_model, "required parameters")
+	return
+}
+
+// UnmarshalUser unmarshals an instance of User from the specified map of raw messages.
+func UnmarshalUser(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(User)
+	err = core.UnmarshalPrimitive(m, "username", &obj.Username)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "role", &obj.Role)
 	if err != nil {
 		return
 	}
@@ -6268,28 +5671,44 @@ func UnmarshalAutoscalingSetGroupAutoscalingAutoscalingMemoryGroup(m map[string]
 	return
 }
 
-// ConnectionConnectionElasticsearchConnection : Elasticsearch Connection Strings.
-// This model "extends" ConnectionConnection
-type ConnectionConnectionElasticsearchConnection struct {
-	// Elasticsearch Connection information for drivers and libraries.
-	HTTPS *ElasticsearchConnectionHTTPS `json:"https" validate:"required"`
+// ConfigurationMySQLConfiguration : MySQL Configuration.
+// This model "extends" Configuration
+type ConfigurationMySQLConfiguration struct {
+	// Maximum age for a binlog in seconds. If a binlog is older, it's archived.
+	MysqlMaxBinlogAgeSec *int64 `json:"mysql_max_binlog_age_sec,omitempty"`
 
-	// Connection information for cURL.
-	Cli *ConnectionCli `json:"cli" validate:"required"`
+	// Maximum number of allowed MySQL connections.
+	MaxConnections *int64 `json:"max_connections,omitempty"`
+
+	// Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT
+	// statements that do not explicitly specify an authentication plugin.
+	MysqlDefaultAuthenticationPlugin *string `json:"mysql_default_authentication_plugin,omitempty"`
 }
 
-func (*ConnectionConnectionElasticsearchConnection) isaConnectionConnection() bool {
+// Constants associated with the ConfigurationMySQLConfiguration.MysqlDefaultAuthenticationPlugin property.
+// Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT statements
+// that do not explicitly specify an authentication plugin.
+const (
+	ConfigurationMySQLConfigurationMysqlDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
+	ConfigurationMySQLConfigurationMysqlDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
+)
+
+func (*ConfigurationMySQLConfiguration) isaConfiguration() bool {
 	return true
 }
 
-// UnmarshalConnectionConnectionElasticsearchConnection unmarshals an instance of ConnectionConnectionElasticsearchConnection from the specified map of raw messages.
-func UnmarshalConnectionConnectionElasticsearchConnection(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionConnectionElasticsearchConnection)
-	err = core.UnmarshalModel(m, "https", &obj.HTTPS, UnmarshalElasticsearchConnectionHTTPS)
+// UnmarshalConfigurationMySQLConfiguration unmarshals an instance of ConfigurationMySQLConfiguration from the specified map of raw messages.
+func UnmarshalConfigurationMySQLConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConfigurationMySQLConfiguration)
+	err = core.UnmarshalPrimitive(m, "mysql_max_binlog_age_sec", &obj.MysqlMaxBinlogAgeSec)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
+	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "mysql_default_authentication_plugin", &obj.MysqlDefaultAuthenticationPlugin)
 	if err != nil {
 		return
 	}
@@ -6297,175 +5716,9 @@ func UnmarshalConnectionConnectionElasticsearchConnection(m map[string]json.RawM
 	return
 }
 
-// ConnectionConnectionEtcdConnection : etcd3 Connection Strings.
-// This model "extends" ConnectionConnection
-type ConnectionConnectionEtcdConnection struct {
-	// GRPC(etcd3) Connection information for drivers and libraries.
-	Grpc *GrpcConnectionURI `json:"grpc" validate:"required"`
-
-	// Connection information for etcdctl.
-	Cli *ConnectionCli `json:"cli" validate:"required"`
-}
-
-func (*ConnectionConnectionEtcdConnection) isaConnectionConnection() bool {
-	return true
-}
-
-// UnmarshalConnectionConnectionEtcdConnection unmarshals an instance of ConnectionConnectionEtcdConnection from the specified map of raw messages.
-func UnmarshalConnectionConnectionEtcdConnection(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionConnectionEtcdConnection)
-	err = core.UnmarshalModel(m, "grpc", &obj.Grpc, UnmarshalGrpcConnectionURI)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConnectionConnectionMongoDbConnection : MongoDB Connection Strings.
-// This model "extends" ConnectionConnection
-type ConnectionConnectionMongoDbConnection struct {
-	// MongoDB Connection information for drivers and libraries.
-	Mongodb *MongoDbConnectionURI `json:"mongodb" validate:"required"`
-
-	// Connection information for mongo shell.
-	Cli *ConnectionCli `json:"cli" validate:"required"`
-}
-
-func (*ConnectionConnectionMongoDbConnection) isaConnectionConnection() bool {
-	return true
-}
-
-// UnmarshalConnectionConnectionMongoDbConnection unmarshals an instance of ConnectionConnectionMongoDbConnection from the specified map of raw messages.
-func UnmarshalConnectionConnectionMongoDbConnection(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionConnectionMongoDbConnection)
-	err = core.UnmarshalModel(m, "mongodb", &obj.Mongodb, UnmarshalMongoDbConnectionURI)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConnectionConnectionPostgreSQLConnection : PostgreSQL and EnterpriseDB Connection Strings.
-// This model "extends" ConnectionConnection
-type ConnectionConnectionPostgreSQLConnection struct {
-	// Connection information for drivers and libraries.
-	Postgres *PostgreSQLConnectionURI `json:"postgres" validate:"required"`
-
-	// Connection information for psql.
-	Cli *ConnectionCli `json:"cli" validate:"required"`
-}
-
-func (*ConnectionConnectionPostgreSQLConnection) isaConnectionConnection() bool {
-	return true
-}
-
-// UnmarshalConnectionConnectionPostgreSQLConnection unmarshals an instance of ConnectionConnectionPostgreSQLConnection from the specified map of raw messages.
-func UnmarshalConnectionConnectionPostgreSQLConnection(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionConnectionPostgreSQLConnection)
-	err = core.UnmarshalModel(m, "postgres", &obj.Postgres, UnmarshalPostgreSQLConnectionURI)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConnectionConnectionRabbitMqConnection : RabbitMQ Connection Strings.
-// This model "extends" ConnectionConnection
-type ConnectionConnectionRabbitMqConnection struct {
-	// RabbitMQ Connection information for AMQPS drivers and libraries.
-	Amqps *RabbitMqConnectionAmqps `json:"amqps" validate:"required"`
-
-	// RabbitMQ Connection information for MQTTS drivers and libraries.
-	Mqtts *RabbitMqConnectionMqtts `json:"mqtts" validate:"required"`
-
-	// RabbitMQ Connection information for STOMP drivers and libraries.
-	StompSsl *RabbitMqConnectionStompSsl `json:"stomp_ssl" validate:"required"`
-
-	// RabbitMQ Connection information for HTTPS.
-	HTTPS *RabbitMqConnectionHTTPS `json:"https" validate:"required"`
-
-	// Connection information for rabbitmqadmin.
-	Cli *ConnectionCli `json:"cli" validate:"required"`
-}
-
-func (*ConnectionConnectionRabbitMqConnection) isaConnectionConnection() bool {
-	return true
-}
-
-// UnmarshalConnectionConnectionRabbitMqConnection unmarshals an instance of ConnectionConnectionRabbitMqConnection from the specified map of raw messages.
-func UnmarshalConnectionConnectionRabbitMqConnection(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionConnectionRabbitMqConnection)
-	err = core.UnmarshalModel(m, "amqps", &obj.Amqps, UnmarshalRabbitMqConnectionAmqps)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "mqtts", &obj.Mqtts, UnmarshalRabbitMqConnectionMqtts)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "stomp_ssl", &obj.StompSsl, UnmarshalRabbitMqConnectionStompSsl)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "https", &obj.HTTPS, UnmarshalRabbitMqConnectionHTTPS)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConnectionConnectionRedisConnection : Redis Connection Strings.
-// This model "extends" ConnectionConnection
-type ConnectionConnectionRedisConnection struct {
-	// Connection information for drivers and libraries.
-	Rediss *RedisConnectionURI `json:"rediss" validate:"required"`
-
-	// Connection information for a Redis CLI client.
-	Cli *ConnectionCli `json:"cli" validate:"required"`
-}
-
-func (*ConnectionConnectionRedisConnection) isaConnectionConnection() bool {
-	return true
-}
-
-// UnmarshalConnectionConnectionRedisConnection unmarshals an instance of ConnectionConnectionRedisConnection from the specified map of raw messages.
-func UnmarshalConnectionConnectionRedisConnection(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionConnectionRedisConnection)
-	err = core.UnmarshalModel(m, "rediss", &obj.Rediss, UnmarshalRedisConnectionURI)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// SetConfigurationConfigurationPgConfiguration : PostgreSQL and EnterpriseDB Configuration.
-// This model "extends" SetConfigurationConfiguration
-type SetConfigurationConfigurationPgConfiguration struct {
+// ConfigurationPgConfiguration : PostgreSQL and EnterpriseDB Configuration.
+// This model "extends" Configuration
+type ConfigurationPgConfiguration struct {
 	// Maximum connections allowed.
 	MaxConnections *int64 `json:"max_connections,omitempty"`
 
@@ -6503,28 +5756,28 @@ type SetConfigurationConfigurationPgConfiguration struct {
 	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
 }
 
-// Constants associated with the SetConfigurationConfigurationPgConfiguration.SynchronousCommit property.
+// Constants associated with the ConfigurationPgConfiguration.SynchronousCommit property.
 // Sets the current transaction's synchronization level.  Off can result in data loss.  remote_write with enable
 // synchronous replication which will impact performance and availabilty.
 const (
-	SetConfigurationConfigurationPgConfigurationSynchronousCommitLocalConst = "local"
-	SetConfigurationConfigurationPgConfigurationSynchronousCommitOffConst   = "off"
+	ConfigurationPgConfigurationSynchronousCommitLocalConst = "local"
+	ConfigurationPgConfigurationSynchronousCommitOffConst   = "off"
 )
 
-// Constants associated with the SetConfigurationConfigurationPgConfiguration.WalLevel property.
+// Constants associated with the ConfigurationPgConfiguration.WalLevel property.
 // WAL level.  Set to logical to use logical decoding or logical replication.
 const (
-	SetConfigurationConfigurationPgConfigurationWalLevelHotStandbyConst = "hot_standby"
-	SetConfigurationConfigurationPgConfigurationWalLevelLogicalConst    = "logical"
+	ConfigurationPgConfigurationWalLevelHotStandbyConst = "hot_standby"
+	ConfigurationPgConfigurationWalLevelLogicalConst    = "logical"
 )
 
-func (*SetConfigurationConfigurationPgConfiguration) isaSetConfigurationConfiguration() bool {
+func (*ConfigurationPgConfiguration) isaConfiguration() bool {
 	return true
 }
 
-// UnmarshalSetConfigurationConfigurationPgConfiguration unmarshals an instance of SetConfigurationConfigurationPgConfiguration from the specified map of raw messages.
-func UnmarshalSetConfigurationConfigurationPgConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetConfigurationConfigurationPgConfiguration)
+// UnmarshalConfigurationPgConfiguration unmarshals an instance of ConfigurationPgConfiguration from the specified map of raw messages.
+func UnmarshalConfigurationPgConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConfigurationPgConfiguration)
 	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
 	if err != nil {
 		return
@@ -6573,9 +5826,9 @@ func UnmarshalSetConfigurationConfigurationPgConfiguration(m map[string]json.Raw
 	return
 }
 
-// SetConfigurationConfigurationRedisConfiguration : Redis Configuration.
-// This model "extends" SetConfigurationConfiguration
-type SetConfigurationConfigurationRedisConfiguration struct {
+// ConfigurationRedisConfiguration : Redis Configuration.
+// This model "extends" Configuration
+type ConfigurationRedisConfiguration struct {
 	// The maximum memory Redis should use, as bytes.
 	MaxmemoryRedis *int64 `json:"maxmemory-redis,omitempty"`
 
@@ -6592,38 +5845,38 @@ type SetConfigurationConfigurationRedisConfiguration struct {
 	StopWritesOnBgsaveError *string `json:"stop-writes-on-bgsave-error,omitempty"`
 }
 
-// Constants associated with the SetConfigurationConfigurationRedisConfiguration.MaxmemoryPolicy property.
+// Constants associated with the ConfigurationRedisConfiguration.MaxmemoryPolicy property.
 // The policy with which Redis evicts keys when maximum memory is reached.
 const (
-	SetConfigurationConfigurationRedisConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
-	SetConfigurationConfigurationRedisConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
-	SetConfigurationConfigurationRedisConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
-	SetConfigurationConfigurationRedisConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
-	SetConfigurationConfigurationRedisConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
-	SetConfigurationConfigurationRedisConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
+	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
+	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
+	ConfigurationRedisConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
+	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
+	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
+	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
 )
 
-// Constants associated with the SetConfigurationConfigurationRedisConfiguration.Appendonly property.
+// Constants associated with the ConfigurationRedisConfiguration.Appendonly property.
 // If set to yes this will enable AOF persistence.
 const (
-	SetConfigurationConfigurationRedisConfigurationAppendonlyNoConst  = "no"
-	SetConfigurationConfigurationRedisConfigurationAppendonlyYesConst = "yes"
+	ConfigurationRedisConfigurationAppendonlyNoConst  = "no"
+	ConfigurationRedisConfigurationAppendonlyYesConst = "yes"
 )
 
-// Constants associated with the SetConfigurationConfigurationRedisConfiguration.StopWritesOnBgsaveError property.
+// Constants associated with the ConfigurationRedisConfiguration.StopWritesOnBgsaveError property.
 // Whether or not to stop accepting writes when background persistence actions fail.
 const (
-	SetConfigurationConfigurationRedisConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
-	SetConfigurationConfigurationRedisConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
+	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
+	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
 )
 
-func (*SetConfigurationConfigurationRedisConfiguration) isaSetConfigurationConfiguration() bool {
+func (*ConfigurationRedisConfiguration) isaConfiguration() bool {
 	return true
 }
 
-// UnmarshalSetConfigurationConfigurationRedisConfiguration unmarshals an instance of SetConfigurationConfigurationRedisConfiguration from the specified map of raw messages.
-func UnmarshalSetConfigurationConfigurationRedisConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetConfigurationConfigurationRedisConfiguration)
+// UnmarshalConfigurationRedisConfiguration unmarshals an instance of ConfigurationRedisConfiguration from the specified map of raw messages.
+func UnmarshalConfigurationRedisConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConfigurationRedisConfiguration)
 	err = core.UnmarshalPrimitive(m, "maxmemory-redis", &obj.MaxmemoryRedis)
 	if err != nil {
 		return
@@ -6648,20 +5901,20 @@ func UnmarshalSetConfigurationConfigurationRedisConfiguration(m map[string]json.
 	return
 }
 
-// SetDeploymentScalingGroupRequestSetCPUGroup : SetDeploymentScalingGroupRequestSetCPUGroup struct
-// This model "extends" SetDeploymentScalingGroupRequest
-type SetDeploymentScalingGroupRequestSetCPUGroup struct {
-	CPU *SetCPUGroupCPU `json:"cpu,omitempty"`
+// ConnectionDataStaxConnection : DataStax Connection Strings.
+// This model "extends" Connection
+type ConnectionDataStaxConnection struct {
+	Secure *DataStaxConnectionURI `json:"secure" validate:"required"`
 }
 
-func (*SetDeploymentScalingGroupRequestSetCPUGroup) isaSetDeploymentScalingGroupRequest() bool {
+func (*ConnectionDataStaxConnection) isaConnection() bool {
 	return true
 }
 
-// UnmarshalSetDeploymentScalingGroupRequestSetCPUGroup unmarshals an instance of SetDeploymentScalingGroupRequestSetCPUGroup from the specified map of raw messages.
-func UnmarshalSetDeploymentScalingGroupRequestSetCPUGroup(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetDeploymentScalingGroupRequestSetCPUGroup)
-	err = core.UnmarshalModel(m, "cpu", &obj.CPU, UnmarshalSetCPUGroupCPU)
+// UnmarshalConnectionDataStaxConnection unmarshals an instance of ConnectionDataStaxConnection from the specified map of raw messages.
+func UnmarshalConnectionDataStaxConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionDataStaxConnection)
+	err = core.UnmarshalModel(m, "secure", &obj.Secure, UnmarshalDataStaxConnectionURI)
 	if err != nil {
 		return
 	}
@@ -6669,20 +5922,27 @@ func UnmarshalSetDeploymentScalingGroupRequestSetCPUGroup(m map[string]json.RawM
 	return
 }
 
-// SetDeploymentScalingGroupRequestSetDiskGroup : SetDeploymentScalingGroupRequestSetDiskGroup struct
-// This model "extends" SetDeploymentScalingGroupRequest
-type SetDeploymentScalingGroupRequestSetDiskGroup struct {
-	Disk *SetDiskGroupDisk `json:"disk,omitempty"`
+// ConnectionElasticsearchConnection : Elasticsearch Connection Strings.
+// This model "extends" Connection
+type ConnectionElasticsearchConnection struct {
+	HTTPS *ConnectionURI `json:"https" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
 }
 
-func (*SetDeploymentScalingGroupRequestSetDiskGroup) isaSetDeploymentScalingGroupRequest() bool {
+func (*ConnectionElasticsearchConnection) isaConnection() bool {
 	return true
 }
 
-// UnmarshalSetDeploymentScalingGroupRequestSetDiskGroup unmarshals an instance of SetDeploymentScalingGroupRequestSetDiskGroup from the specified map of raw messages.
-func UnmarshalSetDeploymentScalingGroupRequestSetDiskGroup(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetDeploymentScalingGroupRequestSetDiskGroup)
-	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalSetDiskGroupDisk)
+// UnmarshalConnectionElasticsearchConnection unmarshals an instance of ConnectionElasticsearchConnection from the specified map of raw messages.
+func UnmarshalConnectionElasticsearchConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionElasticsearchConnection)
+	err = core.UnmarshalModel(m, "https", &obj.HTTPS, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
 	if err != nil {
 		return
 	}
@@ -6690,20 +5950,33 @@ func UnmarshalSetDeploymentScalingGroupRequestSetDiskGroup(m map[string]json.Raw
 	return
 }
 
-// SetDeploymentScalingGroupRequestSetMembersGroup : SetDeploymentScalingGroupRequestSetMembersGroup struct
-// This model "extends" SetDeploymentScalingGroupRequest
-type SetDeploymentScalingGroupRequestSetMembersGroup struct {
-	Members *SetMembersGroupMembers `json:"members,omitempty"`
+// ConnectionEnterpriseDbConnection : PostgreSQL and EnterpriseDB Connection Strings.
+// This model "extends" Connection
+type ConnectionEnterpriseDbConnection struct {
+	Postgres *PostgreSQLConnectionURI `json:"postgres" validate:"required"`
+
+	Emp *ConnectionURI `json:"emp" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
 }
 
-func (*SetDeploymentScalingGroupRequestSetMembersGroup) isaSetDeploymentScalingGroupRequest() bool {
+func (*ConnectionEnterpriseDbConnection) isaConnection() bool {
 	return true
 }
 
-// UnmarshalSetDeploymentScalingGroupRequestSetMembersGroup unmarshals an instance of SetDeploymentScalingGroupRequestSetMembersGroup from the specified map of raw messages.
-func UnmarshalSetDeploymentScalingGroupRequestSetMembersGroup(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetDeploymentScalingGroupRequestSetMembersGroup)
-	err = core.UnmarshalModel(m, "members", &obj.Members, UnmarshalSetMembersGroupMembers)
+// UnmarshalConnectionEnterpriseDbConnection unmarshals an instance of ConnectionEnterpriseDbConnection from the specified map of raw messages.
+func UnmarshalConnectionEnterpriseDbConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionEnterpriseDbConnection)
+	err = core.UnmarshalModel(m, "postgres", &obj.Postgres, UnmarshalPostgreSQLConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "emp", &obj.Emp, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
 	if err != nil {
 		return
 	}
@@ -6711,20 +5984,27 @@ func UnmarshalSetDeploymentScalingGroupRequestSetMembersGroup(m map[string]json.
 	return
 }
 
-// SetDeploymentScalingGroupRequestSetMemoryGroup : SetDeploymentScalingGroupRequestSetMemoryGroup struct
-// This model "extends" SetDeploymentScalingGroupRequest
-type SetDeploymentScalingGroupRequestSetMemoryGroup struct {
-	Memory *SetMemoryGroupMemory `json:"memory,omitempty"`
+// ConnectionEtcdConnection : etcd3 Connection Strings.
+// This model "extends" Connection
+type ConnectionEtcdConnection struct {
+	Grpc *ConnectionURI `json:"grpc" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
 }
 
-func (*SetDeploymentScalingGroupRequestSetMemoryGroup) isaSetDeploymentScalingGroupRequest() bool {
+func (*ConnectionEtcdConnection) isaConnection() bool {
 	return true
 }
 
-// UnmarshalSetDeploymentScalingGroupRequestSetMemoryGroup unmarshals an instance of SetDeploymentScalingGroupRequestSetMemoryGroup from the specified map of raw messages.
-func UnmarshalSetDeploymentScalingGroupRequestSetMemoryGroup(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetDeploymentScalingGroupRequestSetMemoryGroup)
-	err = core.UnmarshalModel(m, "memory", &obj.Memory, UnmarshalSetMemoryGroupMemory)
+// UnmarshalConnectionEtcdConnection unmarshals an instance of ConnectionEtcdConnection from the specified map of raw messages.
+func UnmarshalConnectionEtcdConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionEtcdConnection)
+	err = core.UnmarshalModel(m, "grpc", &obj.Grpc, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
 	if err != nil {
 		return
 	}
@@ -6732,21 +6012,27 @@ func UnmarshalSetDeploymentScalingGroupRequestSetMemoryGroup(m map[string]json.R
 	return
 }
 
-// SetPromotionPromotionPromote : Promotes a read-only replica to a full deployment.
-// This model "extends" SetPromotionPromotion
-type SetPromotionPromotionPromote struct {
-	// Promotion options.
-	Promotion map[string]interface{} `json:"promotion,omitempty"`
+// ConnectionMongoDbConnection : MongoDB Connection Strings.
+// This model "extends" Connection
+type ConnectionMongoDbConnection struct {
+	Mongodb *MongoDbConnectionURI `json:"mongodb" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
 }
 
-func (*SetPromotionPromotionPromote) isaSetPromotionPromotion() bool {
+func (*ConnectionMongoDbConnection) isaConnection() bool {
 	return true
 }
 
-// UnmarshalSetPromotionPromotionPromote unmarshals an instance of SetPromotionPromotionPromote from the specified map of raw messages.
-func UnmarshalSetPromotionPromotionPromote(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetPromotionPromotionPromote)
-	err = core.UnmarshalPrimitive(m, "promotion", &obj.Promotion)
+// UnmarshalConnectionMongoDbConnection unmarshals an instance of ConnectionMongoDbConnection from the specified map of raw messages.
+func UnmarshalConnectionMongoDbConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionMongoDbConnection)
+	err = core.UnmarshalModel(m, "mongodb", &obj.Mongodb, UnmarshalMongoDbConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
 	if err != nil {
 		return
 	}
@@ -6754,21 +6040,190 @@ func UnmarshalSetPromotionPromotionPromote(m map[string]json.RawMessage, result 
 	return
 }
 
-// SetPromotionPromotionUpgradePromote : Promotes a read-only replica to a full deployment running a new database version.
-// This model "extends" SetPromotionPromotion
-type SetPromotionPromotionUpgradePromote struct {
-	// Promotion and Upgrade options.
-	Promotion map[string]interface{} `json:"promotion,omitempty"`
+// ConnectionMongoDbeeConnection : MongoDB Connection Strings.
+// This model "extends" Connection
+type ConnectionMongoDbeeConnection struct {
+	Mongodb *MongoDbConnectionURI `json:"mongodb" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
+
+	BiConnector *ConnectionURI `json:"bi_connector,omitempty"`
+
+	Analytics *ConnectionURI `json:"analytics,omitempty"`
 }
 
-func (*SetPromotionPromotionUpgradePromote) isaSetPromotionPromotion() bool {
+func (*ConnectionMongoDbeeConnection) isaConnection() bool {
 	return true
 }
 
-// UnmarshalSetPromotionPromotionUpgradePromote unmarshals an instance of SetPromotionPromotionUpgradePromote from the specified map of raw messages.
-func UnmarshalSetPromotionPromotionUpgradePromote(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(SetPromotionPromotionUpgradePromote)
-	err = core.UnmarshalPrimitive(m, "promotion", &obj.Promotion)
+// UnmarshalConnectionMongoDbeeConnection unmarshals an instance of ConnectionMongoDbeeConnection from the specified map of raw messages.
+func UnmarshalConnectionMongoDbeeConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionMongoDbeeConnection)
+	err = core.UnmarshalModel(m, "mongodb", &obj.Mongodb, UnmarshalMongoDbConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "bi_connector", &obj.BiConnector, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "analytics", &obj.Analytics, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionMongoDbeeOpsManagerConnection : MongoDB Connection Strings.
+// This model "extends" Connection
+type ConnectionMongoDbeeOpsManagerConnection struct {
+	OpsManager *ConnectionURI `json:"ops_manager,omitempty"`
+}
+
+func (*ConnectionMongoDbeeOpsManagerConnection) isaConnection() bool {
+	return true
+}
+
+// UnmarshalConnectionMongoDbeeOpsManagerConnection unmarshals an instance of ConnectionMongoDbeeOpsManagerConnection from the specified map of raw messages.
+func UnmarshalConnectionMongoDbeeOpsManagerConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionMongoDbeeOpsManagerConnection)
+	err = core.UnmarshalModel(m, "ops_manager", &obj.OpsManager, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionMySQLConnection : MySQL Connection Strings.
+// This model "extends" Connection
+type ConnectionMySQLConnection struct {
+	Mysql *MySQLConnectionURI `json:"mysql" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
+}
+
+func (*ConnectionMySQLConnection) isaConnection() bool {
+	return true
+}
+
+// UnmarshalConnectionMySQLConnection unmarshals an instance of ConnectionMySQLConnection from the specified map of raw messages.
+func UnmarshalConnectionMySQLConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionMySQLConnection)
+	err = core.UnmarshalModel(m, "mysql", &obj.Mysql, UnmarshalMySQLConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionPostgreSQLConnection : PostgreSQL and EnterpriseDB Connection Strings.
+// This model "extends" Connection
+type ConnectionPostgreSQLConnection struct {
+	Postgres *PostgreSQLConnectionURI `json:"postgres" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
+}
+
+func (*ConnectionPostgreSQLConnection) isaConnection() bool {
+	return true
+}
+
+// UnmarshalConnectionPostgreSQLConnection unmarshals an instance of ConnectionPostgreSQLConnection from the specified map of raw messages.
+func UnmarshalConnectionPostgreSQLConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionPostgreSQLConnection)
+	err = core.UnmarshalModel(m, "postgres", &obj.Postgres, UnmarshalPostgreSQLConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionRabbitMqConnection : RabbitMQ Connection Strings.
+// This model "extends" Connection
+type ConnectionRabbitMqConnection struct {
+	Amqps *ConnectionURI `json:"amqps" validate:"required"`
+
+	Mqtts *ConnectionURI `json:"mqtts" validate:"required"`
+
+	StompSsl *ConnectionURI `json:"stomp_ssl" validate:"required"`
+
+	HTTPS *ConnectionURI `json:"https" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
+}
+
+func (*ConnectionRabbitMqConnection) isaConnection() bool {
+	return true
+}
+
+// UnmarshalConnectionRabbitMqConnection unmarshals an instance of ConnectionRabbitMqConnection from the specified map of raw messages.
+func UnmarshalConnectionRabbitMqConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionRabbitMqConnection)
+	err = core.UnmarshalModel(m, "amqps", &obj.Amqps, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "mqtts", &obj.Mqtts, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "stomp_ssl", &obj.StompSsl, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "https", &obj.HTTPS, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionRedisConnection : Redis Connection Strings.
+// This model "extends" Connection
+type ConnectionRedisConnection struct {
+	Rediss *RedisConnectionURI `json:"rediss" validate:"required"`
+
+	// CLI Connection.
+	Cli *ConnectionCli `json:"cli" validate:"required"`
+}
+
+func (*ConnectionRedisConnection) isaConnection() bool {
+	return true
+}
+
+// UnmarshalConnectionRedisConnection unmarshals an instance of ConnectionRedisConnection from the specified map of raw messages.
+func UnmarshalConnectionRedisConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionRedisConnection)
+	err = core.UnmarshalModel(m, "rediss", &obj.Rediss, UnmarshalRedisConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "cli", &obj.Cli, UnmarshalConnectionCli)
 	if err != nil {
 		return
 	}
