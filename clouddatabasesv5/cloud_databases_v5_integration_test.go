@@ -1,4 +1,3 @@
-//go:build integration
 // +build integration
 
 /**
@@ -41,57 +40,22 @@ import (
 
 var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
-	const externalConfigFile = "../cloud_databases.env"
+	const externalConfigFile = "../cloud_databases_v5.env"
 
 	var (
-		err                   error
+		err          error
 		cloudDatabasesService *clouddatabasesv5.CloudDatabasesV5
-		serviceURL            string
-		deploymentID          string
-		replicaID             string
-		autoScalingGroupID    string = "member"
-		config                map[string]string
+		serviceURL   string
+		config       map[string]string
 	)
 
 	// Globlal variables to hold link values
 	var (
-		backupIDLink       string
-		scalingGroupIDLink string
-		taskIDLink         string
+		taskIDLink string
 	)
 
 	var shouldSkipTest = func() {
 		Skip("External configuration is not available, skipping tests...")
-	}
-
-	var waitForTask = func(taskID string) {
-		getTaskOptions := &clouddatabasesv5.GetTaskOptions{
-			ID: &taskID,
-		}
-
-		// If the task runs for more than a minute, then we'll consider it to have succeeded.
-		for complete, attempts := false, 0; !complete && attempts < 30; attempts++ {
-			getTaskResponse, response, err := cloudDatabasesService.GetTask(getTaskOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(getTaskResponse).ToNot(BeNil())
-
-			if getTaskResponse.Task == nil {
-				complete = true
-			} else {
-				switch *getTaskResponse.Task.Status {
-				case "completed", "failed":
-					complete = true
-					Expect(*getTaskResponse.Task.Status).To(Equal("completed"))
-				case "queued", "running":
-					break // from switch, not from for
-				default:
-					fmt.Println("status is " + *getTaskResponse.Task.Status)
-				}
-			}
-			time.Sleep(2 * time.Second)
-		}
 	}
 
 	Describe(`External configuration`, func() {
@@ -111,21 +75,15 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				Skip("Unable to load service URL configuration property, skipping tests")
 			}
 
-			deploymentID = config["DEPLOYMENT_ID"]
-			if deploymentID == "" {
-				Skip("Unable to load service DEPLOYMENT_ID configuration property, skipping tests")
-			}
-			replicaID = config["REPLICA_ID"]
-			if replicaID == "" {
-				Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
-			}
-
 			fmt.Printf("Service URL: %s\n", serviceURL)
 			shouldSkipTest = func() {}
 		})
 	})
 
 	Describe(`Client initialization`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
 		It("Successfully construct the service client instance", func() {
 
 			cloudDatabasesServiceOptions := &clouddatabasesv5.CloudDatabasesV5Options{}
@@ -148,12 +106,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`AddAllowlistEntry(addAllowlistEntryOptions *AddAllowlistEntryOptions)`, func() {
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address:     core.StringPtr("172.16.0.0/16"),
+				Address: core.StringPtr("172.16.0.0/16"),
 				Description: core.StringPtr("Dev IP space 3"),
 			}
 
 			addAllowlistEntryOptions := &clouddatabasesv5.AddAllowlistEntryOptions{
-				ID:        &deploymentID,
+				ID: core.StringPtr("testString"),
 				IPAddress: allowlistEntryModel,
 			}
 
@@ -165,59 +123,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *addAllowlistEntryResponse.Task.ID
 
-			waitForTask(taskIDLink)
-		})
-	})
-
-	Describe(`DeleteAllowlistEntry - Delete an address or range from the allowlist of a deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions)`, func() {
-
-			deleteAllowlistEntryOptions := &clouddatabasesv5.DeleteAllowlistEntryOptions{
-				ID:        &deploymentID,
-				Ipaddress: core.StringPtr("172.16.0.0/16"),
-			}
-
-			deleteAllowlistEntryResponse, response, err := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(deleteAllowlistEntryResponse).ToNot(BeNil())
-
-			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
-
-			waitForTask(taskIDLink)
-		})
-	})
-
-	Describe(`CreateDatabaseUser - Creates a user based on user type`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`CreateDatabaseUser(createDatabaseUserOptions *CreateDatabaseUserOptions)`, func() {
-
-			userModel := &clouddatabasesv5.User{
-				Username: core.StringPtr("user"),
-				Password: core.StringPtr("password123"),
-			}
-
-			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
-				ID:       &deploymentID,
-				UserType: core.StringPtr("database"),
-				User:     userModel,
-			}
-
-			createDatabaseUserResponse, response, err := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(createDatabaseUserResponse).ToNot(BeNil())
-
-			taskIDLink = *createDatabaseUserResponse.Task.ID
-
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
 		})
 	})
 
@@ -232,10 +144,10 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
-				ID:       &deploymentID,
+				ID: core.StringPtr("testString"),
 				UserType: core.StringPtr("database"),
 				Username: core.StringPtr("user"),
-				User:     aPasswordSettingUserModel,
+				User: aPasswordSettingUserModel,
 			}
 
 			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
@@ -246,7 +158,78 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *changeUserPasswordResponse.Task.ID
 
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
+		})
+	})
+
+	Describe(`CreateDatabaseUser - Creates a user based on user type`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`CreateDatabaseUser(createDatabaseUserOptions *CreateDatabaseUserOptions)`, func() {
+
+			userModel := &clouddatabasesv5.User{
+				Username: core.StringPtr("user"),
+				Password: core.StringPtr("password123"),
+				Role: core.StringPtr("group_data_access_admin"),
+			}
+
+			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
+				ID: core.StringPtr("testString"),
+				UserType: core.StringPtr("testString"),
+				User: userModel,
+			}
+
+			createDatabaseUserResponse, response, err := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(createDatabaseUserResponse).ToNot(BeNil())
+
+			taskIDLink = *createDatabaseUserResponse.Task.ID
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
+		})
+	})
+
+	Describe(`DeleteAllowlistEntry - Delete an address or range from the allowlist of a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions)`, func() {
+
+			deleteAllowlistEntryOptions := &clouddatabasesv5.DeleteAllowlistEntryOptions{
+				ID: core.StringPtr("testString"),
+				Ipaddress: core.StringPtr("testString"),
+			}
+
+			deleteAllowlistEntryResponse, response, err := cloudDatabasesService.DeleteAllowlistEntry(deleteAllowlistEntryOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(deleteAllowlistEntryResponse).ToNot(BeNil())
+
+			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
 		})
 	})
 
@@ -257,7 +240,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`DeleteDatabaseUser(deleteDatabaseUserOptions *DeleteDatabaseUserOptions)`, func() {
 
 			deleteDatabaseUserOptions := &clouddatabasesv5.DeleteDatabaseUserOptions{
-				ID:       &deploymentID,
+				ID: core.StringPtr("testString"),
 				UserType: core.StringPtr("database"),
 				Username: core.StringPtr("user"),
 			}
@@ -270,7 +253,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *deleteDatabaseUserResponse.Task.ID
 
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
 		})
 	})
 
@@ -281,7 +270,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`KillConnections(killConnectionsOptions *KillConnectionsOptions)`, func() {
 
 			killConnectionsOptions := &clouddatabasesv5.KillConnectionsOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			killConnectionsResponse, response, err := cloudDatabasesService.KillConnections(killConnectionsOptions)
@@ -292,7 +281,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *killConnectionsResponse.Task.ID
 
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			//
 		})
 	})
 
@@ -303,13 +298,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`SetAllowlist(setAllowlistOptions *SetAllowlistOptions)`, func() {
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address:     core.StringPtr("195.212.0.0/16"),
+				Address: core.StringPtr("195.212.0.0/16"),
 				Description: core.StringPtr("Dev IP space 1"),
 			}
 
 			setAllowlistOptions := &clouddatabasesv5.SetAllowlistOptions{
-				ID:          &deploymentID,
+				ID: core.StringPtr("testString"),
 				IPAddresses: []clouddatabasesv5.AllowlistEntry{*allowlistEntryModel},
+				IfMatch: core.StringPtr("testString"),
 			}
 
 			setAllowlistResponse, response, err := cloudDatabasesService.SetAllowlist(setAllowlistOptions)
@@ -320,7 +316,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *setAllowlistResponse.Task.ID
 
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
 		})
 	})
 
@@ -331,8 +333,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`SetAutoscalingConditions(setAutoscalingConditionsOptions *SetAutoscalingConditionsOptions)`, func() {
 
 			autoscalingMemoryGroupMemoryScalersIoUtilizationModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization{
-				Enabled:      core.BoolPtr(true),
-				OverPeriod:   core.StringPtr("5m"),
+				Enabled: core.BoolPtr(true),
+				OverPeriod: core.StringPtr("5m"),
 				AbovePercent: core.Int64Ptr(int64(90)),
 			}
 
@@ -341,15 +343,15 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			autoscalingMemoryGroupMemoryRateModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryRate{
-				IncreasePercent:  core.Float64Ptr(float64(10.0)),
-				PeriodSeconds:    core.Int64Ptr(int64(300)),
-				LimitMbPerMember: core.Float64Ptr(float64(114432)),
-				Units:            core.StringPtr("mb"),
+				IncreasePercent: core.Float64Ptr(float64(10)),
+				PeriodSeconds: core.Int64Ptr(int64(300)),
+				LimitMbPerMember: core.Float64Ptr(float64(125952)),
+				Units: core.StringPtr("mb"),
 			}
 
 			autoscalingMemoryGroupMemoryModel := &clouddatabasesv5.AutoscalingMemoryGroupMemory{
 				Scalers: autoscalingMemoryGroupMemoryScalersModel,
-				Rate:    autoscalingMemoryGroupMemoryRateModel,
+				Rate: autoscalingMemoryGroupMemoryRateModel,
 			}
 
 			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup{
@@ -357,16 +359,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			setAutoscalingConditionsOptions := &clouddatabasesv5.SetAutoscalingConditionsOptions{
-				ID:          &deploymentID,
-				GroupID:     &autoScalingGroupID,
+				ID: core.StringPtr("testString"),
+				GroupID: core.StringPtr("testString"),
 				Autoscaling: autoscalingSetGroupAutoscalingModel,
 			}
 
 			setAutoscalingConditionsResponse, response, err := cloudDatabasesService.SetAutoscalingConditions(setAutoscalingConditionsOptions)
-
-			if err != nil {
-				fmt.Printf("\nError: %s", response.Result.(map[string]interface{}))
-			}
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(202))
@@ -374,7 +372,66 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *setAutoscalingConditionsResponse.Task.ID
 
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			//
+		})
+	})
+
+	Describe(`SetDeploymentScalingGroup - Set scaling values on a specified group`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions)`, func() {
+
+			groupScalingMembersModel := &clouddatabasesv5.GroupScalingMembers{
+				AllocationCount: core.Int64Ptr(int64(4)),
+			}
+
+			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
+				AllocationMb: core.Int64Ptr(int64(12288)),
+			}
+
+			groupScalingCPUModel := &clouddatabasesv5.GroupScalingCPU{
+				AllocationCount: core.Int64Ptr(int64(2)),
+			}
+
+			groupScalingDiskModel := &clouddatabasesv5.GroupScalingDisk{
+				AllocationMb: core.Int64Ptr(int64(20480)),
+			}
+
+			groupScalingModel := &clouddatabasesv5.GroupScaling{
+				Members: groupScalingMembersModel,
+				Memory: groupScalingMemoryModel,
+				CPU: groupScalingCPUModel,
+				Disk: groupScalingDiskModel,
+			}
+
+			setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
+				ID: core.StringPtr("testString"),
+				GroupID: core.StringPtr("testString"),
+				Group: groupScalingModel,
+			}
+
+			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(setDeploymentScalingGroupResponse).ToNot(BeNil())
+
+			taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
 		})
 	})
 
@@ -386,12 +443,22 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
 				MaxConnections: core.Int64Ptr(int64(200)),
+				MaxPreparedTransactions: core.Int64Ptr(int64(0)),
+				DeadlockTimeout: core.Int64Ptr(int64(100)),
+				EffectiveIoConcurrency: core.Int64Ptr(int64(1)),
+				MaxReplicationSlots: core.Int64Ptr(int64(10)),
+				MaxWalSenders: core.Int64Ptr(int64(12)),
+				SharedBuffers: core.Int64Ptr(int64(16)),
+				SynchronousCommit: core.StringPtr("local"),
+				WalLevel: core.StringPtr("hot_standby"),
+				ArchiveTimeout: core.Int64Ptr(int64(300)),
+				LogMinDurationStatement: core.Int64Ptr(int64(100)),
 			}
 
-			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
-				deploymentID,
-			)
-			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
+			updateDatabaseConfigurationOptions := &clouddatabasesv5.UpdateDatabaseConfigurationOptions{
+				ID: core.StringPtr("testString"),
+				Configuration: configurationModel,
+			}
 
 			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
 
@@ -401,7 +468,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
 
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			//
 		})
 	})
 
@@ -411,13 +484,21 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`ListDeployables(listDeployablesOptions *ListDeployablesOptions)`, func() {
 
-			listDeployablesOptions := &clouddatabasesv5.ListDeployablesOptions{}
+			listDeployablesOptions := &clouddatabasesv5.ListDeployablesOptions{
+			}
 
 			listDeployablesResponse, response, err := cloudDatabasesService.ListDeployables(listDeployablesOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listDeployablesResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -427,13 +508,21 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`ListRegions(listRegionsOptions *ListRegionsOptions)`, func() {
 
-			listRegionsOptions := &clouddatabasesv5.ListRegionsOptions{}
+			listRegionsOptions := &clouddatabasesv5.ListRegionsOptions{
+			}
 
 			listRegionsResponse, response, err := cloudDatabasesService.ListRegions(listRegionsOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listRegionsResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -444,7 +533,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetDeploymentInfo(getDeploymentInfoOptions *GetDeploymentInfoOptions)`, func() {
 
 			getDeploymentInfoOptions := &clouddatabasesv5.GetDeploymentInfoOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			getDeploymentInfoResponse, response, err := cloudDatabasesService.GetDeploymentInfo(getDeploymentInfoOptions)
@@ -452,6 +541,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getDeploymentInfoResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -462,7 +558,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`ListRemotes(listRemotesOptions *ListRemotesOptions)`, func() {
 
 			listRemotesOptions := &clouddatabasesv5.ListRemotesOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			listRemotesResponse, response, err := cloudDatabasesService.ListRemotes(listRemotesOptions)
@@ -470,19 +566,25 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listRemotesResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			//
 		})
 	})
 
 	Describe(`ResyncReplica - Resync read-only replica`, func() {
 		BeforeEach(func() {
-			if replicaID == "" {
-				Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
-			}
+			shouldSkipTest()
 		})
 		It(`ResyncReplica(resyncReplicaOptions *ResyncReplicaOptions)`, func() {
 
 			resyncReplicaOptions := &clouddatabasesv5.ResyncReplicaOptions{
-				ID: &replicaID,
+				ID: core.StringPtr("testString"),
 			}
 
 			resyncReplicaResponse, response, err := cloudDatabasesService.ResyncReplica(resyncReplicaOptions)
@@ -491,22 +593,24 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(resyncReplicaResponse).ToNot(BeNil())
 
-			taskIDLink = *resyncReplicaResponse.Task.ID
-
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			//
 		})
 	})
 
 	Describe(`PromoteReadOnlyReplica - Promote read-only replica to a full deployment`, func() {
 		BeforeEach(func() {
-			if replicaID == "" {
-				Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
-			}
+			shouldSkipTest()
 		})
 		It(`PromoteReadOnlyReplica(promoteReadOnlyReplicaOptions *PromoteReadOnlyReplicaOptions)`, func() {
 
 			promoteReadOnlyReplicaOptions := &clouddatabasesv5.PromoteReadOnlyReplicaOptions{
-				ID:        &replicaID,
+				ID: core.StringPtr("testString"),
 				Promotion: make(map[string]interface{}),
 			}
 
@@ -516,9 +620,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(promoteReadOnlyReplicaResponse).ToNot(BeNil())
 
-			taskIDLink = *promoteReadOnlyReplicaResponse.Task.ID
-
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			// 433
+			//
 		})
 	})
 
@@ -529,7 +638,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`ListDeploymentTasks(listDeploymentTasksOptions *ListDeploymentTasksOptions)`, func() {
 
 			listDeploymentTasksOptions := &clouddatabasesv5.ListDeploymentTasksOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			tasks, response, err := cloudDatabasesService.ListDeploymentTasks(listDeploymentTasksOptions)
@@ -537,6 +646,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(tasks).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -555,26 +671,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getTaskResponse).ToNot(BeNil())
-		})
-	})
 
-	Describe(`ListDeploymentBackups - List currently available backups from a deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`ListDeploymentBackups(listDeploymentBackupsOptions *ListDeploymentBackupsOptions)`, func() {
-
-			listDeploymentBackupsOptions := &clouddatabasesv5.ListDeploymentBackupsOptions{
-				ID: &deploymentID,
-			}
-
-			backups, response, err := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(backups).ToNot(BeNil())
-
-			backupIDLink = *backups.Backups[0].ID
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -585,7 +688,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetBackupInfo(getBackupInfoOptions *GetBackupInfoOptions)`, func() {
 
 			getBackupInfoOptions := &clouddatabasesv5.GetBackupInfoOptions{
-				BackupID: &backupIDLink,
+				BackupID: core.StringPtr("testString"),
 			}
 
 			getBackupInfoResponse, response, err := cloudDatabasesService.GetBackupInfo(getBackupInfoOptions)
@@ -593,6 +696,38 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getBackupInfoResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
+		})
+	})
+
+	Describe(`ListDeploymentBackups - List currently available backups from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`ListDeploymentBackups(listDeploymentBackupsOptions *ListDeploymentBackupsOptions)`, func() {
+
+			listDeploymentBackupsOptions := &clouddatabasesv5.ListDeploymentBackupsOptions{
+				ID: core.StringPtr("testString"),
+			}
+
+			backups, response, err := cloudDatabasesService.ListDeploymentBackups(listDeploymentBackupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(backups).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -603,7 +738,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`StartOndemandBackup(startOndemandBackupOptions *StartOndemandBackupOptions)`, func() {
 
 			startOndemandBackupOptions := &clouddatabasesv5.StartOndemandBackupOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			startOndemandBackupResponse, response, err := cloudDatabasesService.StartOndemandBackup(startOndemandBackupOptions)
@@ -611,6 +746,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(startOndemandBackupResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
 		})
 	})
 
@@ -621,14 +764,22 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetPitrData(getPitrDataOptions *GetPitrDataOptions)`, func() {
 
 			getPitrDataOptions := &clouddatabasesv5.GetPitrDataOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			getPitrDataResponse, response, err := cloudDatabasesService.GetPitrData(getPitrDataOptions)
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(getPitrDataResponse.PointInTimeRecoveryData).ToNot(BeNil())
+			Expect(getPitrDataResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			//
 		})
 	})
 
@@ -639,11 +790,11 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetConnection(getConnectionOptions *GetConnectionOptions)`, func() {
 
 			getConnectionOptions := &clouddatabasesv5.GetConnectionOptions{
-				ID:              &deploymentID,
-				UserType:        core.StringPtr("database"),
-				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
-				CertificateRoot: core.StringPtr("/var/test"),
+				ID: core.StringPtr("testString"),
+				UserType: core.StringPtr("database"),
+				UserID: core.StringPtr("testString"),
+				EndpointType: core.StringPtr("public"),
+				CertificateRoot: core.StringPtr("testString"),
 			}
 
 			getConnectionResponse, response, err := cloudDatabasesService.GetConnection(getConnectionOptions)
@@ -651,6 +802,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getConnectionResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -661,12 +819,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`CompleteConnection(completeConnectionOptions *CompleteConnectionOptions)`, func() {
 
 			completeConnectionOptions := &clouddatabasesv5.CompleteConnectionOptions{
-				ID:              &deploymentID,
-				UserType:        core.StringPtr("database"),
-				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
-				Password:        core.StringPtr("providedpassword"),
-				CertificateRoot: core.StringPtr("/var/test"),
+				ID: core.StringPtr("testString"),
+				UserType: core.StringPtr("database"),
+				UserID: core.StringPtr("testString"),
+				EndpointType: core.StringPtr("public"),
+				Password: core.StringPtr("providedpassword"),
+				CertificateRoot: core.StringPtr("testString"),
 			}
 
 			completeConnectionResponse, response, err := cloudDatabasesService.CompleteConnection(completeConnectionOptions)
@@ -674,6 +832,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(completeConnectionResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
 		})
 	})
 
@@ -684,7 +850,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions *ListDeploymentScalingGroupsOptions)`, func() {
 
 			listDeploymentScalingGroupsOptions := &clouddatabasesv5.ListDeploymentScalingGroupsOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			listDeploymentScalingGroupsResponse, response, err := cloudDatabasesService.ListDeploymentScalingGroups(listDeploymentScalingGroupsOptions)
@@ -693,48 +859,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(listDeploymentScalingGroupsResponse).ToNot(BeNil())
 
-			scalingGroupIDLink = *listDeploymentScalingGroupsResponse.Groups[0].ID
-		})
-	})
-
-	Describe(`SetDeploymentScalingGroup - Set scaling values on a specified group`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions)`, func() {
-
-			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
-				AllocationMb: core.Int64Ptr(int64(12288)),
-			}
-
-			groupScalingDiskModel := &clouddatabasesv5.GroupScalingDisk{
-				AllocationMb: core.Int64Ptr(int64(20480)),
-			}
-
-			groupScalingModel := &clouddatabasesv5.GroupScaling{
-				Memory: groupScalingMemoryModel,
-				Disk:   groupScalingDiskModel,
-			}
-
-			setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
-				ID:      &deploymentID,
-				GroupID: &scalingGroupIDLink,
-				Group:   groupScalingModel,
-			}
-
-			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
-
-			if err != nil {
-				fmt.Printf("\nError: %s", response.Result.(map[string]interface{}))
-			}
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(setDeploymentScalingGroupResponse).ToNot(BeNil())
-
-			taskIDLink = *setDeploymentScalingGroupResponse.Task.ID
-
-			waitForTask(taskIDLink)
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -753,6 +883,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 
@@ -763,8 +900,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetAutoscalingConditions(getAutoscalingConditionsOptions *GetAutoscalingConditionsOptions)`, func() {
 
 			getAutoscalingConditionsOptions := &clouddatabasesv5.GetAutoscalingConditionsOptions{
-				ID:      &deploymentID,
-				GroupID: &autoScalingGroupID,
+				ID: core.StringPtr("testString"),
+				GroupID: core.StringPtr("testString"),
 			}
 
 			autoscalingGroup, response, err := cloudDatabasesService.GetAutoscalingConditions(getAutoscalingConditionsOptions)
@@ -772,6 +909,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(autoscalingGroup).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 404
+			//
 		})
 	})
 
@@ -782,7 +927,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetAllowlist(getAllowlistOptions *GetAllowlistOptions)`, func() {
 
 			getAllowlistOptions := &clouddatabasesv5.GetAllowlistOptions{
-				ID: &deploymentID,
+				ID: core.StringPtr("testString"),
 			}
 
 			getAllowlistResponse, response, err := cloudDatabasesService.GetAllowlist(getAllowlistOptions)
@@ -790,6 +935,232 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getAllowlistResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			// 422
+			//
+		})
+	})
+
+	Describe(`GetAutoscalingCapability - Discover autoscaling capability information from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetAutoscalingCapability(getAutoscalingCapabilityOptions *GetAutoscalingCapabilityOptions)`, func() {
+
+			getAutoscalingCapabilityRequestDeploymentModel := &clouddatabasesv5.GetAutoscalingCapabilityRequestDeployment{
+				DeploymentType: core.StringPtr("PostgreSQL"),
+				Version: core.StringPtr("10"),
+				Platform: core.StringPtr("satellite"),
+			}
+
+			getAutoscalingCapabilityOptions := &clouddatabasesv5.GetAutoscalingCapabilityOptions{
+				ID: core.StringPtr("testString"),
+				Deployment: getAutoscalingCapabilityRequestDeploymentModel,
+			}
+
+			getAutoscalingCapabilityResponse, response, err := cloudDatabasesService.GetAutoscalingCapability(getAutoscalingCapabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getAutoscalingCapabilityResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
+		})
+	})
+
+	Describe(`GetEncryptionCapability - Discover encryption capability information from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetEncryptionCapability(getEncryptionCapabilityOptions *GetEncryptionCapabilityOptions)`, func() {
+
+			getEncryptionCapabilityRequestDeploymentModel := &clouddatabasesv5.GetEncryptionCapabilityRequestDeployment{
+				DeploymentType: core.StringPtr("PostgreSQL"),
+			}
+
+			getEncryptionCapabilityOptions := &clouddatabasesv5.GetEncryptionCapabilityOptions{
+				ID: core.StringPtr("testString"),
+				Deployment: getEncryptionCapabilityRequestDeploymentModel,
+			}
+
+			getEncryptionCapabilityResponse, response, err := cloudDatabasesService.GetEncryptionCapability(getEncryptionCapabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getEncryptionCapabilityResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
+		})
+	})
+
+	Describe(`GetEndpointsCapability - Discover endpoints capability information from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetEndpointsCapability(getEndpointsCapabilityOptions *GetEndpointsCapabilityOptions)`, func() {
+
+			getEndpointsCapabilityRequestDeploymentModel := &clouddatabasesv5.GetEndpointsCapabilityRequestDeployment{
+				DeploymentType: core.StringPtr("mongoDB"),
+			}
+
+			getEndpointsCapabilityOptions := &clouddatabasesv5.GetEndpointsCapabilityOptions{
+				ID: core.StringPtr("testString"),
+				Deployment: getEndpointsCapabilityRequestDeploymentModel,
+			}
+
+			getEndpointsCapabilityResponse, response, err := cloudDatabasesService.GetEndpointsCapability(getEndpointsCapabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getEndpointsCapabilityResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
+		})
+	})
+
+	Describe(`GetGroupsCapability - Discover groups capability information from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetGroupsCapability(getGroupsCapabilityOptions *GetGroupsCapabilityOptions)`, func() {
+
+			getGroupsCapabilityRequestDeploymentModel := &clouddatabasesv5.GetGroupsCapabilityRequestDeployment{
+				DeploymentType: core.StringPtr("mongoDB"),
+			}
+
+			getGroupsCapabilityOptions := &clouddatabasesv5.GetGroupsCapabilityOptions{
+				ID: core.StringPtr("testString"),
+				Deployment: getGroupsCapabilityRequestDeploymentModel,
+			}
+
+			getGroupsCapabilityResponse, response, err := cloudDatabasesService.GetGroupsCapability(getGroupsCapabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getGroupsCapabilityResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
+		})
+	})
+
+	Describe(`GetRegionsCapability - Discover regions capability information for a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetRegionsCapability(getRegionsCapabilityOptions *GetRegionsCapabilityOptions)`, func() {
+
+			getRegionsCapabilityRequestDeploymentModel := &clouddatabasesv5.GetRegionsCapabilityRequestDeployment{
+				DeploymentType: core.StringPtr("PostgreSQL"),
+				Version: core.StringPtr("10"),
+				Platform: core.StringPtr("satellite"),
+			}
+
+			getRegionsCapabilityOptions := &clouddatabasesv5.GetRegionsCapabilityOptions{
+				ID: core.StringPtr("testString"),
+				Deployment: getRegionsCapabilityRequestDeploymentModel,
+			}
+
+			getRegionsCapabilityResponse, response, err := cloudDatabasesService.GetRegionsCapability(getRegionsCapabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getRegionsCapabilityResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
+		})
+	})
+
+	Describe(`GetRemotesCapability - Discover remotes capability information for a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetRemotesCapability(getRemotesCapabilityOptions *GetRemotesCapabilityOptions)`, func() {
+
+			getRemotesCapabilityRequestDeploymentModel := &clouddatabasesv5.GetRemotesCapabilityRequestDeployment{
+				DeploymentType: core.StringPtr("PostgreSQL"),
+			}
+
+			getRemotesCapabilityOptions := &clouddatabasesv5.GetRemotesCapabilityOptions{
+				ID: core.StringPtr("testString"),
+				Deployment: getRemotesCapabilityRequestDeploymentModel,
+			}
+
+			getRemotesCapabilityResponse, response, err := cloudDatabasesService.GetRemotesCapability(getRemotesCapabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getRemotesCapabilityResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
+		})
+	})
+
+	Describe(`GetVersionsCapability - Discover versions capability information for a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetVersionsCapability(getVersionsCapabilityOptions *GetVersionsCapabilityOptions)`, func() {
+
+			getVersionsCapabilityRequestDeploymentModel := &clouddatabasesv5.GetVersionsCapabilityRequestDeployment{
+				DeploymentType: core.StringPtr("PostgreSQL"),
+			}
+
+			getVersionsCapabilityOptions := &clouddatabasesv5.GetVersionsCapabilityOptions{
+				ID: core.StringPtr("testString"),
+				Deployment: getVersionsCapabilityRequestDeploymentModel,
+			}
+
+			getVersionsCapabilityResponse, response, err := cloudDatabasesService.GetVersionsCapability(getVersionsCapabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getVersionsCapabilityResponse).ToNot(BeNil())
+
+			//
+			// The following status codes aren't covered by tests.
+			// Please provide integration tests for these too.
+			//
+			// 403
+			//
 		})
 	})
 })
+
+//
+// Utility functions are declared in the unit test file
+//
