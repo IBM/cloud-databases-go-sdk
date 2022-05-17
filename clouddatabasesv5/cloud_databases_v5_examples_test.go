@@ -46,8 +46,8 @@ const externalConfigFile = "../cloud_databases_v5.env"
 
 var (
 	cloudDatabasesService *clouddatabasesv5.CloudDatabasesV5
-	config       map[string]string
-	configLoaded bool = false
+	config                map[string]string
+	configLoaded          bool = false
 )
 
 // Globlal variables to hold link values
@@ -112,7 +112,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-addAllowlistEntry
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address: core.StringPtr("172.16.0.0/16"),
+				Address:     core.StringPtr("172.16.0.0/16"),
 				Description: core.StringPtr("Dev IP space 3"),
 			}
 
@@ -279,7 +279,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-setAllowlist
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address: core.StringPtr("195.212.0.0/16"),
+				Address:     core.StringPtr("195.212.0.0/16"),
 				Description: core.StringPtr("Dev IP space 1"),
 			}
 
@@ -309,8 +309,8 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-setAutoscalingConditions
 
 			autoscalingMemoryGroupMemoryScalersIoUtilizationModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization{
-				Enabled: core.BoolPtr(true),
-				OverPeriod: core.StringPtr("5m"),
+				Enabled:      core.BoolPtr(true),
+				OverPeriod:   core.StringPtr("5m"),
 				AbovePercent: core.Int64Ptr(int64(90)),
 			}
 
@@ -319,15 +319,15 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			}
 
 			autoscalingMemoryGroupMemoryRateModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryRate{
-				IncreasePercent: core.Float64Ptr(float64(10)),
-				PeriodSeconds: core.Int64Ptr(int64(300)),
+				IncreasePercent:  core.Float64Ptr(float64(10)),
+				PeriodSeconds:    core.Int64Ptr(int64(300)),
 				LimitMbPerMember: core.Float64Ptr(float64(125952)),
-				Units: core.StringPtr("mb"),
+				Units:            core.StringPtr("mb"),
 			}
 
 			autoscalingMemoryGroupMemoryModel := &clouddatabasesv5.AutoscalingMemoryGroupMemory{
 				Scalers: autoscalingMemoryGroupMemoryScalersModel,
-				Rate: autoscalingMemoryGroupMemoryRateModel,
+				Rate:    autoscalingMemoryGroupMemoryRateModel,
 			}
 
 			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup{

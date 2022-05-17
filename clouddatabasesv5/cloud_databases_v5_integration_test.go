@@ -43,10 +43,10 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	const externalConfigFile = "../cloud_databases_v5.env"
 
 	var (
-		err          error
+		err                   error
 		cloudDatabasesService *clouddatabasesv5.CloudDatabasesV5
-		serviceURL   string
-		config       map[string]string
+		serviceURL            string
+		config                map[string]string
 	)
 
 	// Globlal variables to hold link values
@@ -106,12 +106,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`AddAllowlistEntry(addAllowlistEntryOptions *AddAllowlistEntryOptions)`, func() {
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address: core.StringPtr("172.16.0.0/16"),
+				Address:     core.StringPtr("172.16.0.0/16"),
 				Description: core.StringPtr("Dev IP space 3"),
 			}
 
 			addAllowlistEntryOptions := &clouddatabasesv5.AddAllowlistEntryOptions{
-				ID: core.StringPtr("testString"),
+				ID:        core.StringPtr("testString"),
 				IPAddress: allowlistEntryModel,
 			}
 
@@ -144,10 +144,10 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
-				ID: core.StringPtr("testString"),
+				ID:       core.StringPtr("testString"),
 				UserType: core.StringPtr("database"),
 				Username: core.StringPtr("user"),
-				User: aPasswordSettingUserModel,
+				User:     aPasswordSettingUserModel,
 			}
 
 			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
@@ -177,13 +177,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			userModel := &clouddatabasesv5.User{
 				Username: core.StringPtr("user"),
 				Password: core.StringPtr("password123"),
-				Role: core.StringPtr("group_data_access_admin"),
+				Role:     core.StringPtr("group_data_access_admin"),
 			}
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
-				ID: core.StringPtr("testString"),
+				ID:       core.StringPtr("testString"),
 				UserType: core.StringPtr("testString"),
-				User: userModel,
+				User:     userModel,
 			}
 
 			createDatabaseUserResponse, response, err := cloudDatabasesService.CreateDatabaseUser(createDatabaseUserOptions)
@@ -211,7 +211,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`DeleteAllowlistEntry(deleteAllowlistEntryOptions *DeleteAllowlistEntryOptions)`, func() {
 
 			deleteAllowlistEntryOptions := &clouddatabasesv5.DeleteAllowlistEntryOptions{
-				ID: core.StringPtr("testString"),
+				ID:        core.StringPtr("testString"),
 				Ipaddress: core.StringPtr("testString"),
 			}
 
@@ -240,7 +240,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`DeleteDatabaseUser(deleteDatabaseUserOptions *DeleteDatabaseUserOptions)`, func() {
 
 			deleteDatabaseUserOptions := &clouddatabasesv5.DeleteDatabaseUserOptions{
-				ID: core.StringPtr("testString"),
+				ID:       core.StringPtr("testString"),
 				UserType: core.StringPtr("database"),
 				Username: core.StringPtr("user"),
 			}
@@ -298,14 +298,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`SetAllowlist(setAllowlistOptions *SetAllowlistOptions)`, func() {
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address: core.StringPtr("195.212.0.0/16"),
+				Address:     core.StringPtr("195.212.0.0/16"),
 				Description: core.StringPtr("Dev IP space 1"),
 			}
 
 			setAllowlistOptions := &clouddatabasesv5.SetAllowlistOptions{
-				ID: core.StringPtr("testString"),
+				ID:          core.StringPtr("testString"),
 				IPAddresses: []clouddatabasesv5.AllowlistEntry{*allowlistEntryModel},
-				IfMatch: core.StringPtr("testString"),
+				IfMatch:     core.StringPtr("testString"),
 			}
 
 			setAllowlistResponse, response, err := cloudDatabasesService.SetAllowlist(setAllowlistOptions)
@@ -333,8 +333,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`SetAutoscalingConditions(setAutoscalingConditionsOptions *SetAutoscalingConditionsOptions)`, func() {
 
 			autoscalingMemoryGroupMemoryScalersIoUtilizationModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization{
-				Enabled: core.BoolPtr(true),
-				OverPeriod: core.StringPtr("5m"),
+				Enabled:      core.BoolPtr(true),
+				OverPeriod:   core.StringPtr("5m"),
 				AbovePercent: core.Int64Ptr(int64(90)),
 			}
 
@@ -343,15 +343,15 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			autoscalingMemoryGroupMemoryRateModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryRate{
-				IncreasePercent: core.Float64Ptr(float64(10)),
-				PeriodSeconds: core.Int64Ptr(int64(300)),
+				IncreasePercent:  core.Float64Ptr(float64(10)),
+				PeriodSeconds:    core.Int64Ptr(int64(300)),
 				LimitMbPerMember: core.Float64Ptr(float64(125952)),
-				Units: core.StringPtr("mb"),
+				Units:            core.StringPtr("mb"),
 			}
 
 			autoscalingMemoryGroupMemoryModel := &clouddatabasesv5.AutoscalingMemoryGroupMemory{
 				Scalers: autoscalingMemoryGroupMemoryScalersModel,
-				Rate: autoscalingMemoryGroupMemoryRateModel,
+				Rate:    autoscalingMemoryGroupMemoryRateModel,
 			}
 
 			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup{
@@ -359,8 +359,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			setAutoscalingConditionsOptions := &clouddatabasesv5.SetAutoscalingConditionsOptions{
-				ID: core.StringPtr("testString"),
-				GroupID: core.StringPtr("testString"),
+				ID:          core.StringPtr("testString"),
+				GroupID:     core.StringPtr("testString"),
 				Autoscaling: autoscalingSetGroupAutoscalingModel,
 			}
 
@@ -406,15 +406,15 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			groupScalingModel := &clouddatabasesv5.GroupScaling{
 				Members: groupScalingMembersModel,
-				Memory: groupScalingMemoryModel,
-				CPU: groupScalingCPUModel,
-				Disk: groupScalingDiskModel,
+				Memory:  groupScalingMemoryModel,
+				CPU:     groupScalingCPUModel,
+				Disk:    groupScalingDiskModel,
 			}
 
 			setDeploymentScalingGroupOptions := &clouddatabasesv5.SetDeploymentScalingGroupOptions{
-				ID: core.StringPtr("testString"),
+				ID:      core.StringPtr("testString"),
 				GroupID: core.StringPtr("testString"),
-				Group: groupScalingModel,
+				Group:   groupScalingModel,
 			}
 
 			setDeploymentScalingGroupResponse, response, err := cloudDatabasesService.SetDeploymentScalingGroup(setDeploymentScalingGroupOptions)
@@ -442,21 +442,21 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions)`, func() {
 
 			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
-				MaxConnections: core.Int64Ptr(int64(200)),
+				MaxConnections:          core.Int64Ptr(int64(200)),
 				MaxPreparedTransactions: core.Int64Ptr(int64(0)),
-				DeadlockTimeout: core.Int64Ptr(int64(100)),
-				EffectiveIoConcurrency: core.Int64Ptr(int64(1)),
-				MaxReplicationSlots: core.Int64Ptr(int64(10)),
-				MaxWalSenders: core.Int64Ptr(int64(12)),
-				SharedBuffers: core.Int64Ptr(int64(16)),
-				SynchronousCommit: core.StringPtr("local"),
-				WalLevel: core.StringPtr("hot_standby"),
-				ArchiveTimeout: core.Int64Ptr(int64(300)),
+				DeadlockTimeout:         core.Int64Ptr(int64(100)),
+				EffectiveIoConcurrency:  core.Int64Ptr(int64(1)),
+				MaxReplicationSlots:     core.Int64Ptr(int64(10)),
+				MaxWalSenders:           core.Int64Ptr(int64(12)),
+				SharedBuffers:           core.Int64Ptr(int64(16)),
+				SynchronousCommit:       core.StringPtr("local"),
+				WalLevel:                core.StringPtr("hot_standby"),
+				ArchiveTimeout:          core.Int64Ptr(int64(300)),
 				LogMinDurationStatement: core.Int64Ptr(int64(100)),
 			}
 
 			updateDatabaseConfigurationOptions := &clouddatabasesv5.UpdateDatabaseConfigurationOptions{
-				ID: core.StringPtr("testString"),
+				ID:            core.StringPtr("testString"),
 				Configuration: configurationModel,
 			}
 
@@ -484,8 +484,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`ListDeployables(listDeployablesOptions *ListDeployablesOptions)`, func() {
 
-			listDeployablesOptions := &clouddatabasesv5.ListDeployablesOptions{
-			}
+			listDeployablesOptions := &clouddatabasesv5.ListDeployablesOptions{}
 
 			listDeployablesResponse, response, err := cloudDatabasesService.ListDeployables(listDeployablesOptions)
 
@@ -508,8 +507,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`ListRegions(listRegionsOptions *ListRegionsOptions)`, func() {
 
-			listRegionsOptions := &clouddatabasesv5.ListRegionsOptions{
-			}
+			listRegionsOptions := &clouddatabasesv5.ListRegionsOptions{}
 
 			listRegionsResponse, response, err := cloudDatabasesService.ListRegions(listRegionsOptions)
 
@@ -610,7 +608,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`PromoteReadOnlyReplica(promoteReadOnlyReplicaOptions *PromoteReadOnlyReplicaOptions)`, func() {
 
 			promoteReadOnlyReplicaOptions := &clouddatabasesv5.PromoteReadOnlyReplicaOptions{
-				ID: core.StringPtr("testString"),
+				ID:        core.StringPtr("testString"),
 				Promotion: make(map[string]interface{}),
 			}
 
@@ -790,10 +788,10 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetConnection(getConnectionOptions *GetConnectionOptions)`, func() {
 
 			getConnectionOptions := &clouddatabasesv5.GetConnectionOptions{
-				ID: core.StringPtr("testString"),
-				UserType: core.StringPtr("database"),
-				UserID: core.StringPtr("testString"),
-				EndpointType: core.StringPtr("public"),
+				ID:              core.StringPtr("testString"),
+				UserType:        core.StringPtr("database"),
+				UserID:          core.StringPtr("testString"),
+				EndpointType:    core.StringPtr("public"),
 				CertificateRoot: core.StringPtr("testString"),
 			}
 
@@ -819,11 +817,11 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`CompleteConnection(completeConnectionOptions *CompleteConnectionOptions)`, func() {
 
 			completeConnectionOptions := &clouddatabasesv5.CompleteConnectionOptions{
-				ID: core.StringPtr("testString"),
-				UserType: core.StringPtr("database"),
-				UserID: core.StringPtr("testString"),
-				EndpointType: core.StringPtr("public"),
-				Password: core.StringPtr("providedpassword"),
+				ID:              core.StringPtr("testString"),
+				UserType:        core.StringPtr("database"),
+				UserID:          core.StringPtr("testString"),
+				EndpointType:    core.StringPtr("public"),
+				Password:        core.StringPtr("providedpassword"),
 				CertificateRoot: core.StringPtr("testString"),
 			}
 
@@ -900,7 +898,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`GetAutoscalingConditions(getAutoscalingConditionsOptions *GetAutoscalingConditionsOptions)`, func() {
 
 			getAutoscalingConditionsOptions := &clouddatabasesv5.GetAutoscalingConditionsOptions{
-				ID: core.StringPtr("testString"),
+				ID:      core.StringPtr("testString"),
 				GroupID: core.StringPtr("testString"),
 			}
 
@@ -954,12 +952,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			getAutoscalingCapabilityRequestDeploymentModel := &clouddatabasesv5.GetAutoscalingCapabilityRequestDeployment{
 				DeploymentType: core.StringPtr("PostgreSQL"),
-				Version: core.StringPtr("10"),
-				Platform: core.StringPtr("satellite"),
+				Version:        core.StringPtr("10"),
+				Platform:       core.StringPtr("satellite"),
 			}
 
 			getAutoscalingCapabilityOptions := &clouddatabasesv5.GetAutoscalingCapabilityOptions{
-				ID: core.StringPtr("testString"),
+				ID:         core.StringPtr("testString"),
 				Deployment: getAutoscalingCapabilityRequestDeploymentModel,
 			}
 
@@ -989,7 +987,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			getEncryptionCapabilityOptions := &clouddatabasesv5.GetEncryptionCapabilityOptions{
-				ID: core.StringPtr("testString"),
+				ID:         core.StringPtr("testString"),
 				Deployment: getEncryptionCapabilityRequestDeploymentModel,
 			}
 
@@ -1019,7 +1017,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			getEndpointsCapabilityOptions := &clouddatabasesv5.GetEndpointsCapabilityOptions{
-				ID: core.StringPtr("testString"),
+				ID:         core.StringPtr("testString"),
 				Deployment: getEndpointsCapabilityRequestDeploymentModel,
 			}
 
@@ -1049,7 +1047,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			getGroupsCapabilityOptions := &clouddatabasesv5.GetGroupsCapabilityOptions{
-				ID: core.StringPtr("testString"),
+				ID:         core.StringPtr("testString"),
 				Deployment: getGroupsCapabilityRequestDeploymentModel,
 			}
 
@@ -1076,12 +1074,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			getRegionsCapabilityRequestDeploymentModel := &clouddatabasesv5.GetRegionsCapabilityRequestDeployment{
 				DeploymentType: core.StringPtr("PostgreSQL"),
-				Version: core.StringPtr("10"),
-				Platform: core.StringPtr("satellite"),
+				Version:        core.StringPtr("10"),
+				Platform:       core.StringPtr("satellite"),
 			}
 
 			getRegionsCapabilityOptions := &clouddatabasesv5.GetRegionsCapabilityOptions{
-				ID: core.StringPtr("testString"),
+				ID:         core.StringPtr("testString"),
 				Deployment: getRegionsCapabilityRequestDeploymentModel,
 			}
 
@@ -1111,7 +1109,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			getRemotesCapabilityOptions := &clouddatabasesv5.GetRemotesCapabilityOptions{
-				ID: core.StringPtr("testString"),
+				ID:         core.StringPtr("testString"),
 				Deployment: getRemotesCapabilityRequestDeploymentModel,
 			}
 
@@ -1141,7 +1139,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			getVersionsCapabilityOptions := &clouddatabasesv5.GetVersionsCapabilityOptions{
-				ID: core.StringPtr("testString"),
+				ID:         core.StringPtr("testString"),
 				Deployment: getVersionsCapabilityRequestDeploymentModel,
 			}
 
