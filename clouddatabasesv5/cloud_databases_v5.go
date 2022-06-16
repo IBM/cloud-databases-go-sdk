@@ -2042,6 +2042,10 @@ func UnmarshalAddAllowlistEntryResponse(m map[string]json.RawMessage, result int
 	return
 }
 
+type Allowlist struct {
+	AllowlistEntrys []AllowlistEntry `json:"ip_addresses"`
+}
+
 // AllowlistEntry : AllowlistEntry struct
 type AllowlistEntry struct {
 	// An IPv4 address or a CIDR range (netmasked IPv4 address).
@@ -2049,6 +2053,10 @@ type AllowlistEntry struct {
 
 	// A human readable description of the address or range for identification purposes.
 	Description *string `json:"description,omitempty"`
+}
+
+type AllowlistReq struct {
+	AllowlistEntry AllowlistEntry `json:"ip_address"`
 }
 
 // UnmarshalAllowlistEntry unmarshals an instance of AllowlistEntry from the specified map of raw messages.
