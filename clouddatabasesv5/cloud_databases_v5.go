@@ -487,6 +487,67 @@ func (cloudDatabases *CloudDatabasesV5) CreateLogicalReplicationSlotWithContext(
 	return
 }
 
+// DeleteLogicalReplicationSlot : Delete a logical replication slot
+// Deletes a logical replication slot from a database. For use with PostgreSQL, EnterpriseDB, and wal2json only.
+func (cloudDatabases *CloudDatabasesV5) DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions) (result *DeleteLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
+	return cloudDatabases.DeleteLogicalReplicationSlotWithContext(context.Background(), deleteLogicalReplicationSlotOptions)
+}
+
+// DeleteLogicalReplicationSlotWithContext is an alternate form of the DeleteLogicalReplicationSlot method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) DeleteLogicalReplicationSlotWithContext(ctx context.Context, deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions) (result *DeleteLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(deleteLogicalReplicationSlotOptions, "deleteLogicalReplicationSlotOptions cannot be nil")
+	if err != nil {
+		return
+	}
+	err = core.ValidateStruct(deleteLogicalReplicationSlotOptions, "deleteLogicalReplicationSlotOptions")
+	if err != nil {
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"id":   *deleteLogicalReplicationSlotOptions.ID,
+		"name": *deleteLogicalReplicationSlotOptions.Name,
+	}
+
+	builder := core.NewRequestBuilder(core.DELETE)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/postgresql/logical_replication_slots/{name}`, pathParamsMap)
+	if err != nil {
+		return
+	}
+
+	for headerName, headerValue := range deleteLogicalReplicationSlotOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "DeleteLogicalReplicationSlot")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	request, err := builder.Build()
+	if err != nil {
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = cloudDatabases.Service.Request(request, &rawResponse)
+	if err != nil {
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalDeleteLogicalReplicationSlotResponse)
+		if err != nil {
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
 // ChangeUserPassword : Set specified user's password
 // Sets the password of a specified user.
 func (cloudDatabases *CloudDatabasesV5) ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions) (result *ChangeUserPasswordResponse, response *core.DetailedResponse, err error) {
@@ -3474,6 +3535,60 @@ func UnmarshalLogicalReplicationSlotLogicalReplicationSlot(m map[string]json.Raw
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "plugin_type", &obj.PluginType)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// DeleteLogicalReplicationSlotOptions : The DeleteLogicalReplicationSlot options.
+type DeleteLogicalReplicationSlotOptions struct {
+	// Deployment ID.
+	ID *string `json:"id" validate:"required,ne="`
+
+	// Name of the logical replication slot.
+	Name *string `json:"name" validate:"required,ne="`
+
+	// Allows users to set headers on API requests
+	Headers map[string]string
+}
+
+// NewDeleteLogicalReplicationSlotOptions : Instantiate DeleteLogicalReplicationSlotOptions
+func (*CloudDatabasesV5) NewDeleteLogicalReplicationSlotOptions(id string, name string) *DeleteLogicalReplicationSlotOptions {
+	return &DeleteLogicalReplicationSlotOptions{
+		ID:   core.StringPtr(id),
+		Name: core.StringPtr(name),
+	}
+}
+
+// SetID : Allow user to set ID
+func (_options *DeleteLogicalReplicationSlotOptions) SetID(id string) *DeleteLogicalReplicationSlotOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
+}
+
+// SetName : Allow user to set Name
+func (_options *DeleteLogicalReplicationSlotOptions) SetName(name string) *DeleteLogicalReplicationSlotOptions {
+	_options.Name = core.StringPtr(name)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *DeleteLogicalReplicationSlotOptions) SetHeaders(param map[string]string) *DeleteLogicalReplicationSlotOptions {
+	options.Headers = param
+	return options
+}
+
+// DeleteLogicalReplicationSlotResponse : DeleteLogicalReplicationSlotResponse struct
+type DeleteLogicalReplicationSlotResponse struct {
+	Task *Task `json:"task,omitempty"`
+}
+
+// UnmarshalDeleteLogicalReplicationSlotResponse unmarshals an instance of DeleteLogicalReplicationSlotResponse from the specified map of raw messages.
+func UnmarshalDeleteLogicalReplicationSlotResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(DeleteLogicalReplicationSlotResponse)
+	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
 	if err != nil {
 		return
 	}
