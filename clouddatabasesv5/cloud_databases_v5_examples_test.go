@@ -337,6 +337,32 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 
 			waitForTask(taskIDLink)
 		})
+		It(`DeleteLogicalReplicationSlot request example`, func() {
+			fmt.Println("\nDeleteLogicalReplicationSlot() result:")
+			// begin-deleteLogicalReplicationSlot
+
+			deleteLogicalReplicationOptions := cloudDatabasesService.NewDeleteLogicalReplicationSlotOptions(
+				deploymentID,
+				logicalRepName,
+			)
+
+			deleteLogicalReplicationResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(deleteLogicalReplicationResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-deleteLogicalReplicationSlot
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(deleteLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *deleteLogicalReplicationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
 		It(`KillConnections request example`, func() {
 			fmt.Println("\nKillConnections() result:")
 			// begin-killConnections
