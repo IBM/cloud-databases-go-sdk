@@ -64,6 +64,9 @@ var (
 	replicaID          string
 	backupIDLink       string
 	scalingGroupIDLink string
+	logicalRepName     string = "wj123"
+	databaseName       string = "exampleDatabase"
+	pluginType         string = "wal2json"
 )
 
 // Globlal variables to hold link values
@@ -242,6 +245,36 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(createDatabaseUserResponse).ToNot(BeNil())
 
 			taskIDLink = *createDatabaseUserResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+		It(`CreateLogicalReplicationSlot request example`, func() {
+			fmt.Println("\nCreateLogicalReplicationSlot() result:")
+			// begin-createLogicalReplicationSlot
+
+			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot{
+				Name:         &logicalRepName,
+				DatabaseName: &databaseName,
+				PluginType:   &pluginType,
+			}
+
+			createLogicalReplicationSlotOptions := cloudDatabasesService.NewCreateLogicalReplicationSlotOptions(deploymentID)
+			createLogicalReplicationSlotOptions.SetLogicalReplicationSlot(logicalReplicationSlotModel)
+
+			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(createLogicalReplicationResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-createLogicalReplicationSlot
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(createLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *createLogicalReplicationResponse.Task.ID
 
 			waitForTask(taskIDLink)
 		})

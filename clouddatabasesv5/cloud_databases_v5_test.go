@@ -5352,6 +5352,285 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
+	Describe(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions) - Operation response error`, func() {
+		createLogicalReplicationSlotPath := "/deployments/testString/postgresql/logical_replication_slots"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(createLogicalReplicationSlotPath))
+					Expect(req.Method).To(Equal("POST"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(202)
+					fmt.Fprintf(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke CreateLogicalReplicationSlot with error: Operation response processing error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the LogicalReplicationSlotLogicalReplicationSlot model
+				logicalReplicationSlotLogicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot)
+				logicalReplicationSlotLogicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotLogicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotLogicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
+				// Construct an instance of the CreateLogicalReplicationSlotOptions model
+				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
+				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotLogicalReplicationSlotModel
+				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				cloudDatabasesService.EnableRetries(0, 0)
+				result, response, operationErr = cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
+		createLogicalReplicationSlotPath := "/deployments/testString/postgresql/logical_replication_slots"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(createLogicalReplicationSlotPath))
+					Expect(req.Method).To(Equal("POST"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(202)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+				}))
+			})
+			It(`Invoke CreateLogicalReplicationSlot successfully with retries`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+				cloudDatabasesService.EnableRetries(0, 0)
+
+				// Construct an instance of the LogicalReplicationSlotLogicalReplicationSlot model
+				logicalReplicationSlotLogicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot)
+				logicalReplicationSlotLogicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotLogicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotLogicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
+				// Construct an instance of the CreateLogicalReplicationSlotOptions model
+				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
+				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotLogicalReplicationSlotModel
+				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := cloudDatabasesService.CreateLogicalReplicationSlotWithContext(ctx, createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				cloudDatabasesService.DisableRetries()
+				result, response, operationErr := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = cloudDatabasesService.CreateLogicalReplicationSlotWithContext(ctx, createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(createLogicalReplicationSlotPath))
+					Expect(req.Method).To(Equal("POST"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(202)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+				}))
+			})
+			It(`Invoke CreateLogicalReplicationSlot successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := cloudDatabasesService.CreateLogicalReplicationSlot(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the LogicalReplicationSlotLogicalReplicationSlot model
+				logicalReplicationSlotLogicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot)
+				logicalReplicationSlotLogicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotLogicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotLogicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
+				// Construct an instance of the CreateLogicalReplicationSlotOptions model
+				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
+				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotLogicalReplicationSlotModel
+				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke CreateLogicalReplicationSlot with error: Operation validation and request error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the LogicalReplicationSlotLogicalReplicationSlot model
+				logicalReplicationSlotLogicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot)
+				logicalReplicationSlotLogicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotLogicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotLogicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
+				// Construct an instance of the CreateLogicalReplicationSlotOptions model
+				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
+				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotLogicalReplicationSlotModel
+				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := cloudDatabasesService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+				// Construct a second instance of the CreateLogicalReplicationSlotOptions model with no property values
+				createLogicalReplicationSlotOptionsModelNew := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
+				// Invoke operation with invalid model (negative test)
+				result, response, operationErr = cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModelNew)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(202)
+				}))
+			})
+			It(`Invoke CreateLogicalReplicationSlot successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the LogicalReplicationSlotLogicalReplicationSlot model
+				logicalReplicationSlotLogicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot)
+				logicalReplicationSlotLogicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotLogicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotLogicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
+				// Construct an instance of the CreateLogicalReplicationSlotOptions model
+				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
+				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotLogicalReplicationSlotModel
+				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
 	Describe(`SetAutoscalingConditions(setAutoscalingConditionsOptions *SetAutoscalingConditionsOptions) - Operation response error`, func() {
 		setAutoscalingConditionsPath := "/deployments/testString/groups/testString/autoscaling"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
