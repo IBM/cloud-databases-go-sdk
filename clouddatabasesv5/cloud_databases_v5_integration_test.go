@@ -221,6 +221,35 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
+	Describe(`CreateLogicalReplicationSlot - Creates a logical replication slot`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
+
+			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot{
+				Name:         core.StringPtr("wj123"),
+				DatabaseName: core.StringPtr("exampleDatabase"),
+				PluginType:   core.StringPtr("wal2json"),
+			}
+
+			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
+				ID:                     &deploymentID,
+				LogicalReplicationSlot: logicalReplicationSlotModel,
+			}
+
+			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(createLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *createLogicalReplicationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
+
 	Describe(`ChangeUserPassword - Set specified user's password`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -269,6 +298,29 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(deleteDatabaseUserResponse).ToNot(BeNil())
 
 			taskIDLink = *deleteDatabaseUserResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
+
+	Describe(`DeleteLogicalReplicationSlot - Deletes a logical replication slot`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions)`, func() {
+
+			deleteLogicalReplicationSlotOptions := &clouddatabasesv5.DeleteLogicalReplicationSlotOptions{
+				ID:   &deploymentID,
+				Name: core.StringPtr("wj123"),
+			}
+
+			deleteLogicalReplicationResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(deleteLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *deleteLogicalReplicationResponse.Task.ID
 
 			waitForTask(taskIDLink)
 		})
