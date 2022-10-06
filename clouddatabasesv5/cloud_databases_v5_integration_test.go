@@ -227,7 +227,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
-			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot{
+			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlot{
 				Name:         core.StringPtr("wj123"),
 				DatabaseName: core.StringPtr("exampleDatabase"),
 				PluginType:   core.StringPtr("wal2json"),

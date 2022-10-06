@@ -3464,7 +3464,7 @@ type CreateLogicalReplicationSlotOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	LogicalReplicationSlot *LogicalReplicationSlotLogicalReplicationSlot `json:"logical_replication_slot,omitempty"`
+	LogicalReplicationSlot *LogicalReplicationSlot `json:"logical_replication_slot,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
@@ -3484,7 +3484,7 @@ func (_options *CreateLogicalReplicationSlotOptions) SetID(id string) *CreateLog
 }
 
 // SetLogicalReplicationSlot : Allow user to set LogicalReplicationSlot
-func (_options *CreateLogicalReplicationSlotOptions) SetLogicalReplicationSlot(logicalReplicationSlot *LogicalReplicationSlotLogicalReplicationSlot) *CreateLogicalReplicationSlotOptions {
+func (_options *CreateLogicalReplicationSlotOptions) SetLogicalReplicationSlot(logicalReplicationSlot *LogicalReplicationSlot) *CreateLogicalReplicationSlotOptions {
 	_options.LogicalReplicationSlot = logicalReplicationSlot
 	return _options
 }
@@ -3511,21 +3511,21 @@ func UnmarshalCreateLogicalReplicationSlotResponse(m map[string]json.RawMessage,
 	return
 }
 
-// LogicalReplicationSlotLogicalReplicationSlot : LogicalReplicationSlotLogicalReplicationSlot struct
-type LogicalReplicationSlotLogicalReplicationSlot struct {
+// LogicalReplicationSlot : LogicalReplicationSlot struct
+type LogicalReplicationSlot struct {
 	// name of the replication slot.
-	Name *string `json:"name,omitempty"`
+	Name *string `json:"name" validate:"required"`
 
 	// name of the database the replication slot is created on.
-	DatabaseName *string `json:"database_name,omitempty"`
+	DatabaseName *string `json:"database_name" validate:"required"`
 
 	// creating a replication slot is only supported for use with wal2json.
-	PluginType *string `json:"plugin_type,omitempty"`
+	PluginType *string `json:"plugin_type" validate:"required"`
 }
 
-// UnmarshalLogicalReplicationSlotLogicalReplicationSlot unmarshals an instance of LogicalReplicationSlotLogicalReplicationSlot from the specified map of raw messages.
-func UnmarshalLogicalReplicationSlotLogicalReplicationSlot(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(LogicalReplicationSlotLogicalReplicationSlot)
+// UnmarshalLogicalReplicationSlot unmarshals an instance of LogicalReplicationSlot from the specified map of raw messages.
+func UnmarshalLogicalReplicationSlot(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(LogicalReplicationSlot)
 	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
 	if err != nil {
 		return

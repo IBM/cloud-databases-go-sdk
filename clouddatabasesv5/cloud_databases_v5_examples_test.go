@@ -252,7 +252,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			fmt.Println("\nCreateLogicalReplicationSlot() result:")
 			// begin-createLogicalReplicationSlot
 
-			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlotLogicalReplicationSlot{
+			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlot{
 				Name:         &logicalRepName,
 				DatabaseName: &databaseName,
 				PluginType:   &pluginType,
