@@ -28,6 +28,7 @@ Go client library to interact with the various [IBM Cloud Cloud Databases APIs](
   * [Go modules](#go-modules)
   * [`go get` command](#go-get-command)
 - [Using the SDK](#using-the-sdk)
+- [Running the Integration Tests](#running-the-integration-tests)
 - [Questions](#questions)
 - [Issues](#issues)
 - [Open source @ IBM](#open-source--ibm)
@@ -82,6 +83,21 @@ Be sure to use the appropriate package name from the service table above for the
 
 ## Using the SDK
 For general SDK usage information, please see [this link](https://github.com/IBM/ibm-cloud-sdk-common/blob/main/README.md)
+
+## Running the Integration Tests
+To run the integration tests run the `make test-int` command in the root directory. If you wish to run all the integration tests
+you can configure your `cloud_databases.env` file as seen below:
+
+```
+CLOUD_DATABASES_URL=<service base url> (e.g. https://api.eu-gb.databases.cloud.ibm.com/v5/ibm)
+CLOUD_DATABASES_AUTH_TYPE=iam
+CLOUD_DATABASES_APIKEY=<IAM apikey>
+CLOUD_DATABASES_AUTH_URL=<IAM token service base URL - omit this if using the production environment>
+CLOUD_DATABASES_DEPLOYMENT_ID=<ID of an example deployment>
+CLOUD_DATABASES_REPLICA_ID=<ID of an example replica>
+```
+
+Make sure your env file is in the root directory.
 
 ## Questions
 
