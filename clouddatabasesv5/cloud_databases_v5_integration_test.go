@@ -290,6 +290,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`KillConnections - Kill connections to a PostgreSQL or EnterpriseDB deployment`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`KillConnections(killConnectionsOptions *KillConnectionsOptions)`, func() {
 
@@ -691,6 +692,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`GetPitrData - Get earliest point-in-time-recovery timestamp`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`GetPitrData(getPitrDataOptions *GetPitrDataOptions)`, func() {
 
