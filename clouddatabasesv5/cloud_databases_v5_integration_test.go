@@ -29,6 +29,7 @@ import (
 	"github.com/IBM/go-sdk-core/v5/core"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"strings"
 )
 
 /**
@@ -62,6 +63,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 	var shouldSkipTest = func() {
 		Skip("External configuration is not available, skipping tests...")
+	}
+
+	var skipTestNotPGorEDB = func() {
+		if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") {
+			Skip("Not Postgresql or EDB, skipping tests...")
+		}
 	}
 
 	var waitForTask = func(taskID string) {
@@ -227,6 +234,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
 
+			var userName string = "user"
+
+			if strings.Contains(deploymentID, "postgresql") || strings.Contains(deploymentID, "enterprisedb") {
+				userName = "repl"
+			}
+
 			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
 				Password: core.StringPtr("xyzzyyzzyx"),
 			}
@@ -234,7 +247,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
 				ID:       &deploymentID,
 				UserType: core.StringPtr("database"),
-				Username: core.StringPtr("repl"),
+				Username: &userName,
 				User:     aPasswordSettingUserModel,
 			}
 
@@ -386,8 +399,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
 				MaxConnections: core.Int64Ptr(int64(200)),
-				WalLevel:       core.StringPtr("logical"),
-				MaxWalSenders:  core.Int64Ptr(int64(200)),
+			}
+
+			if strings.Contains(deploymentID, "postgresql") || strings.Contains(deploymentID, "enterprisedb") {
+				configurationModel = &clouddatabasesv5.ConfigurationPgConfiguration{
+					MaxConnections: core.Int64Ptr(int64(200)),
+					WalLevel:       core.StringPtr("logical"),
+					MaxWalSenders:  core.Int64Ptr(int64(200)),
+				}
 			}
 
 			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
@@ -410,6 +429,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`CreateLogicalReplicationSlot - Creates a logical replication slot`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
@@ -439,6 +459,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`DeleteLogicalReplicationSlot - Deletes a logical replication slot`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions)`, func() {
 
