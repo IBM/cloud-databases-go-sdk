@@ -337,16 +337,44 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 
 			waitForTask(taskIDLink)
 		})
+		It(`CreateLogicalReplicationSlot request example`, func() {
+			fmt.Println("\nCreateLogicalReplicationSlot() result:")
+			// begin-createLogicalReplicationSlot
+
+			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
+				ID:           deploymentID,
+				Name:         logicalRepName,
+				DatabaseName: databaseName,
+				PluginType:   pluginType,
+			}
+
+			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(createLogicalReplicationResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-createLogicalReplicationSlot
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(createLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *createLogicalReplicationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
 		It(`DeleteLogicalReplicationSlot request example`, func() {
 			fmt.Println("\nDeleteLogicalReplicationSlot() result:")
 			// begin-deleteLogicalReplicationSlot
 
-			deleteLogicalReplicationOptions := cloudDatabasesService.NewDeleteLogicalReplicationSlotOptions(
-				deploymentID,
-				logicalRepName,
-			)
+			deleteLogicalReplicationSlotOptions := &clouddatabasesv5.DeleteLogicalReplicationSlotOptions{
+				ID:   deploymentID,
+				Name: logicalRepName,
+			}
 
-			deleteLogicalReplicationResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationOptions)
+			deleteLogicalReplicationResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions)
 			if err != nil {
 				panic(err)
 			}

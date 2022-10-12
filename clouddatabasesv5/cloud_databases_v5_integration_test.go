@@ -434,15 +434,11 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
-			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlot{
+			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
+				ID:           &deploymentID,
 				Name:         core.StringPtr("wj123"),
 				DatabaseName: core.StringPtr("ibmclouddb"),
 				PluginType:   core.StringPtr("wal2json"),
-			}
-
-			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
-				ID:                     &deploymentID,
-				LogicalReplicationSlot: logicalReplicationSlotModel,
 			}
 
 			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
