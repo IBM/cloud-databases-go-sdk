@@ -234,12 +234,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
 
-			var userName string = "user"
-
-			if strings.Contains(deploymentID, "postgresql") || strings.Contains(deploymentID, "enterprisedb") {
-				userName = "repl"
-			}
-
 			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
 				Password: core.StringPtr("xyzzyyzzyx"),
 			}
@@ -247,7 +241,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
 				ID:       &deploymentID,
 				UserType: core.StringPtr("database"),
-				Username: &userName,
+				Username: core.StringPtr("user"),
 				User:     aPasswordSettingUserModel,
 			}
 
@@ -395,19 +389,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`UpdateDatabaseConfiguration - Change your database configuration`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions)`, func() {
 
 			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
 				MaxConnections: core.Int64Ptr(int64(200)),
-			}
-
-			if strings.Contains(deploymentID, "postgresql") || strings.Contains(deploymentID, "enterprisedb") {
-				configurationModel = &clouddatabasesv5.ConfigurationPgConfiguration{
-					MaxConnections: core.Int64Ptr(int64(200)),
-					WalLevel:       core.StringPtr("logical"),
-					MaxWalSenders:  core.Int64Ptr(int64(200)),
-				}
+				WalLevel:       core.StringPtr("logical"),
+				MaxWalSenders:  core.Int64Ptr(int64(200)),
 			}
 
 			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
@@ -433,6 +422,23 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			skipTestNotPGorEDB()
 		})
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
+
+			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
+				Password: core.StringPtr("xyzzyyzzyx"),
+			}
+
+			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
+				ID:       &deploymentID,
+				UserType: core.StringPtr("database"),
+				Username: core.StringPtr("repl"),
+				User:     aPasswordSettingUserModel,
+			}
+
+			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+
+			passTaskIDLink := *changeUserPasswordResponse.Task.ID
+
+			waitForTask(passTaskIDLink)
 
 			logicalReplicationSlot := &clouddatabasesv5.LogicalReplicationSlot{
 				Name:         core.StringPtr("wj123"),
