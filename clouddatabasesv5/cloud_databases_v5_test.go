@@ -5971,12 +5971,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
+				// Construct an instance of the LogicalReplicationSlot model
+				logicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlot)
+				logicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
 				// Construct an instance of the CreateLogicalReplicationSlotOptions model
 				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
 				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.Name = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.DatabaseName = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.PluginType = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotModel
 				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptionsModel)
@@ -6041,12 +6045,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
+				// Construct an instance of the LogicalReplicationSlot model
+				logicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlot)
+				logicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
 				// Construct an instance of the CreateLogicalReplicationSlotOptions model
 				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
 				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.Name = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.DatabaseName = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.PluginType = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotModel
 				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -6119,12 +6127,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
+				// Construct an instance of the LogicalReplicationSlot model
+				logicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlot)
+				logicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
 				// Construct an instance of the CreateLogicalReplicationSlotOptions model
 				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
 				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.Name = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.DatabaseName = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.PluginType = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotModel
 				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -6142,12 +6154,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
+				// Construct an instance of the LogicalReplicationSlot model
+				logicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlot)
+				logicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
 				// Construct an instance of the CreateLogicalReplicationSlotOptions model
 				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
 				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.Name = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.DatabaseName = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.PluginType = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotModel
 				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -6186,12 +6202,16 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
+				// Construct an instance of the LogicalReplicationSlot model
+				logicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlot)
+				logicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+
 				// Construct an instance of the CreateLogicalReplicationSlotOptions model
 				createLogicalReplicationSlotOptionsModel := new(clouddatabasesv5.CreateLogicalReplicationSlotOptions)
 				createLogicalReplicationSlotOptionsModel.ID = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.Name = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.DatabaseName = core.StringPtr("testString")
-				createLogicalReplicationSlotOptionsModel.PluginType = core.StringPtr("testString")
+				createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot = logicalReplicationSlotModel
 				createLogicalReplicationSlotOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
@@ -7511,22 +7531,25 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(createDatabaseUserOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewCreateLogicalReplicationSlotOptions successfully`, func() {
+				// Construct an instance of the LogicalReplicationSlot model
+				logicalReplicationSlotModel := new(clouddatabasesv5.LogicalReplicationSlot)
+				Expect(logicalReplicationSlotModel).ToNot(BeNil())
+				logicalReplicationSlotModel.Name = core.StringPtr("customer_replication")
+				logicalReplicationSlotModel.DatabaseName = core.StringPtr("customers")
+				logicalReplicationSlotModel.PluginType = core.StringPtr("wal2json")
+				Expect(logicalReplicationSlotModel.Name).To(Equal(core.StringPtr("customer_replication")))
+				Expect(logicalReplicationSlotModel.DatabaseName).To(Equal(core.StringPtr("customers")))
+				Expect(logicalReplicationSlotModel.PluginType).To(Equal(core.StringPtr("wal2json")))
+
 				// Construct an instance of the CreateLogicalReplicationSlotOptions model
 				id := "testString"
-				createLogicalReplicationSlotOptionsName := "testString"
-				createLogicalReplicationSlotOptionsDatabaseName := "testString"
-				createLogicalReplicationSlotOptionsPluginType := "testString"
-				createLogicalReplicationSlotOptionsModel := cloudDatabasesService.NewCreateLogicalReplicationSlotOptions(id, createLogicalReplicationSlotOptionsName, createLogicalReplicationSlotOptionsDatabaseName, createLogicalReplicationSlotOptionsPluginType)
+				createLogicalReplicationSlotOptionsModel := cloudDatabasesService.NewCreateLogicalReplicationSlotOptions(id)
 				createLogicalReplicationSlotOptionsModel.SetID("testString")
-				createLogicalReplicationSlotOptionsModel.SetName("testString")
-				createLogicalReplicationSlotOptionsModel.SetDatabaseName("testString")
-				createLogicalReplicationSlotOptionsModel.SetPluginType("testString")
+				createLogicalReplicationSlotOptionsModel.SetLogicalReplicationSlot(logicalReplicationSlotModel)
 				createLogicalReplicationSlotOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(createLogicalReplicationSlotOptionsModel).ToNot(BeNil())
 				Expect(createLogicalReplicationSlotOptionsModel.ID).To(Equal(core.StringPtr("testString")))
-				Expect(createLogicalReplicationSlotOptionsModel.Name).To(Equal(core.StringPtr("testString")))
-				Expect(createLogicalReplicationSlotOptionsModel.DatabaseName).To(Equal(core.StringPtr("testString")))
-				Expect(createLogicalReplicationSlotOptionsModel.PluginType).To(Equal(core.StringPtr("testString")))
+				Expect(createLogicalReplicationSlotOptionsModel.LogicalReplicationSlot).To(Equal(logicalReplicationSlotModel))
 				Expect(createLogicalReplicationSlotOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewDeleteAllowlistEntryOptions successfully`, func() {
@@ -7728,6 +7751,14 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(listRemotesOptionsModel).ToNot(BeNil())
 				Expect(listRemotesOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(listRemotesOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewLogicalReplicationSlot successfully`, func() {
+				name := "customer_replication"
+				databaseName := "customers"
+				pluginType := "wal2json"
+				_model, err := cloudDatabasesService.NewLogicalReplicationSlot(name, databaseName, pluginType)
+				Expect(_model).ToNot(BeNil())
+				Expect(err).To(BeNil())
 			})
 			It(`Invoke NewPromoteReadOnlyReplicaOptions successfully`, func() {
 				// Construct an instance of the PromoteReadOnlyReplicaOptions model

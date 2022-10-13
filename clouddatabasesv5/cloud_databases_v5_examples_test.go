@@ -31,7 +31,6 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-//
 // This file provides an example of how to use the Cloud Databases service.
 //
 // The following configuration properties are assumed to be defined:
@@ -45,7 +44,6 @@ import (
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
-//
 const externalConfigFile = "../cloud_databases.env"
 
 var (
@@ -341,11 +339,15 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			fmt.Println("\nCreateLogicalReplicationSlot() result:")
 			// begin-createLogicalReplicationSlot
 
+			logicalReplicationSlot := &clouddatabasesv5.LogicalReplicationSlot{
+				Name:         &logicalRepName,
+				DatabaseName: &databaseName,
+				PluginType:   &pluginType,
+			}
+
 			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
-				ID:           deploymentID,
-				Name:         logicalRepName,
-				DatabaseName: databaseName,
-				PluginType:   pluginType,
+				ID:                     &deploymentID,
+				LogicalReplicationSlot: logicalReplicationSlot,
 			}
 
 			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)

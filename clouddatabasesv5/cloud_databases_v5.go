@@ -1750,14 +1750,8 @@ func (cloudDatabases *CloudDatabasesV5) CreateLogicalReplicationSlotWithContext(
 	builder.AddHeader("Content-Type", "application/json")
 
 	body := make(map[string]interface{})
-	if createLogicalReplicationSlotOptions.Name != nil {
-		body["name"] = createLogicalReplicationSlotOptions.Name
-	}
-	if createLogicalReplicationSlotOptions.DatabaseName != nil {
-		body["database_name"] = createLogicalReplicationSlotOptions.DatabaseName
-	}
-	if createLogicalReplicationSlotOptions.PluginType != nil {
-		body["plugin_type"] = createLogicalReplicationSlotOptions.PluginType
+	if createLogicalReplicationSlotOptions.LogicalReplicationSlot != nil {
+		body["logical_replication_slot"] = createLogicalReplicationSlotOptions.LogicalReplicationSlot
 	}
 	_, err = builder.SetBodyContentJSON(body)
 	if err != nil {
@@ -3462,26 +3456,16 @@ type CreateLogicalReplicationSlotOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// name of the replication slot.
-	Name *string `json:"name" validate:"required"`
-
-	// name of the database the replication slot is created on.
-	DatabaseName *string `json:"database_name" validate:"required"`
-
-	// creating a replication slot is only supported for use with wal2json.
-	PluginType *string `json:"plugin_type" validate:"required"`
+	LogicalReplicationSlot *LogicalReplicationSlot `json:"logical_replication_slot,omitempty"`
 
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
 
 // NewCreateLogicalReplicationSlotOptions : Instantiate CreateLogicalReplicationSlotOptions
-func (*CloudDatabasesV5) NewCreateLogicalReplicationSlotOptions(id string, name string, databaseName string, pluginType string) *CreateLogicalReplicationSlotOptions {
+func (*CloudDatabasesV5) NewCreateLogicalReplicationSlotOptions(id string) *CreateLogicalReplicationSlotOptions {
 	return &CreateLogicalReplicationSlotOptions{
-		ID:           core.StringPtr(id),
-		Name:         core.StringPtr(name),
-		DatabaseName: core.StringPtr(databaseName),
-		PluginType:   core.StringPtr(pluginType),
+		ID: core.StringPtr(id),
 	}
 }
 
@@ -3491,21 +3475,9 @@ func (_options *CreateLogicalReplicationSlotOptions) SetID(id string) *CreateLog
 	return _options
 }
 
-// SetName : Allow user to set Name
-func (_options *CreateLogicalReplicationSlotOptions) SetName(name string) *CreateLogicalReplicationSlotOptions {
-	_options.Name = core.StringPtr(name)
-	return _options
-}
-
-// SetDatabaseName : Allow user to set DatabaseName
-func (_options *CreateLogicalReplicationSlotOptions) SetDatabaseName(databaseName string) *CreateLogicalReplicationSlotOptions {
-	_options.DatabaseName = core.StringPtr(databaseName)
-	return _options
-}
-
-// SetPluginType : Allow user to set PluginType
-func (_options *CreateLogicalReplicationSlotOptions) SetPluginType(pluginType string) *CreateLogicalReplicationSlotOptions {
-	_options.PluginType = core.StringPtr(pluginType)
+// SetLogicalReplicationSlot : Allow user to set LogicalReplicationSlot
+func (_options *CreateLogicalReplicationSlotOptions) SetLogicalReplicationSlot(logicalReplicationSlot *LogicalReplicationSlot) *CreateLogicalReplicationSlotOptions {
+	_options.LogicalReplicationSlot = logicalReplicationSlot
 	return _options
 }
 
@@ -4980,6 +4952,48 @@ type ListRemotesResponse struct {
 func UnmarshalListRemotesResponse(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(ListRemotesResponse)
 	err = core.UnmarshalModel(m, "remotes", &obj.Remotes, UnmarshalRemotes)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// LogicalReplicationSlot : LogicalReplicationSlot struct
+type LogicalReplicationSlot struct {
+	// name of the replication slot.
+	Name *string `json:"name" validate:"required"`
+
+	// name of the database the replication slot is created on.
+	DatabaseName *string `json:"database_name" validate:"required"`
+
+	// creating a replication slot is only supported for use with wal2json.
+	PluginType *string `json:"plugin_type" validate:"required"`
+}
+
+// NewLogicalReplicationSlot : Instantiate LogicalReplicationSlot (Generic Model Constructor)
+func (*CloudDatabasesV5) NewLogicalReplicationSlot(name string, databaseName string, pluginType string) (_model *LogicalReplicationSlot, err error) {
+	_model = &LogicalReplicationSlot{
+		Name:         core.StringPtr(name),
+		DatabaseName: core.StringPtr(databaseName),
+		PluginType:   core.StringPtr(pluginType),
+	}
+	err = core.ValidateStruct(_model, "required parameters")
+	return
+}
+
+// UnmarshalLogicalReplicationSlot unmarshals an instance of LogicalReplicationSlot from the specified map of raw messages.
+func UnmarshalLogicalReplicationSlot(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(LogicalReplicationSlot)
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "database_name", &obj.DatabaseName)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "plugin_type", &obj.PluginType)
 	if err != nil {
 		return
 	}
