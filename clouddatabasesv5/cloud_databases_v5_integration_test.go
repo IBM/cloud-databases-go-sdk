@@ -29,6 +29,7 @@ import (
 	"github.com/IBM/go-sdk-core/v5/core"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	"strings"
 )
 
 /**
@@ -62,6 +63,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 	var shouldSkipTest = func() {
 		Skip("External configuration is not available, skipping tests...")
+	}
+
+	var skipTestNotPGorEDB = func() {
+		if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") {
+			Skip("Not Postgresql or EDB, skipping tests...")
+		}
 	}
 
 	var waitForTask = func(taskID string) {
@@ -277,6 +284,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`KillConnections - Kill connections to a PostgreSQL or EnterpriseDB deployment`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`KillConnections(killConnectionsOptions *KillConnectionsOptions)`, func() {
 
@@ -381,11 +389,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`UpdateDatabaseConfiguration - Change your database configuration`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions)`, func() {
 
 			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
 				MaxConnections: core.Int64Ptr(int64(200)),
+				WalLevel:       core.StringPtr("logical"),
+				MaxWalSenders:  core.Int64Ptr(int64(200)),
 			}
 
 			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
@@ -405,6 +416,76 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
+	Describe(`CreateLogicalReplicationSlot - Creates a logical replication slot`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+			skipTestNotPGorEDB()
+		})
+		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
+
+			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
+				Password: core.StringPtr("xyzzyyzzyx"),
+			}
+
+			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
+				ID:       &deploymentID,
+				UserType: core.StringPtr("database"),
+				Username: core.StringPtr("repl"),
+				User:     aPasswordSettingUserModel,
+			}
+
+			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+
+			passTaskIDLink := *changeUserPasswordResponse.Task.ID
+
+			waitForTask(passTaskIDLink)
+
+			logicalReplicationSlot := &clouddatabasesv5.LogicalReplicationSlot{
+				Name:         core.StringPtr("wj123"),
+				DatabaseName: core.StringPtr("ibmclouddb"),
+				PluginType:   core.StringPtr("wal2json"),
+			}
+
+			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
+				ID:                     &deploymentID,
+				LogicalReplicationSlot: logicalReplicationSlot,
+			}
+
+			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(createLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *createLogicalReplicationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
+
+	Describe(`DeleteLogicalReplicationSlot - Deletes a logical replication slot`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+			skipTestNotPGorEDB()
+		})
+		It(`DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions)`, func() {
+
+			deleteLogicalReplicationSlotOptions := &clouddatabasesv5.DeleteLogicalReplicationSlotOptions{
+				ID:   &deploymentID,
+				Name: core.StringPtr("wj123"),
+			}
+
+			deleteLogicalReplicationResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(deleteLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *deleteLogicalReplicationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
 	Describe(`ListDeployables - List all deployable databases`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -617,6 +698,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`GetPitrData - Get earliest point-in-time-recovery timestamp`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotPGorEDB()
 		})
 		It(`GetPitrData(getPitrDataOptions *GetPitrDataOptions)`, func() {
 
