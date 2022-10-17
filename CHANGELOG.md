@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.2.0...v0.3.0) (2022-10-17)
+
+
+### Features
+
+* **Cloud Databases:** Create and Delete Logical Replication ([#10](https://github.com/IBM/cloud-databases-go-sdk/issues/10)) ([7db643f](https://github.com/IBM/cloud-databases-go-sdk/commit/7db643f8be32f103f125f1c9ca2a8aa7eeff5582))
+
 # [0.2.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.1.0...v0.2.0) (2022-02-17)
 
 
