@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.3.0...v0.3.1) (2022-12-12)
+
+
+### Bug Fixes
+
+* **Cloud Databases:** update Configuration fields ([0addb2e](https://github.com/IBM/cloud-databases-go-sdk/commit/0addb2e7a3617770f607015235d776d62880ba1e))
+
 # [0.3.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.2.0...v0.3.0) (2022-10-17)
 
 
