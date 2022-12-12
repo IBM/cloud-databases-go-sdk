@@ -77,6 +77,18 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		}
 	}
 
+	var skipNoReplica = func() {
+		_, err = os.Stat(externalConfigFile)
+		if err != nil {
+			Skip("External configuration file not found, skipping tests: " + err.Error())
+		}
+
+		replicaID = config["REPLICA_ID"]
+		if replicaID == "" {
+			Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
+		}
+	}
+
 	var waitForTask = func(taskID string) {
 		getTaskOptions := &clouddatabasesv5.GetTaskOptions{
 			ID: &taskID,
@@ -128,10 +140,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			if deploymentID == "" {
 				Skip("Unable to load service DEPLOYMENT_ID configuration property, skipping tests")
 			}
-			replicaID = config["REPLICA_ID"]
-			if replicaID == "" {
-				Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
-			}
 
 			fmt.Printf("Service URL: %s\n", serviceURL)
 			shouldSkipTest = func() {}
@@ -155,34 +163,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	})
 
 	// ------------------ ALLOWLISTING -----------------
-	Describe(`AddAllowlistEntry - Add an address or range to the allowlist for a deployment`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`AddAllowlistEntry(addAllowlistEntryOptions *AddAllowlistEntryOptions)`, func() {
-
-			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address:     core.StringPtr("172.16.0.0/16"),
-				Description: core.StringPtr("Dev IP space 3"),
-			}
-
-			addAllowlistEntryOptions := &clouddatabasesv5.AddAllowlistEntryOptions{
-				ID:        &deploymentID,
-				IPAddress: allowlistEntryModel,
-			}
-
-			addAllowlistEntryResponse, response, err := cloudDatabasesService.AddAllowlistEntry(addAllowlistEntryOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(addAllowlistEntryResponse).ToNot(BeNil())
-
-			taskIDLink = *addAllowlistEntryResponse.Task.ID
-
-			waitForTask(taskIDLink)
-		})
-	})
-
 	Describe(`SetAllowlist - Set the allowlist for a deployment`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -206,6 +186,34 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(setAllowlistResponse).ToNot(BeNil())
 
 			taskIDLink = *setAllowlistResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
+
+	Describe(`AddAllowlistEntry - Add an address or range to the allowlist for a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`AddAllowlistEntry(addAllowlistEntryOptions *AddAllowlistEntryOptions)`, func() {
+
+			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
+				Address:     core.StringPtr("172.16.0.0/16"),
+				Description: core.StringPtr("Dev IP space 3"),
+			}
+
+			addAllowlistEntryOptions := &clouddatabasesv5.AddAllowlistEntryOptions{
+				ID:        &deploymentID,
+				IPAddress: allowlistEntryModel,
+			}
+
+			addAllowlistEntryResponse, response, err := cloudDatabasesService.AddAllowlistEntry(addAllowlistEntryOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(addAllowlistEntryResponse).ToNot(BeNil())
+
+			taskIDLink = *addAllowlistEntryResponse.Task.ID
 
 			waitForTask(taskIDLink)
 		})
@@ -501,6 +509,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`ListRemotes - List read-only replica information`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipNoReplica()
 		})
 		It(`ListRemotes(listRemotesOptions *ListRemotesOptions)`, func() {
 
@@ -518,9 +527,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 	Describe(`ResyncReplica - Resync read-only replica`, func() {
 		BeforeEach(func() {
-			if replicaID == "" {
-				Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
-			}
+			shouldSkipTest()
+			skipNoReplica()
 		})
 		It(`ResyncReplica(resyncReplicaOptions *ResyncReplicaOptions)`, func() {
 
@@ -542,9 +550,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 	Describe(`PromoteReadOnlyReplica - Promote read-only replica to a full deployment`, func() {
 		BeforeEach(func() {
-			if replicaID == "" {
-				Skip("Unable to load service REPLICA_ID configuration property, skipping tests")
-			}
+			shouldSkipTest()
+			skipNoReplica()
 		})
 		It(`PromoteReadOnlyReplica(promoteReadOnlyReplicaOptions *PromoteReadOnlyReplicaOptions)`, func() {
 
@@ -566,6 +573,24 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	})
 
 	// ------------------ BACKUPS -----------------
+	Describe(`StartOndemandBackup - Initiate an on-demand backup`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`StartOndemandBackup(startOndemandBackupOptions *StartOndemandBackupOptions)`, func() {
+
+			startOndemandBackupOptions := &clouddatabasesv5.StartOndemandBackupOptions{
+				ID: &deploymentID,
+			}
+
+			startOndemandBackupResponse, response, err := cloudDatabasesService.StartOndemandBackup(startOndemandBackupOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(startOndemandBackupResponse).ToNot(BeNil())
+		})
+	})
+
 	Describe(`ListDeploymentBackups - List currently available backups from a deployment`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
@@ -604,52 +629,74 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`StartOndemandBackup - Initiate an on-demand backup`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
-		It(`StartOndemandBackup(startOndemandBackupOptions *StartOndemandBackupOptions)`, func() {
-
-			startOndemandBackupOptions := &clouddatabasesv5.StartOndemandBackupOptions{
-				ID: &deploymentID,
-			}
-
-			startOndemandBackupResponse, response, err := cloudDatabasesService.StartOndemandBackup(startOndemandBackupOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(startOndemandBackupResponse).ToNot(BeNil())
-		})
-	})
-
 	// ------------------ CONFIGURATION -----------------
 	Describe(`UpdateDatabaseConfiguration - Change your database configuration`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 			skipTestConfiguration()
 		})
-		It(`UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions)`, func() {
+		It(`UpdateDatabaseConfiguration for Postgresql`, func() {
 
-			configurationModel := &clouddatabasesv5.Configuration{}
-
-			if strings.Contains(deploymentID, "postgresql") && strings.Contains(deploymentID, "enterprisedb") {
-				configurationModel = &clouddatabasesv5.Configuration{
-					MaxConnections: core.Int64Ptr(int64(200)),
-					WalLevel:       core.StringPtr("logical"),
-					MaxWalSenders:  core.Int64Ptr(int64(200)),
-				}
+			if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") {
+				Skip("Database is not postgresql or enterprisedb, skipping tests...")
 			}
 
-			if strings.Contains(deploymentID, "redis") {
-				configurationModel = &clouddatabasesv5.Configuration{
-					MaxmemoryPolicy: core.StringPtr("allkeys-lru"),
-				}
+			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
+				MaxConnections: core.Int64Ptr(int64(200)),
+				WalLevel:       core.StringPtr("logical"),
+				MaxWalSenders:  core.Int64Ptr(int64(200)),
 			}
 
-			if strings.Contains(deploymentID, "mysql") {
-				configurationModel = &clouddatabasesv5.Configuration{
-					MaxConnections: core.Int64Ptr(int64(200)),
-				}
+			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
+				deploymentID,
+			)
+			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
+
+			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
+
+			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+
+		It(`UpdateDatabaseConfiguration for Redis`, func() {
+
+			if !strings.Contains(deploymentID, "redis") {
+				Skip("Database is not redis, skipping tests...")
+			}
+
+			configurationModel := &clouddatabasesv5.ConfigurationRedisConfiguration{
+				MaxmemoryPolicy: core.StringPtr("allkeys-lru"),
+			}
+
+			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
+				deploymentID,
+			)
+			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
+
+			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
+
+			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+
+		It(`UpdateDatabaseConfiguration for MySQL`, func() {
+
+			if !strings.Contains(deploymentID, "mysql") {
+				Skip("Database is not MySQL, skipping tests...")
+			}
+
+			configurationModel := &clouddatabasesv5.ConfigurationMySQLConfiguration{
+				MaxConnections: core.Int64Ptr(int64(200)),
 			}
 
 			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
