@@ -6,7 +6,7 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![CLA assistant](https://cla-assistant.io/readme/badge/ibm/cloud-databases-go-sdk)](https://cla-assistant.io/ibm/cloud-databases-go-sdk)
 
-# IBM Cloud Databases Go SDK 0.3.0
+# IBM Cloud Databases Go SDK 0.3.1
 Go client library to interact with the various [IBM Cloud Cloud Databases APIs](https://cloud.ibm.com/apidocs?category=cloud-databases).
 
 ## Table of Contents
@@ -54,7 +54,7 @@ Service Name | Package name
 * Go version 1.18 or above.
 
 ## Installation
-The current version of this SDK: 0.3.0
+The current version of this SDK: 0.3.1
 
 ### Go modules  
 If your application uses Go modules for dependency management (recommended), just add an import for each service 
