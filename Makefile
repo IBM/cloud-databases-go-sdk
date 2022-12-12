@@ -1,9 +1,12 @@
 # Makefile to build the project
+GOFMT_FILES?= $$(find . -path ./.direnv -prune -false -o -name '*.go')
+COVERAGE    = -coverprofile=coverage.txt -covermode=atomic
 
-COVERAGE = -coverprofile=coverage.txt -covermode=atomic
-
-all: test lint tidy
+all: fmt test lint tidy
 travis-ci: test-cov lint tidy
+
+fmt:
+	gofmt -w $(GOFMT_FILES)
 
 test:
 	go test `go list ./...`
