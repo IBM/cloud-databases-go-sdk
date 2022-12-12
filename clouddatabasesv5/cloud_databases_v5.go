@@ -551,7 +551,7 @@ func (cloudDatabases *CloudDatabasesV5) DeleteDatabaseUserWithContext(ctx contex
 }
 
 // UpdateDatabaseConfiguration : Change your database configuration
-// Change your database configuration. Available for PostgreSQL, EnterpriseDB, MySQL, and Redis ONLY.
+// Change your database configuration. Available for PostgreSQL, EnterpriseDB, MySQL, RabbitMQ and Redis ONLY.
 func (cloudDatabases *CloudDatabasesV5) UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions *UpdateDatabaseConfigurationOptions) (result *UpdateDatabaseConfigurationResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.UpdateDatabaseConfigurationWithContext(context.Background(), updateDatabaseConfigurationOptions)
 }
@@ -2841,13 +2841,11 @@ func UnmarshalCompleteConnectionResponse(m map[string]json.RawMessage, result in
 // Models which "extend" this model:
 // - ConfigurationPgConfiguration
 // - ConfigurationRedisConfiguration
+// - ConfigurationRabbitMqConfiguration
 // - ConfigurationMySQLConfiguration
 type Configuration struct {
-	// Maximum connections allowed.
-	MaxConnections *int64 `json:"max_connections,omitempty"`
-
-	// Max number of transactions that can be in the "prepared" state simultaneously.
-	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
+	// The number of seconds to wait before forces a switch to the next WAL file if a new file has not been started.
+	ArchiveTimeout *int64 `json:"archive_timeout,omitempty"`
 
 	// Deadlock timeout in ms. The time to wait on a lock before checking for deadlock.  Also the duration where lock waits
 	// will be logged.
@@ -2855,6 +2853,23 @@ type Configuration struct {
 
 	// Number of simultaneous requests that can be handled efficiently by the disk subsystem.
 	EffectiveIoConcurrency *int64 `json:"effective_io_concurrency,omitempty"`
+
+	// The minimum number of milliseconds for execution time above which statements will be logged.
+	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
+
+	// Causes each attempted connection to the server to be logged, as well as successful completion of client
+	// authentication.
+	LogConnections *string `json:"log_connections,omitempty"`
+
+	// Causes session terminations to be logged. The log output provides information similar to log_connections, plus the
+	// duration of the session.
+	LogDisconnections *string `json:"log_disconnections,omitempty"`
+
+	// Maximum connections allowed.
+	MaxConnections *int64 `json:"max_connections,omitempty"`
+
+	// Max number of transactions that can be in the "prepared" state simultaneously.
+	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
 
 	// Maximum number of simultaneously defined replication slots.
 	MaxReplicationSlots *int64 `json:"max_replication_slots,omitempty"`
@@ -2870,14 +2885,18 @@ type Configuration struct {
 	// synchronous replication which will impact performance and availabilty.
 	SynchronousCommit *string `json:"synchronous_commit,omitempty"`
 
+	// The number of TCP keepalives that can be lost before the server's connection to the client is considered dead.
+	TCPKeepalivesCount *int64 `json:"tcp_keepalives_count,omitempty"`
+
+	// The number of seconds of inactivity after which TCP should send a keepalive message to the client.
+	TCPKeepalivesIdle *int64 `json:"tcp_keepalives_idle,omitempty"`
+
+	// The number of seconds after which a TCP keepalive message that is not acknowledged by the client should be
+	// retransmitted.
+	TCPKeepalivesInterval *int64 `json:"tcp_keepalives_interval,omitempty"`
+
 	// WAL level.  Set to logical to use logical decoding or logical replication.
 	WalLevel *string `json:"wal_level,omitempty"`
-
-	// The number of seconds to wait before forces a switch to the next WAL file if a new file has not been started.
-	ArchiveTimeout *int64 `json:"archive_timeout,omitempty"`
-
-	// The minimum number of milliseconds for execution time above which statements will be logged.
-	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
 
 	// The maximum memory Redis should use, as bytes.
 	MaxmemoryRedis *int64 `json:"maxmemory-redis,omitempty"`
@@ -2894,13 +2913,67 @@ type Configuration struct {
 	// Whether or not to stop accepting writes when background persistence actions fail.
 	StopWritesOnBgsaveError *string `json:"stop-writes-on-bgsave-error,omitempty"`
 
-	// Maximum age for a binlog in seconds. If a binlog is older, it's archived.
-	MysqlMaxBinlogAgeSec *int64 `json:"mysql_max_binlog_age_sec,omitempty"`
+	// Automatically delete undefined queues.
+	DeleteUndefinedQueues *bool `json:"delete_undefined_queues,omitempty"`
 
 	// Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT
 	// statements that do not explicitly specify an authentication plugin.
-	MysqlDefaultAuthenticationPlugin *string `json:"mysql_default_authentication_plugin,omitempty"`
+	DefaultAuthenticationPlugin *string `json:"default_authentication_plugin,omitempty"`
+
+	// Percentage of memory to use for innodb_buffer_pool_size.
+	InnodbBufferPoolSizePercentage *int64 `json:"innodb_buffer_pool_size_percentage,omitempty"`
+
+	// Controls the balance between strict ACID compliance for commit operations and higher performance. See official MySQL
+	// documentation for more details.
+	InnodbFlushLogAtTrxCommit *int64 `json:"innodb_flush_log_at_trx_commit,omitempty"`
+
+	// InnoDB log buffer size in bytes.
+	InnodbLogBufferSize *int64 `json:"innodb_log_buffer_size,omitempty"`
+
+	// InnoDB log file size in bytes.
+	InnodbLogFileSize *int64 `json:"innodb_log_file_size,omitempty"`
+
+	// An InnoDB MySQL option that may affect performance. Check official MySQL documentation for a detailed description of
+	// this option's use cases.
+	InnodbLruScanDepth *int64 `json:"innodb_lru_scan_depth,omitempty"`
+
+	// The number of I/O Threads for read operations in InnoDB.
+	InnodbReadIoThreads *int64 `json:"innodb_read_io_threads,omitempty"`
+
+	// The number of I/O Threads for write operations in InnoDB.
+	InnodbWriteIoThreads *int64 `json:"innodb_write_io_threads,omitempty"`
+
+	// The maximum size of a packet message buffer in bytes.
+	MaxAllowedPacket *int64 `json:"max_allowed_packet,omitempty"`
+
+	// Maximum age for a binlog in seconds. If a binlog is older, it's archived.
+	MysqlMaxBinlogAgeSec *int64 `json:"mysql_max_binlog_age_sec,omitempty"`
+
+	// The number of seconds to wait for more data from a connection before aborting the read.
+	NetReadTimeout *int64 `json:"net_read_timeout,omitempty"`
+
+	// The number of seconds to wait for a block to be written to a connection before aborting the write.
+	NetWriteTimeout *int64 `json:"net_write_timeout,omitempty"`
+
+	// The comma-separated list of SQL modes applied on this server globally.
+	SQLMode *string `json:"sql_mode,omitempty"`
 }
+
+// Constants associated with the Configuration.LogConnections property.
+// Causes each attempted connection to the server to be logged, as well as successful completion of client
+// authentication.
+const (
+	ConfigurationLogConnectionsOffConst = "off"
+	ConfigurationLogConnectionsOnConst  = "on"
+)
+
+// Constants associated with the Configuration.LogDisconnections property.
+// Causes session terminations to be logged. The log output provides information similar to log_connections, plus the
+// duration of the session.
+const (
+	ConfigurationLogDisconnectionsOffConst = "off"
+	ConfigurationLogDisconnectionsOnConst  = "on"
+)
 
 // Constants associated with the Configuration.SynchronousCommit property.
 // Sets the current transaction's synchronization level.  Off can result in data loss.  remote_write with enable
@@ -2942,12 +3015,13 @@ const (
 	ConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
 )
 
-// Constants associated with the Configuration.MysqlDefaultAuthenticationPlugin property.
+// Constants associated with the Configuration.DefaultAuthenticationPlugin property.
 // Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT statements
 // that do not explicitly specify an authentication plugin.
 const (
-	ConfigurationMysqlDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
-	ConfigurationMysqlDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
+	ConfigurationDefaultAuthenticationPluginCachingSha2PasswordConst = "caching_sha2_password"
+	ConfigurationDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
+	ConfigurationDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
 )
 
 func (*Configuration) isaConfiguration() bool {
@@ -2961,11 +3035,7 @@ type ConfigurationIntf interface {
 // UnmarshalConfiguration unmarshals an instance of Configuration from the specified map of raw messages.
 func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(Configuration)
-	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
+	err = core.UnmarshalPrimitive(m, "archive_timeout", &obj.ArchiveTimeout)
 	if err != nil {
 		return
 	}
@@ -2974,6 +3044,26 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "effective_io_concurrency", &obj.EffectiveIoConcurrency)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_connections", &obj.LogConnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_disconnections", &obj.LogDisconnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
 	if err != nil {
 		return
 	}
@@ -2993,15 +3083,19 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 	if err != nil {
 		return
 	}
+	err = core.UnmarshalPrimitive(m, "tcp_keepalives_count", &obj.TCPKeepalivesCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "tcp_keepalives_idle", &obj.TCPKeepalivesIdle)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "tcp_keepalives_interval", &obj.TCPKeepalivesInterval)
+	if err != nil {
+		return
+	}
 	err = core.UnmarshalPrimitive(m, "wal_level", &obj.WalLevel)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "archive_timeout", &obj.ArchiveTimeout)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
 	if err != nil {
 		return
 	}
@@ -3025,11 +3119,59 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 	if err != nil {
 		return
 	}
+	err = core.UnmarshalPrimitive(m, "delete_undefined_queues", &obj.DeleteUndefinedQueues)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "default_authentication_plugin", &obj.DefaultAuthenticationPlugin)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_buffer_pool_size_percentage", &obj.InnodbBufferPoolSizePercentage)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_flush_log_at_trx_commit", &obj.InnodbFlushLogAtTrxCommit)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_log_buffer_size", &obj.InnodbLogBufferSize)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_log_file_size", &obj.InnodbLogFileSize)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_lru_scan_depth", &obj.InnodbLruScanDepth)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_read_io_threads", &obj.InnodbReadIoThreads)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_write_io_threads", &obj.InnodbWriteIoThreads)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_allowed_packet", &obj.MaxAllowedPacket)
+	if err != nil {
+		return
+	}
 	err = core.UnmarshalPrimitive(m, "mysql_max_binlog_age_sec", &obj.MysqlMaxBinlogAgeSec)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "mysql_default_authentication_plugin", &obj.MysqlDefaultAuthenticationPlugin)
+	err = core.UnmarshalPrimitive(m, "net_read_timeout", &obj.NetReadTimeout)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "net_write_timeout", &obj.NetWriteTimeout)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "sql_mode", &obj.SQLMode)
 	if err != nil {
 		return
 	}
@@ -3045,8 +3187,8 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 // - ConnectionRabbitMqConnection
 // - ConnectionEtcdConnection
 // - ConnectionMongoDbConnection
-// - ConnectionMongoDbeeOpsManagerConnection
 // - ConnectionMongoDbeeConnection
+// - ConnectionMongoDbeeOpsManagerConnection
 // - ConnectionMySQLConnection
 // - ConnectionDataStaxConnection
 // - ConnectionEnterpriseDbConnection
@@ -5954,23 +6096,59 @@ func UnmarshalAutoscalingSetGroupAutoscalingAutoscalingMemoryGroup(m map[string]
 // ConfigurationMySQLConfiguration : MySQL Configuration.
 // This model "extends" Configuration
 type ConfigurationMySQLConfiguration struct {
-	// Maximum age for a binlog in seconds. If a binlog is older, it's archived.
-	MysqlMaxBinlogAgeSec *int64 `json:"mysql_max_binlog_age_sec,omitempty"`
+	// Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT
+	// statements that do not explicitly specify an authentication plugin.
+	DefaultAuthenticationPlugin *string `json:"default_authentication_plugin,omitempty"`
+
+	// Percentage of memory to use for innodb_buffer_pool_size.
+	InnodbBufferPoolSizePercentage *int64 `json:"innodb_buffer_pool_size_percentage,omitempty"`
+
+	// Controls the balance between strict ACID compliance for commit operations and higher performance. See official MySQL
+	// documentation for more details.
+	InnodbFlushLogAtTrxCommit *int64 `json:"innodb_flush_log_at_trx_commit,omitempty"`
+
+	// InnoDB log buffer size in bytes.
+	InnodbLogBufferSize *int64 `json:"innodb_log_buffer_size,omitempty"`
+
+	// InnoDB log file size in bytes.
+	InnodbLogFileSize *int64 `json:"innodb_log_file_size,omitempty"`
+
+	// An InnoDB MySQL option that may affect performance. Check official MySQL documentation for a detailed description of
+	// this option's use cases.
+	InnodbLruScanDepth *int64 `json:"innodb_lru_scan_depth,omitempty"`
+
+	// The number of I/O Threads for read operations in InnoDB.
+	InnodbReadIoThreads *int64 `json:"innodb_read_io_threads,omitempty"`
+
+	// The number of I/O Threads for write operations in InnoDB.
+	InnodbWriteIoThreads *int64 `json:"innodb_write_io_threads,omitempty"`
+
+	// The maximum size of a packet message buffer in bytes.
+	MaxAllowedPacket *int64 `json:"max_allowed_packet,omitempty"`
 
 	// Maximum number of allowed MySQL connections.
 	MaxConnections *int64 `json:"max_connections,omitempty"`
 
-	// Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT
-	// statements that do not explicitly specify an authentication plugin.
-	MysqlDefaultAuthenticationPlugin *string `json:"mysql_default_authentication_plugin,omitempty"`
+	// Maximum age for a binlog in seconds. If a binlog is older, it's archived.
+	MysqlMaxBinlogAgeSec *int64 `json:"mysql_max_binlog_age_sec,omitempty"`
+
+	// The number of seconds to wait for more data from a connection before aborting the read.
+	NetReadTimeout *int64 `json:"net_read_timeout,omitempty"`
+
+	// The number of seconds to wait for a block to be written to a connection before aborting the write.
+	NetWriteTimeout *int64 `json:"net_write_timeout,omitempty"`
+
+	// The comma-separated list of SQL modes applied on this server globally.
+	SQLMode *string `json:"sql_mode,omitempty"`
 }
 
-// Constants associated with the ConfigurationMySQLConfiguration.MysqlDefaultAuthenticationPlugin property.
+// Constants associated with the ConfigurationMySQLConfiguration.DefaultAuthenticationPlugin property.
 // Determines which authentication plugin the server assigns to new accounts created by CREATE USER and GRANT statements
 // that do not explicitly specify an authentication plugin.
 const (
-	ConfigurationMySQLConfigurationMysqlDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
-	ConfigurationMySQLConfigurationMysqlDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
+	ConfigurationMySQLConfigurationDefaultAuthenticationPluginCachingSha2PasswordConst = "caching_sha2_password"
+	ConfigurationMySQLConfigurationDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
+	ConfigurationMySQLConfigurationDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
 )
 
 func (*ConfigurationMySQLConfiguration) isaConfiguration() bool {
@@ -5980,7 +6158,39 @@ func (*ConfigurationMySQLConfiguration) isaConfiguration() bool {
 // UnmarshalConfigurationMySQLConfiguration unmarshals an instance of ConfigurationMySQLConfiguration from the specified map of raw messages.
 func UnmarshalConfigurationMySQLConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(ConfigurationMySQLConfiguration)
-	err = core.UnmarshalPrimitive(m, "mysql_max_binlog_age_sec", &obj.MysqlMaxBinlogAgeSec)
+	err = core.UnmarshalPrimitive(m, "default_authentication_plugin", &obj.DefaultAuthenticationPlugin)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_buffer_pool_size_percentage", &obj.InnodbBufferPoolSizePercentage)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_flush_log_at_trx_commit", &obj.InnodbFlushLogAtTrxCommit)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_log_buffer_size", &obj.InnodbLogBufferSize)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_log_file_size", &obj.InnodbLogFileSize)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_lru_scan_depth", &obj.InnodbLruScanDepth)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_read_io_threads", &obj.InnodbReadIoThreads)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "innodb_write_io_threads", &obj.InnodbWriteIoThreads)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_allowed_packet", &obj.MaxAllowedPacket)
 	if err != nil {
 		return
 	}
@@ -5988,7 +6198,19 @@ func UnmarshalConfigurationMySQLConfiguration(m map[string]json.RawMessage, resu
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "mysql_default_authentication_plugin", &obj.MysqlDefaultAuthenticationPlugin)
+	err = core.UnmarshalPrimitive(m, "mysql_max_binlog_age_sec", &obj.MysqlMaxBinlogAgeSec)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "net_read_timeout", &obj.NetReadTimeout)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "net_write_timeout", &obj.NetWriteTimeout)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "sql_mode", &obj.SQLMode)
 	if err != nil {
 		return
 	}
@@ -5999,11 +6221,8 @@ func UnmarshalConfigurationMySQLConfiguration(m map[string]json.RawMessage, resu
 // ConfigurationPgConfiguration : PostgreSQL and EnterpriseDB Configuration.
 // This model "extends" Configuration
 type ConfigurationPgConfiguration struct {
-	// Maximum connections allowed.
-	MaxConnections *int64 `json:"max_connections,omitempty"`
-
-	// Max number of transactions that can be in the "prepared" state simultaneously.
-	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
+	// The number of seconds to wait before forces a switch to the next WAL file if a new file has not been started.
+	ArchiveTimeout *int64 `json:"archive_timeout,omitempty"`
 
 	// Deadlock timeout in ms. The time to wait on a lock before checking for deadlock.  Also the duration where lock waits
 	// will be logged.
@@ -6011,6 +6230,23 @@ type ConfigurationPgConfiguration struct {
 
 	// Number of simultaneous requests that can be handled efficiently by the disk subsystem.
 	EffectiveIoConcurrency *int64 `json:"effective_io_concurrency,omitempty"`
+
+	// The minimum number of milliseconds for execution time above which statements will be logged.
+	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
+
+	// Causes each attempted connection to the server to be logged, as well as successful completion of client
+	// authentication.
+	LogConnections *string `json:"log_connections,omitempty"`
+
+	// Causes session terminations to be logged. The log output provides information similar to log_connections, plus the
+	// duration of the session.
+	LogDisconnections *string `json:"log_disconnections,omitempty"`
+
+	// Maximum connections allowed.
+	MaxConnections *int64 `json:"max_connections,omitempty"`
+
+	// Max number of transactions that can be in the "prepared" state simultaneously.
+	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
 
 	// Maximum number of simultaneously defined replication slots.
 	MaxReplicationSlots *int64 `json:"max_replication_slots,omitempty"`
@@ -6026,15 +6262,35 @@ type ConfigurationPgConfiguration struct {
 	// synchronous replication which will impact performance and availabilty.
 	SynchronousCommit *string `json:"synchronous_commit,omitempty"`
 
+	// The number of TCP keepalives that can be lost before the server's connection to the client is considered dead.
+	TCPKeepalivesCount *int64 `json:"tcp_keepalives_count,omitempty"`
+
+	// The number of seconds of inactivity after which TCP should send a keepalive message to the client.
+	TCPKeepalivesIdle *int64 `json:"tcp_keepalives_idle,omitempty"`
+
+	// The number of seconds after which a TCP keepalive message that is not acknowledged by the client should be
+	// retransmitted.
+	TCPKeepalivesInterval *int64 `json:"tcp_keepalives_interval,omitempty"`
+
 	// WAL level.  Set to logical to use logical decoding or logical replication.
 	WalLevel *string `json:"wal_level,omitempty"`
-
-	// The number of seconds to wait before forces a switch to the next WAL file if a new file has not been started.
-	ArchiveTimeout *int64 `json:"archive_timeout,omitempty"`
-
-	// The minimum number of milliseconds for execution time above which statements will be logged.
-	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
 }
+
+// Constants associated with the ConfigurationPgConfiguration.LogConnections property.
+// Causes each attempted connection to the server to be logged, as well as successful completion of client
+// authentication.
+const (
+	ConfigurationPgConfigurationLogConnectionsOffConst = "off"
+	ConfigurationPgConfigurationLogConnectionsOnConst  = "on"
+)
+
+// Constants associated with the ConfigurationPgConfiguration.LogDisconnections property.
+// Causes session terminations to be logged. The log output provides information similar to log_connections, plus the
+// duration of the session.
+const (
+	ConfigurationPgConfigurationLogDisconnectionsOffConst = "off"
+	ConfigurationPgConfigurationLogDisconnectionsOnConst  = "on"
+)
 
 // Constants associated with the ConfigurationPgConfiguration.SynchronousCommit property.
 // Sets the current transaction's synchronization level.  Off can result in data loss.  remote_write with enable
@@ -6058,11 +6314,7 @@ func (*ConfigurationPgConfiguration) isaConfiguration() bool {
 // UnmarshalConfigurationPgConfiguration unmarshals an instance of ConfigurationPgConfiguration from the specified map of raw messages.
 func UnmarshalConfigurationPgConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(ConfigurationPgConfiguration)
-	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
+	err = core.UnmarshalPrimitive(m, "archive_timeout", &obj.ArchiveTimeout)
 	if err != nil {
 		return
 	}
@@ -6071,6 +6323,26 @@ func UnmarshalConfigurationPgConfiguration(m map[string]json.RawMessage, result 
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "effective_io_concurrency", &obj.EffectiveIoConcurrency)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_connections", &obj.LogConnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_disconnections", &obj.LogDisconnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
 	if err != nil {
 		return
 	}
@@ -6090,15 +6362,41 @@ func UnmarshalConfigurationPgConfiguration(m map[string]json.RawMessage, result 
 	if err != nil {
 		return
 	}
+	err = core.UnmarshalPrimitive(m, "tcp_keepalives_count", &obj.TCPKeepalivesCount)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "tcp_keepalives_idle", &obj.TCPKeepalivesIdle)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "tcp_keepalives_interval", &obj.TCPKeepalivesInterval)
+	if err != nil {
+		return
+	}
 	err = core.UnmarshalPrimitive(m, "wal_level", &obj.WalLevel)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "archive_timeout", &obj.ArchiveTimeout)
-	if err != nil {
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConfigurationRabbitMqConfiguration : MySQL Configuration.
+// This model "extends" Configuration
+type ConfigurationRabbitMqConfiguration struct {
+	// Automatically delete undefined queues.
+	DeleteUndefinedQueues *bool `json:"delete_undefined_queues,omitempty"`
+}
+
+func (*ConfigurationRabbitMqConfiguration) isaConfiguration() bool {
+	return true
+}
+
+// UnmarshalConfigurationRabbitMqConfiguration unmarshals an instance of ConfigurationRabbitMqConfiguration from the specified map of raw messages.
+func UnmarshalConfigurationRabbitMqConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConfigurationRabbitMqConfiguration)
+	err = core.UnmarshalPrimitive(m, "delete_undefined_queues", &obj.DeleteUndefinedQueues)
 	if err != nil {
 		return
 	}
