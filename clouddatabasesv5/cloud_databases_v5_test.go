@@ -21,7 +21,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -639,7 +638,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform": "satellite, classic", "platform_options": {"mapKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
+					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform": "satellite, classic", "platform_options": {"anyKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
 				}))
 			})
 			It(`Invoke GetDeploymentInfo successfully with retries`, func() {
@@ -693,7 +692,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform": "satellite, classic", "platform_options": {"mapKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
+					fmt.Fprintf(res, "%s", `{"deployment": {"id": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "name": "crn:v1:bluemix:public:databases-for-redis:us-south:a/274074dce64e9c423ffc238516c755e1:29caf0e7-120f-4da8-9551-3abf57ebcfc7::", "type": "redis", "platform": "satellite, classic", "platform_options": {"anyKey": "anyValue"}, "version": "4", "admin_usernames": {"mapKey": "Inner"}, "enable_public_endpoints": true, "enable_private_endpoints": false}}`)
 				}))
 			})
 			It(`Invoke GetDeploymentInfo successfully`, func() {
@@ -2343,7 +2342,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the PromoteReadOnlyReplicaOptions model
 				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
 				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
-				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Promotion = map[string]interface{}{"anyKey": "anyValue"}
 				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.PromoteReadOnlyReplica(promoteReadOnlyReplicaOptionsModel)
@@ -2411,7 +2410,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the PromoteReadOnlyReplicaOptions model
 				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
 				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
-				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Promotion = map[string]interface{}{"anyKey": "anyValue"}
 				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -2487,7 +2486,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the PromoteReadOnlyReplicaOptions model
 				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
 				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
-				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Promotion = map[string]interface{}{"anyKey": "anyValue"}
 				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -2508,7 +2507,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the PromoteReadOnlyReplicaOptions model
 				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
 				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
-				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Promotion = map[string]interface{}{"anyKey": "anyValue"}
 				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -2550,7 +2549,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the PromoteReadOnlyReplicaOptions model
 				promoteReadOnlyReplicaOptionsModel := new(clouddatabasesv5.PromoteReadOnlyReplicaOptions)
 				promoteReadOnlyReplicaOptionsModel.ID = core.StringPtr("testString")
-				promoteReadOnlyReplicaOptionsModel.Promotion = make(map[string]interface{})
+				promoteReadOnlyReplicaOptionsModel.Promotion = map[string]interface{}{"anyKey": "anyValue"}
 				promoteReadOnlyReplicaOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
@@ -3906,7 +3905,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"anyKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke GetConnection successfully with retries`, func() {
@@ -3965,7 +3964,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"anyKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke GetConnection successfully`, func() {
@@ -4156,7 +4155,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"anyKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke CompleteConnection successfully with retries`, func() {
@@ -4231,7 +4230,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"mapKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"mapKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
+					fmt.Fprintf(res, "%s", `{"connection": {"postgres": {"type": "uri", "composed": ["Composed"], "scheme": "Scheme", "hosts": [{"hostname": "Hostname", "port": 4}], "path": "Path", "query_options": {"anyKey": "anyValue"}, "authentication": {"method": "Method", "username": "Username", "password": "Password"}, "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}, "ssl": false, "browser_accessible": false, "database": "Database"}, "cli": {"type": "cli", "composed": ["Composed"], "environment": {"anyKey": "anyValue"}, "bin": "Bin", "arguments": [["Arguments"]], "certificate": {"name": "Name", "certificate_base64": "CertificateBase64"}}}}`)
 				}))
 			})
 			It(`Invoke CompleteConnection successfully`, func() {
@@ -5364,7 +5363,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("PATCH"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke SetAutoscalingConditions with error: Operation response processing error`, func() {
@@ -5748,7 +5747,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("DELETE"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke KillConnections with error: Operation response processing error`, func() {
@@ -5960,7 +5959,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.Method).To(Equal("POST"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, `} this is not valid json {`)
+					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
 			It(`Invoke CreateLogicalReplicationSlot with error: Operation response processing error`, func() {
@@ -7765,11 +7764,11 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				id := "testString"
 				promoteReadOnlyReplicaOptionsModel := cloudDatabasesService.NewPromoteReadOnlyReplicaOptions(id)
 				promoteReadOnlyReplicaOptionsModel.SetID("testString")
-				promoteReadOnlyReplicaOptionsModel.SetPromotion(make(map[string]interface{}))
+				promoteReadOnlyReplicaOptionsModel.SetPromotion(map[string]interface{}{"anyKey": "anyValue"})
 				promoteReadOnlyReplicaOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(promoteReadOnlyReplicaOptionsModel).ToNot(BeNil())
 				Expect(promoteReadOnlyReplicaOptionsModel.ID).To(Equal(core.StringPtr("testString")))
-				Expect(promoteReadOnlyReplicaOptionsModel.Promotion).To(Equal(make(map[string]interface{})))
+				Expect(promoteReadOnlyReplicaOptionsModel.Promotion).To(Equal(map[string]interface{}{"anyKey": "anyValue"}))
 				Expect(promoteReadOnlyReplicaOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewResyncReplicaOptions successfully`, func() {
@@ -7824,11 +7823,11 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the AutoscalingMemoryGroupMemoryRate model
 				autoscalingMemoryGroupMemoryRateModel := new(clouddatabasesv5.AutoscalingMemoryGroupMemoryRate)
 				Expect(autoscalingMemoryGroupMemoryRateModel).ToNot(BeNil())
-				autoscalingMemoryGroupMemoryRateModel.IncreasePercent = core.Float64Ptr(float64(10.0))
+				autoscalingMemoryGroupMemoryRateModel.IncreasePercent = core.Float64Ptr(float64(10))
 				autoscalingMemoryGroupMemoryRateModel.PeriodSeconds = core.Int64Ptr(int64(300))
 				autoscalingMemoryGroupMemoryRateModel.LimitMbPerMember = core.Float64Ptr(float64(125952))
 				autoscalingMemoryGroupMemoryRateModel.Units = core.StringPtr("mb")
-				Expect(autoscalingMemoryGroupMemoryRateModel.IncreasePercent).To(Equal(core.Float64Ptr(float64(10.0))))
+				Expect(autoscalingMemoryGroupMemoryRateModel.IncreasePercent).To(Equal(core.Float64Ptr(float64(10))))
 				Expect(autoscalingMemoryGroupMemoryRateModel.PeriodSeconds).To(Equal(core.Int64Ptr(int64(300))))
 				Expect(autoscalingMemoryGroupMemoryRateModel.LimitMbPerMember).To(Equal(core.Float64Ptr(float64(125952))))
 				Expect(autoscalingMemoryGroupMemoryRateModel.Units).To(Equal(core.StringPtr("mb")))
@@ -8010,7 +8009,7 @@ func CreateMockUUID(mockData string) *strfmt.UUID {
 }
 
 func CreateMockReader(mockData string) io.ReadCloser {
-	return ioutil.NopCloser(bytes.NewReader([]byte(mockData)))
+	return io.NopCloser(bytes.NewReader([]byte(mockData)))
 }
 
 func CreateMockDate(mockData string) *strfmt.Date {
