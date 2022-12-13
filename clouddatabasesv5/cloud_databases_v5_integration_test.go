@@ -71,6 +71,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		}
 	}
 
+	var skipTestNotPG = func() {
+		if !strings.Contains(deploymentID, "postgresql") {
+			Skip("Not Postgresql or EDB, skipping tests...")
+		}
+	}
+
 	var skipTestConfiguration = func() {
 		if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") && !strings.Contains(deploymentID, "redis") && !strings.Contains(deploymentID, "mysql") {
 			Skip("Cannot configure resource, skipping tests...")
@@ -255,6 +261,166 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(deleteAllowlistEntryResponse).ToNot(BeNil())
 
 			taskIDLink = *deleteAllowlistEntryResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
+
+	// ------------------ CONFIGURATION -----------------
+	Describe(`UpdateDatabaseConfiguration - Change your database configuration`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+			skipTestConfiguration()
+		})
+
+		It(`UpdateDatabaseConfiguration for Redis`, func() {
+
+			if !strings.Contains(deploymentID, "redis") {
+				Skip("Database is not redis, skipping tests...")
+			}
+
+			configurationModel := &clouddatabasesv5.ConfigurationRedisConfiguration{
+				MaxmemoryPolicy: core.StringPtr("allkeys-lru"),
+			}
+
+			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
+				deploymentID,
+			)
+			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
+
+			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
+
+			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+
+		It(`UpdateDatabaseConfiguration for MySQL`, func() {
+
+			if !strings.Contains(deploymentID, "mysql") {
+				Skip("Database is not MySQL, skipping tests...")
+			}
+
+			configurationModel := &clouddatabasesv5.ConfigurationMySQLConfiguration{
+				MaxConnections: core.Int64Ptr(int64(200)),
+			}
+
+			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
+				deploymentID,
+			)
+			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
+
+			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
+
+			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+
+		It(`UpdateDatabaseConfiguration for Postgresql or EDB`, func() {
+
+			if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") {
+				Skip("Database is not postgresql or enterprisedb, skipping tests...")
+			}
+
+			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
+				MaxConnections: core.Int64Ptr(int64(300)),
+				WalLevel:       core.StringPtr("logical"),
+				MaxWalSenders:  core.Int64Ptr(int64(300)),
+			}
+
+			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
+				deploymentID,
+			)
+			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
+
+			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
+
+			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
+
+	// ------------------ LOGICAL REPLICATION SLOT -----------------
+	Describe(`CreateLogicalReplicationSlot - Creates a logical replication slot`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+			skipTestNotPG()
+		})
+		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
+
+			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
+				Password: core.StringPtr("password12"),
+			}
+
+			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
+				ID:       &deploymentID,
+				UserType: core.StringPtr("database"),
+				Username: core.StringPtr("repl"),
+				User:     aPasswordSettingUserModel,
+			}
+
+			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+
+			passTaskIDLink := *changeUserPasswordResponse.Task.ID
+
+			waitForTask(passTaskIDLink)
+
+			logicalReplicationSlot := &clouddatabasesv5.LogicalReplicationSlot{
+				Name:         core.StringPtr("test123"),
+				DatabaseName: core.StringPtr("ibmclouddb"),
+				PluginType:   core.StringPtr("wal2json"),
+			}
+
+			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
+				ID:                     &deploymentID,
+				LogicalReplicationSlot: logicalReplicationSlot,
+			}
+
+			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(createLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *createLogicalReplicationResponse.Task.ID
+
+			waitForTask(taskIDLink)
+		})
+	})
+
+	Describe(`DeleteLogicalReplicationSlot - Deletes a logical replication slot`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+			skipTestNotPG()
+		})
+		It(`DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions)`, func() {
+
+			deleteLogicalReplicationSlotOptions := &clouddatabasesv5.DeleteLogicalReplicationSlotOptions{
+				ID:   &deploymentID,
+				Name: core.StringPtr("wj123"),
+			}
+
+			deleteLogicalReplicationResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(202))
+			Expect(deleteLogicalReplicationResponse).ToNot(BeNil())
+
+			taskIDLink = *deleteLogicalReplicationResponse.Task.ID
 
 			waitForTask(taskIDLink)
 		})
@@ -629,165 +795,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	// ------------------ CONFIGURATION -----------------
-	Describe(`UpdateDatabaseConfiguration - Change your database configuration`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-			skipTestConfiguration()
-		})
-		It(`UpdateDatabaseConfiguration for Postgresql`, func() {
-
-			if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") {
-				Skip("Database is not postgresql or enterprisedb, skipping tests...")
-			}
-
-			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
-				MaxConnections: core.Int64Ptr(int64(200)),
-				WalLevel:       core.StringPtr("logical"),
-				MaxWalSenders:  core.Int64Ptr(int64(200)),
-			}
-
-			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
-				deploymentID,
-			)
-			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
-
-			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
-
-			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
-
-			waitForTask(taskIDLink)
-		})
-
-		It(`UpdateDatabaseConfiguration for Redis`, func() {
-
-			if !strings.Contains(deploymentID, "redis") {
-				Skip("Database is not redis, skipping tests...")
-			}
-
-			configurationModel := &clouddatabasesv5.ConfigurationRedisConfiguration{
-				MaxmemoryPolicy: core.StringPtr("allkeys-lru"),
-			}
-
-			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
-				deploymentID,
-			)
-			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
-
-			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
-
-			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
-
-			waitForTask(taskIDLink)
-		})
-
-		It(`UpdateDatabaseConfiguration for MySQL`, func() {
-
-			if !strings.Contains(deploymentID, "mysql") {
-				Skip("Database is not MySQL, skipping tests...")
-			}
-
-			configurationModel := &clouddatabasesv5.ConfigurationMySQLConfiguration{
-				MaxConnections: core.Int64Ptr(int64(200)),
-			}
-
-			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
-				deploymentID,
-			)
-			updateDatabaseConfigurationOptions.SetConfiguration(configurationModel)
-
-			updateDatabaseConfigurationResponse, response, err := cloudDatabasesService.UpdateDatabaseConfiguration(updateDatabaseConfigurationOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(updateDatabaseConfigurationResponse).ToNot(BeNil())
-
-			taskIDLink = *updateDatabaseConfigurationResponse.Task.ID
-
-			waitForTask(taskIDLink)
-		})
-	})
-
-	// ------------------ LOGICAL REPLICATION SLOT -----------------
-	Describe(`CreateLogicalReplicationSlot - Creates a logical replication slot`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-			skipTestNotPGorEDB()
-		})
-		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
-
-			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
-				Password: core.StringPtr("xyzzyyzzyx"),
-			}
-
-			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
-				ID:       &deploymentID,
-				UserType: core.StringPtr("database"),
-				Username: core.StringPtr("repl"),
-				User:     aPasswordSettingUserModel,
-			}
-
-			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
-
-			passTaskIDLink := *changeUserPasswordResponse.Task.ID
-
-			waitForTask(passTaskIDLink)
-
-			logicalReplicationSlot := &clouddatabasesv5.LogicalReplicationSlot{
-				Name:         core.StringPtr("wj123"),
-				DatabaseName: core.StringPtr("ibmclouddb"),
-				PluginType:   core.StringPtr("wal2json"),
-			}
-
-			createLogicalReplicationSlotOptions := &clouddatabasesv5.CreateLogicalReplicationSlotOptions{
-				ID:                     &deploymentID,
-				LogicalReplicationSlot: logicalReplicationSlot,
-			}
-
-			createLogicalReplicationResponse, response, err := cloudDatabasesService.CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(createLogicalReplicationResponse).ToNot(BeNil())
-
-			taskIDLink = *createLogicalReplicationResponse.Task.ID
-
-			waitForTask(taskIDLink)
-		})
-	})
-
-	Describe(`DeleteLogicalReplicationSlot - Deletes a logical replication slot`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-			skipTestNotPGorEDB()
-		})
-		It(`DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions *DeleteLogicalReplicationSlotOptions)`, func() {
-
-			deleteLogicalReplicationSlotOptions := &clouddatabasesv5.DeleteLogicalReplicationSlotOptions{
-				ID:   &deploymentID,
-				Name: core.StringPtr("wj123"),
-			}
-
-			deleteLogicalReplicationResponse, response, err := cloudDatabasesService.DeleteLogicalReplicationSlot(deleteLogicalReplicationSlotOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(deleteLogicalReplicationResponse).ToNot(BeNil())
-
-			taskIDLink = *deleteLogicalReplicationResponse.Task.ID
-
-			waitForTask(taskIDLink)
-		})
-	})
-
 	// ------------------ SCALING -----------------
 	Describe(`ListDeploymentScalingGroups - List currently available scaling groups from a deployment`, func() {
 		BeforeEach(func() {
@@ -815,12 +822,44 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`SetDeploymentScalingGroup(setDeploymentScalingGroupOptions *SetDeploymentScalingGroupOptions)`, func() {
 
+			var disk int
+			var memory int
+
+			if strings.Contains(deploymentID, "postgresql") {
+				disk = 10240
+				memory = 12288
+			} else if strings.Contains(deploymentID, "elasticsearch") {
+				disk = 21504
+				memory = 6912
+			} else if strings.Contains(deploymentID, "mysql") {
+				disk = 46080
+				memory = 6912
+			} else if strings.Contains(deploymentID, "cassandra") {
+				disk = 76800
+				memory = 40704
+			} else if strings.Contains(deploymentID, "enterprisedb") {
+				disk = 76800
+				memory = 6912
+			} else if strings.Contains(deploymentID, "etcd") {
+				disk = 76800
+				memory = 6912
+			} else if strings.Contains(deploymentID, "mongodb") {
+				disk = 76800
+				memory = 46848
+			} else if strings.Contains(deploymentID, "rabbitmq") {
+				disk = 18432
+				memory = 6912
+			} else if strings.Contains(deploymentID, "redis") {
+				disk = 12288
+				memory = 4608
+			}
+
 			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
-				AllocationMb: core.Int64Ptr(int64(12288)),
+				AllocationMb: core.Int64Ptr(int64(memory)),
 			}
 
 			groupScalingDiskModel := &clouddatabasesv5.GroupScalingDisk{
-				AllocationMb: core.Int64Ptr(int64(20480)),
+				AllocationMb: core.Int64Ptr(int64(disk)),
 			}
 
 			groupScalingModel := &clouddatabasesv5.GroupScaling{
@@ -854,10 +893,118 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`GetDefaultScalingGroups(getDefaultScalingGroupsOptions *GetDefaultScalingGroupsOptions)`, func() {
+		It(`GetDefaultScalingGroups - Postgresql`, func() {
 
 			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
 				Type: core.StringPtr("postgresql"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Datastax`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("datastax_enterprise_full"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Elasticsearch`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("elasticsearch"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Enterprisedb`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("enterprisedb"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Etcd`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("etcd"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Mongodb`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("mongodb"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Mongodbee`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("mongodbee"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - MySQL`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("mysql"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Rabbitmq`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("rabbitmq"),
+			}
+
+			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
+		})
+		It(`GetDefaultScalingGroups - Redis`, func() {
+
+			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
+				Type: core.StringPtr("redis"),
 			}
 
 			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
