@@ -332,9 +332,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			}
 
 			configurationModel := &clouddatabasesv5.ConfigurationPgConfiguration{
-				MaxConnections: core.Int64Ptr(int64(300)),
+				MaxConnections: core.Int64Ptr(int64(200)),
 				WalLevel:       core.StringPtr("logical"),
-				MaxWalSenders:  core.Int64Ptr(int64(300)),
+				MaxWalSenders:  core.Int64Ptr(int64(200)),
 			}
 
 			updateDatabaseConfigurationOptions := cloudDatabasesService.NewUpdateDatabaseConfigurationOptions(
