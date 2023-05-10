@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.45.1-632ec580-20220210-190638
+ * IBM OpenAPI SDK Code Generator Version: 3.71.0-316eb5da-20230504-195406
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -1709,8 +1709,7 @@ func (cloudDatabases *CloudDatabasesV5) KillConnectionsWithContext(ctx context.C
 }
 
 // CreateLogicalReplicationSlot : Create a new logical replication slot
-// Creates a new logical replication slot on the specified database. For use with PostgreSQL, EnterpriseDB, and wal2json
-// only.
+// Creates a new logical replication slot on the specified database. For use with PostgreSQL and wal2json only.
 func (cloudDatabases *CloudDatabasesV5) CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions) (result *CreateLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.CreateLogicalReplicationSlotWithContext(context.Background(), createLogicalReplicationSlotOptions)
 }
@@ -2200,7 +2199,7 @@ func UnmarshalAllowlistEntry(m map[string]json.RawMessage, result interface{}) (
 
 // AutoscalingCPUGroupCPU : AutoscalingCPUGroupCPU struct
 type AutoscalingCPUGroupCPU struct {
-	Scalers interface{} `json:"scalers,omitempty"`
+	Scalers map[string]interface{} `json:"scalers,omitempty"`
 
 	Rate *AutoscalingCPUGroupCPURate `json:"rate,omitempty"`
 }
@@ -2649,6 +2648,7 @@ func UnmarshalBackup(m map[string]json.RawMessage, result interface{}) (err erro
 
 // Backups : Backups struct
 type Backups struct {
+	// An array of backups.
 	Backups []Backup `json:"backups,omitempty"`
 }
 
@@ -3212,11 +3212,11 @@ type Connection struct {
 
 	Mongodb *MongoDbConnectionURI `json:"mongodb,omitempty"`
 
-	OpsManager *ConnectionURI `json:"ops_manager,omitempty"`
-
 	BiConnector *ConnectionURI `json:"bi_connector,omitempty"`
 
 	Analytics *ConnectionURI `json:"analytics,omitempty"`
+
+	OpsManager *ConnectionURI `json:"ops_manager,omitempty"`
 
 	Mysql *MySQLConnectionURI `json:"mysql,omitempty"`
 
@@ -3272,15 +3272,15 @@ func UnmarshalConnection(m map[string]json.RawMessage, result interface{}) (err 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "ops_manager", &obj.OpsManager, UnmarshalConnectionURI)
-	if err != nil {
-		return
-	}
 	err = core.UnmarshalModel(m, "bi_connector", &obj.BiConnector, UnmarshalConnectionURI)
 	if err != nil {
 		return
 	}
 	err = core.UnmarshalModel(m, "analytics", &obj.Analytics, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "ops_manager", &obj.OpsManager, UnmarshalConnectionURI)
 	if err != nil {
 		return
 	}
@@ -4446,6 +4446,15 @@ type Group struct {
 	Disk *GroupDisk `json:"disk,omitempty"`
 }
 
+// Constants associated with the Group.ID property.
+// Id/name for group.
+const (
+	GroupIDAnalyticsConst   = "analytics"
+	GroupIDBiConnectorConst = "bi_connector"
+	GroupIDMemberConst      = "member"
+	GroupIDSearchConst      = "search"
+)
+
 // UnmarshalGroup unmarshals an instance of Group from the specified map of raw messages.
 func UnmarshalGroup(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(Group)
@@ -4749,6 +4758,8 @@ type GroupScaling struct {
 
 	CPU *GroupScalingCPU `json:"cpu,omitempty"`
 
+	HostFlavor *GroupScalingHostFlavor `json:"host_flavor,omitempty"`
+
 	Disk *GroupScalingDisk `json:"disk,omitempty"`
 }
 
@@ -4764,6 +4775,10 @@ func UnmarshalGroupScaling(m map[string]json.RawMessage, result interface{}) (er
 		return
 	}
 	err = core.UnmarshalModel(m, "cpu", &obj.CPU, UnmarshalGroupScalingCPU)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "host_flavor", &obj.HostFlavor, UnmarshalGroupScalingHostFlavor)
 	if err != nil {
 		return
 	}
@@ -4802,6 +4817,23 @@ type GroupScalingDisk struct {
 func UnmarshalGroupScalingDisk(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(GroupScalingDisk)
 	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// GroupScalingHostFlavor : GroupScalingHostFlavor struct
+type GroupScalingHostFlavor struct {
+	// Host flavor for group.
+	AllocationHostFlavor *string `json:"allocation_host_flavor,omitempty"`
+}
+
+// UnmarshalGroupScalingHostFlavor unmarshals an instance of GroupScalingHostFlavor from the specified map of raw messages.
+func UnmarshalGroupScalingHostFlavor(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScalingHostFlavor)
+	err = core.UnmarshalPrimitive(m, "allocation_host_flavor", &obj.AllocationHostFlavor)
 	if err != nil {
 		return
 	}
