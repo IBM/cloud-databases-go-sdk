@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.45.1-632ec580-20220210-190638
+ * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -1709,8 +1709,7 @@ func (cloudDatabases *CloudDatabasesV5) KillConnectionsWithContext(ctx context.C
 }
 
 // CreateLogicalReplicationSlot : Create a new logical replication slot
-// Creates a new logical replication slot on the specified database. For use with PostgreSQL, EnterpriseDB, and wal2json
-// only.
+// Creates a new logical replication slot on the specified database. For use with PostgreSQL and wal2json only.
 func (cloudDatabases *CloudDatabasesV5) CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions) (result *CreateLogicalReplicationSlotResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.CreateLogicalReplicationSlotWithContext(context.Background(), createLogicalReplicationSlotOptions)
 }
@@ -2649,6 +2648,7 @@ func UnmarshalBackup(m map[string]json.RawMessage, result interface{}) (err erro
 
 // Backups : Backups struct
 type Backups struct {
+	// An array of backups.
 	Backups []Backup `json:"backups,omitempty"`
 }
 
@@ -2854,9 +2854,6 @@ type Configuration struct {
 	// Number of simultaneous requests that can be handled efficiently by the disk subsystem.
 	EffectiveIoConcurrency *int64 `json:"effective_io_concurrency,omitempty"`
 
-	// The minimum number of milliseconds for execution time above which statements will be logged.
-	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
-
 	// Causes each attempted connection to the server to be logged, as well as successful completion of client
 	// authentication.
 	LogConnections *string `json:"log_connections,omitempty"`
@@ -2864,6 +2861,9 @@ type Configuration struct {
 	// Causes session terminations to be logged. The log output provides information similar to log_connections, plus the
 	// duration of the session.
 	LogDisconnections *string `json:"log_disconnections,omitempty"`
+
+	// The minimum number of milliseconds for execution time above which statements will be logged.
+	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
 
 	// Maximum connections allowed.
 	MaxConnections *int64 `json:"max_connections,omitempty"`
@@ -2899,7 +2899,7 @@ type Configuration struct {
 	WalLevel *string `json:"wal_level,omitempty"`
 
 	// The maximum memory Redis should use, as bytes.
-	MaxmemoryRedis *int64 `json:"maxmemory-redis,omitempty"`
+	Maxmemory *int64 `json:"maxmemory,omitempty"`
 
 	// The policy with which Redis evicts keys when maximum memory is reached.
 	MaxmemoryPolicy *string `json:"maxmemory-policy,omitempty"`
@@ -3047,15 +3047,15 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
-	if err != nil {
-		return
-	}
 	err = core.UnmarshalPrimitive(m, "log_connections", &obj.LogConnections)
 	if err != nil {
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "log_disconnections", &obj.LogDisconnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
 	if err != nil {
 		return
 	}
@@ -3099,7 +3099,7 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "maxmemory-redis", &obj.MaxmemoryRedis)
+	err = core.UnmarshalPrimitive(m, "maxmemory", &obj.Maxmemory)
 	if err != nil {
 		return
 	}
@@ -3212,11 +3212,11 @@ type Connection struct {
 
 	Mongodb *MongoDbConnectionURI `json:"mongodb,omitempty"`
 
-	OpsManager *ConnectionURI `json:"ops_manager,omitempty"`
-
 	BiConnector *ConnectionURI `json:"bi_connector,omitempty"`
 
 	Analytics *ConnectionURI `json:"analytics,omitempty"`
+
+	OpsManager *ConnectionURI `json:"ops_manager,omitempty"`
 
 	Mysql *MySQLConnectionURI `json:"mysql,omitempty"`
 
@@ -3272,15 +3272,15 @@ func UnmarshalConnection(m map[string]json.RawMessage, result interface{}) (err 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "ops_manager", &obj.OpsManager, UnmarshalConnectionURI)
-	if err != nil {
-		return
-	}
 	err = core.UnmarshalModel(m, "bi_connector", &obj.BiConnector, UnmarshalConnectionURI)
 	if err != nil {
 		return
 	}
 	err = core.UnmarshalModel(m, "analytics", &obj.Analytics, UnmarshalConnectionURI)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "ops_manager", &obj.OpsManager, UnmarshalConnectionURI)
 	if err != nil {
 		return
 	}
@@ -4445,6 +4445,15 @@ type Group struct {
 
 	Disk *GroupDisk `json:"disk,omitempty"`
 }
+
+// Constants associated with the Group.ID property.
+// Id/name for group.
+const (
+	GroupIDAnalyticsConst   = "analytics"
+	GroupIDBiConnectorConst = "bi_connector"
+	GroupIDMemberConst      = "member"
+	GroupIDSearchConst      = "search"
+)
 
 // UnmarshalGroup unmarshals an instance of Group from the specified map of raw messages.
 func UnmarshalGroup(m map[string]json.RawMessage, result interface{}) (err error) {
@@ -6231,9 +6240,6 @@ type ConfigurationPgConfiguration struct {
 	// Number of simultaneous requests that can be handled efficiently by the disk subsystem.
 	EffectiveIoConcurrency *int64 `json:"effective_io_concurrency,omitempty"`
 
-	// The minimum number of milliseconds for execution time above which statements will be logged.
-	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
-
 	// Causes each attempted connection to the server to be logged, as well as successful completion of client
 	// authentication.
 	LogConnections *string `json:"log_connections,omitempty"`
@@ -6241,6 +6247,9 @@ type ConfigurationPgConfiguration struct {
 	// Causes session terminations to be logged. The log output provides information similar to log_connections, plus the
 	// duration of the session.
 	LogDisconnections *string `json:"log_disconnections,omitempty"`
+
+	// The minimum number of milliseconds for execution time above which statements will be logged.
+	LogMinDurationStatement *int64 `json:"log_min_duration_statement,omitempty"`
 
 	// Maximum connections allowed.
 	MaxConnections *int64 `json:"max_connections,omitempty"`
@@ -6326,15 +6335,15 @@ func UnmarshalConfigurationPgConfiguration(m map[string]json.RawMessage, result 
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
-	if err != nil {
-		return
-	}
 	err = core.UnmarshalPrimitive(m, "log_connections", &obj.LogConnections)
 	if err != nil {
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "log_disconnections", &obj.LogDisconnections)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "log_min_duration_statement", &obj.LogMinDurationStatement)
 	if err != nil {
 		return
 	}
@@ -6408,7 +6417,7 @@ func UnmarshalConfigurationRabbitMqConfiguration(m map[string]json.RawMessage, r
 // This model "extends" Configuration
 type ConfigurationRedisConfiguration struct {
 	// The maximum memory Redis should use, as bytes.
-	MaxmemoryRedis *int64 `json:"maxmemory-redis,omitempty"`
+	Maxmemory *int64 `json:"maxmemory,omitempty"`
 
 	// The policy with which Redis evicts keys when maximum memory is reached.
 	MaxmemoryPolicy *string `json:"maxmemory-policy,omitempty"`
@@ -6455,7 +6464,7 @@ func (*ConfigurationRedisConfiguration) isaConfiguration() bool {
 // UnmarshalConfigurationRedisConfiguration unmarshals an instance of ConfigurationRedisConfiguration from the specified map of raw messages.
 func UnmarshalConfigurationRedisConfiguration(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(ConfigurationRedisConfiguration)
-	err = core.UnmarshalPrimitive(m, "maxmemory-redis", &obj.MaxmemoryRedis)
+	err = core.UnmarshalPrimitive(m, "maxmemory", &obj.Maxmemory)
 	if err != nil {
 		return
 	}
