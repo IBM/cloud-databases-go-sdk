@@ -16,14 +16,14 @@ before_install:
   - pyenv global 3.8
 
 install:
-  - curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.50.1
+  - curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh| sh -s -- -b $(go env GOPATH)/bin v1.52.2
 
 script:
   - make travis-ci
 
 before_deploy:
-  - nvm install 14
-  - npm install -g npm@6.x
+  - nvm install 18
+  - npm install -g npm@9.x
   - npm install @semantic-release/changelog
   - npm install @semantic-release/exec
   - npm install @semantic-release/git
