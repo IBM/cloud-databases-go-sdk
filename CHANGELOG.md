@@ -1,3 +1,10 @@
+## [0.3.2](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.3.1...v0.3.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* **Cloud Databases:** correct Redis configuration ([#15](https://github.com/IBM/cloud-databases-go-sdk/issues/15)) ([2268fa6](https://github.com/IBM/cloud-databases-go-sdk/commit/2268fa685dff3538f24c6075d8fd945e76fd941c))
+
 ## [0.3.1](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.3.0...v0.3.1) (2022-12-12)
 
 
