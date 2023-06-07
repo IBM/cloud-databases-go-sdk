@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.71.0-316eb5da-20230504-195406
+ * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -2957,6 +2957,9 @@ type Configuration struct {
 
 	// The comma-separated list of SQL modes applied on this server globally.
 	SQLMode *string `json:"sql_mode,omitempty"`
+
+	// The number of seconds the server waits for activity on a noninteractive connection before closing it.
+	WaitTimeout *int64 `json:"wait_timeout,omitempty"`
 }
 
 // Constants associated with the Configuration.LogConnections property.
@@ -3172,6 +3175,10 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "sql_mode", &obj.SQLMode)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "wait_timeout", &obj.WaitTimeout)
 	if err != nil {
 		return
 	}
@@ -4758,9 +4765,10 @@ type GroupScaling struct {
 
 	CPU *GroupScalingCPU `json:"cpu,omitempty"`
 
-	HostFlavor *GroupScalingHostFlavor `json:"host_flavor,omitempty"`
-
 	Disk *GroupScalingDisk `json:"disk,omitempty"`
+
+	// Host flavor for group.
+	HostFlavor *string `json:"host_flavor,omitempty"`
 }
 
 // UnmarshalGroupScaling unmarshals an instance of GroupScaling from the specified map of raw messages.
@@ -4778,11 +4786,11 @@ func UnmarshalGroupScaling(m map[string]json.RawMessage, result interface{}) (er
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "host_flavor", &obj.HostFlavor, UnmarshalGroupScalingHostFlavor)
+	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalGroupScalingDisk)
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalGroupScalingDisk)
+	err = core.UnmarshalPrimitive(m, "host_flavor", &obj.HostFlavor)
 	if err != nil {
 		return
 	}
@@ -4817,23 +4825,6 @@ type GroupScalingDisk struct {
 func UnmarshalGroupScalingDisk(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(GroupScalingDisk)
 	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
-	if err != nil {
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// GroupScalingHostFlavor : GroupScalingHostFlavor struct
-type GroupScalingHostFlavor struct {
-	// Host flavor for group.
-	AllocationHostFlavor *string `json:"allocation_host_flavor,omitempty"`
-}
-
-// UnmarshalGroupScalingHostFlavor unmarshals an instance of GroupScalingHostFlavor from the specified map of raw messages.
-func UnmarshalGroupScalingHostFlavor(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(GroupScalingHostFlavor)
-	err = core.UnmarshalPrimitive(m, "allocation_host_flavor", &obj.AllocationHostFlavor)
 	if err != nil {
 		return
 	}
@@ -6172,6 +6163,9 @@ type ConfigurationMySQLConfiguration struct {
 
 	// The comma-separated list of SQL modes applied on this server globally.
 	SQLMode *string `json:"sql_mode,omitempty"`
+
+	// The number of seconds the server waits for activity on a noninteractive connection before closing it.
+	WaitTimeout *int64 `json:"wait_timeout,omitempty"`
 }
 
 // Constants associated with the ConfigurationMySQLConfiguration.DefaultAuthenticationPlugin property.
@@ -6243,6 +6237,10 @@ func UnmarshalConfigurationMySQLConfiguration(m map[string]json.RawMessage, resu
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "sql_mode", &obj.SQLMode)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "wait_timeout", &obj.WaitTimeout)
 	if err != nil {
 		return
 	}

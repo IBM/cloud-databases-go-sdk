@@ -4825,10 +4825,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
 				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
 
-				// Construct an instance of the GroupScalingHostFlavor model
-				groupScalingHostFlavorModel := new(clouddatabasesv5.GroupScalingHostFlavor)
-				groupScalingHostFlavorModel.AllocationHostFlavor = core.StringPtr("b3c.16x64.encrypted")
-
 				// Construct an instance of the GroupScalingDisk model
 				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
 				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
@@ -4838,8 +4834,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingModel.Members = groupScalingMembersModel
 				groupScalingModel.Memory = groupScalingMemoryModel
 				groupScalingModel.CPU = groupScalingCPUModel
-				groupScalingModel.HostFlavor = groupScalingHostFlavorModel
 				groupScalingModel.Disk = groupScalingDiskModel
+				groupScalingModel.HostFlavor = core.StringPtr("b3c.16x64.encrypted")
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
@@ -4922,10 +4918,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
 				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
 
-				// Construct an instance of the GroupScalingHostFlavor model
-				groupScalingHostFlavorModel := new(clouddatabasesv5.GroupScalingHostFlavor)
-				groupScalingHostFlavorModel.AllocationHostFlavor = core.StringPtr("b3c.16x64.encrypted")
-
 				// Construct an instance of the GroupScalingDisk model
 				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
 				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
@@ -4935,8 +4927,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingModel.Members = groupScalingMembersModel
 				groupScalingModel.Memory = groupScalingMemoryModel
 				groupScalingModel.CPU = groupScalingCPUModel
-				groupScalingModel.HostFlavor = groupScalingHostFlavorModel
 				groupScalingModel.Disk = groupScalingDiskModel
+				groupScalingModel.HostFlavor = core.StringPtr("b3c.16x64.encrypted")
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
@@ -5027,10 +5019,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
 				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
 
-				// Construct an instance of the GroupScalingHostFlavor model
-				groupScalingHostFlavorModel := new(clouddatabasesv5.GroupScalingHostFlavor)
-				groupScalingHostFlavorModel.AllocationHostFlavor = core.StringPtr("b3c.16x64.encrypted")
-
 				// Construct an instance of the GroupScalingDisk model
 				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
 				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
@@ -5040,8 +5028,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingModel.Members = groupScalingMembersModel
 				groupScalingModel.Memory = groupScalingMemoryModel
 				groupScalingModel.CPU = groupScalingCPUModel
-				groupScalingModel.HostFlavor = groupScalingHostFlavorModel
 				groupScalingModel.Disk = groupScalingDiskModel
+				groupScalingModel.HostFlavor = core.StringPtr("b3c.16x64.encrypted")
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
@@ -5077,10 +5065,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
 				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
 
-				// Construct an instance of the GroupScalingHostFlavor model
-				groupScalingHostFlavorModel := new(clouddatabasesv5.GroupScalingHostFlavor)
-				groupScalingHostFlavorModel.AllocationHostFlavor = core.StringPtr("b3c.16x64.encrypted")
-
 				// Construct an instance of the GroupScalingDisk model
 				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
 				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
@@ -5090,8 +5074,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingModel.Members = groupScalingMembersModel
 				groupScalingModel.Memory = groupScalingMemoryModel
 				groupScalingModel.CPU = groupScalingCPUModel
-				groupScalingModel.HostFlavor = groupScalingHostFlavorModel
 				groupScalingModel.Disk = groupScalingDiskModel
+				groupScalingModel.HostFlavor = core.StringPtr("b3c.16x64.encrypted")
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
@@ -5148,10 +5132,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingCPUModel := new(clouddatabasesv5.GroupScalingCPU)
 				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
 
-				// Construct an instance of the GroupScalingHostFlavor model
-				groupScalingHostFlavorModel := new(clouddatabasesv5.GroupScalingHostFlavor)
-				groupScalingHostFlavorModel.AllocationHostFlavor = core.StringPtr("b3c.16x64.encrypted")
-
 				// Construct an instance of the GroupScalingDisk model
 				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
 				groupScalingDiskModel.AllocationMb = core.Int64Ptr(int64(20480))
@@ -5161,8 +5141,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingModel.Members = groupScalingMembersModel
 				groupScalingModel.Memory = groupScalingMemoryModel
 				groupScalingModel.CPU = groupScalingCPUModel
-				groupScalingModel.HostFlavor = groupScalingHostFlavorModel
 				groupScalingModel.Disk = groupScalingDiskModel
+				groupScalingModel.HostFlavor = core.StringPtr("b3c.16x64.encrypted")
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				setDeploymentScalingGroupOptionsModel := new(clouddatabasesv5.SetDeploymentScalingGroupOptions)
@@ -7930,12 +7910,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingCPUModel.AllocationCount = core.Int64Ptr(int64(2))
 				Expect(groupScalingCPUModel.AllocationCount).To(Equal(core.Int64Ptr(int64(2))))
 
-				// Construct an instance of the GroupScalingHostFlavor model
-				groupScalingHostFlavorModel := new(clouddatabasesv5.GroupScalingHostFlavor)
-				Expect(groupScalingHostFlavorModel).ToNot(BeNil())
-				groupScalingHostFlavorModel.AllocationHostFlavor = core.StringPtr("b3c.16x64.encrypted")
-				Expect(groupScalingHostFlavorModel.AllocationHostFlavor).To(Equal(core.StringPtr("b3c.16x64.encrypted")))
-
 				// Construct an instance of the GroupScalingDisk model
 				groupScalingDiskModel := new(clouddatabasesv5.GroupScalingDisk)
 				Expect(groupScalingDiskModel).ToNot(BeNil())
@@ -7948,13 +7922,13 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				groupScalingModel.Members = groupScalingMembersModel
 				groupScalingModel.Memory = groupScalingMemoryModel
 				groupScalingModel.CPU = groupScalingCPUModel
-				groupScalingModel.HostFlavor = groupScalingHostFlavorModel
 				groupScalingModel.Disk = groupScalingDiskModel
+				groupScalingModel.HostFlavor = core.StringPtr("b3c.16x64.encrypted")
 				Expect(groupScalingModel.Members).To(Equal(groupScalingMembersModel))
 				Expect(groupScalingModel.Memory).To(Equal(groupScalingMemoryModel))
 				Expect(groupScalingModel.CPU).To(Equal(groupScalingCPUModel))
-				Expect(groupScalingModel.HostFlavor).To(Equal(groupScalingHostFlavorModel))
 				Expect(groupScalingModel.Disk).To(Equal(groupScalingDiskModel))
+				Expect(groupScalingModel.HostFlavor).To(Equal(core.StringPtr("b3c.16x64.encrypted")))
 
 				// Construct an instance of the SetDeploymentScalingGroupOptions model
 				id := "testString"
