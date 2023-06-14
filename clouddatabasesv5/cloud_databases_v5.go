@@ -4451,6 +4451,8 @@ type Group struct {
 	CPU *GroupCPU `json:"cpu,omitempty"`
 
 	Disk *GroupDisk `json:"disk,omitempty"`
+
+	HostFlavor *GroupHostFlavor `json:"host_flavor,omitempty"`
 }
 
 // Constants associated with the Group.ID property.
@@ -4486,6 +4488,10 @@ func UnmarshalGroup(m map[string]json.RawMessage, result interface{}) (err error
 		return
 	}
 	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalGroupDisk)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "host_flavor", &obj.HostFlavor, UnmarshalGroupHostFlavor)
 	if err != nil {
 		return
 	}
@@ -4618,6 +4624,37 @@ func UnmarshalGroupDisk(m map[string]json.RawMessage, result interface{}) (err e
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "can_scale_down", &obj.CanScaleDown)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// GroupHostFlavor : GroupHostFlavor struct
+type GroupHostFlavor struct {
+	// Group's host flavor id.
+	ID *string `json:"id,omitempty"`
+
+	// Group's hostflavor name.
+	Name *string `json:"name,omitempty"`
+
+	// Group's host flavor size.
+	HostingSize *string `json:"hosting_size,omitempty"`
+}
+
+// UnmarshalGroupHostFlavor unmarshals an instance of GroupHostFlavor from the specified map of raw messages.
+func UnmarshalGroupHostFlavor(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupHostFlavor)
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "hosting_size", &obj.HostingSize)
 	if err != nil {
 		return
 	}
