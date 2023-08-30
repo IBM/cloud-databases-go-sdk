@@ -4804,8 +4804,7 @@ type GroupScaling struct {
 
 	Disk *GroupScalingDisk `json:"disk,omitempty"`
 
-	// Host flavor for group.
-	HostFlavor *string `json:"host_flavor,omitempty"`
+	HostFlavor *GroupScalingHostFlavor `json:"host_flavor,omitempty"`
 }
 
 // UnmarshalGroupScaling unmarshals an instance of GroupScaling from the specified map of raw messages.
@@ -4827,7 +4826,7 @@ func UnmarshalGroupScaling(m map[string]json.RawMessage, result interface{}) (er
 	if err != nil {
 		return
 	}
-	err = core.UnmarshalPrimitive(m, "host_flavor", &obj.HostFlavor)
+	err = core.UnmarshalModel(m, "host_flavor", &obj.HostFlavor, UnmarshalGroupScalingHostFlavor)
 	if err != nil {
 		return
 	}
@@ -4862,6 +4861,23 @@ type GroupScalingDisk struct {
 func UnmarshalGroupScalingDisk(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(GroupScalingDisk)
 	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// GroupScalingHostFlavor : GroupScalingHostFlavor struct
+type GroupScalingHostFlavor struct {
+	// Host flavor id.
+	ID *string `json:"id,omitempty"`
+}
+
+// UnmarshalGroupScalingHostFlavor unmarshals an instance of GroupScalingHostFlavor from the specified map of raw messages.
+func UnmarshalGroupScalingHostFlavor(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScalingHostFlavor)
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
 	if err != nil {
 		return
 	}
