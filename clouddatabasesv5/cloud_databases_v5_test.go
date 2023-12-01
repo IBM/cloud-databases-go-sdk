@@ -811,11 +811,10 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the User model
-				userModel := new(clouddatabasesv5.User)
+				// Construct an instance of the UserDatabaseUser model
+				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
 				userModel.Password = core.StringPtr("password123")
-				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -886,11 +885,10 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
-				// Construct an instance of the User model
-				userModel := new(clouddatabasesv5.User)
+				// Construct an instance of the UserDatabaseUser model
+				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
 				userModel.Password = core.StringPtr("password123")
-				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -969,11 +967,10 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the User model
-				userModel := new(clouddatabasesv5.User)
+				// Construct an instance of the UserDatabaseUser model
+				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
 				userModel.Password = core.StringPtr("password123")
-				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -997,11 +994,10 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the User model
-				userModel := new(clouddatabasesv5.User)
+				// Construct an instance of the UserDatabaseUser model
+				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
 				userModel.Password = core.StringPtr("password123")
-				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -1046,11 +1042,10 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the User model
-				userModel := new(clouddatabasesv5.User)
+				// Construct an instance of the UserDatabaseUser model
+				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
 				userModel.Password = core.StringPtr("password123")
-				userModel.Role = core.StringPtr("group_data_access_admin")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -1072,22 +1067,22 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-	Describe(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions) - Operation response error`, func() {
-		changeUserPasswordPath := "/deployments/testString/users/database/user"
+	Describe(`UpdateUser(updateUserOptions *UpdateUserOptions) - Operation response error`, func() {
+		updateUserPath := "/deployments/testString/users/database/user"
 		Context(`Using mock server endpoint with invalid JSON response`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(changeUserPasswordPath))
+					Expect(req.URL.EscapedPath()).To(Equal(updateUserPath))
 					Expect(req.Method).To(Equal("PATCH"))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
 					fmt.Fprint(res, `} this is not valid json {`)
 				}))
 			})
-			It(`Invoke ChangeUserPassword with error: Operation response processing error`, func() {
+			It(`Invoke UpdateUser with error: Operation response processing error`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1095,26 +1090,26 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the APasswordSettingUser model
-				aPasswordSettingUserModel := new(clouddatabasesv5.APasswordSettingUser)
-				aPasswordSettingUserModel.Password = core.StringPtr("xyzzyyzzyx")
+				// Construct an instance of the UserUpdatePasswordSetting model
+				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
+				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
 
-				// Construct an instance of the ChangeUserPasswordOptions model
-				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
-				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
-				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
-				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
-				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateUserOptions model
+				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
+				updateUserOptionsModel.ID = core.StringPtr("testString")
+				updateUserOptionsModel.UserType = core.StringPtr("database")
+				updateUserOptionsModel.Username = core.StringPtr("user")
+				updateUserOptionsModel.User = userUpdateModel
+				updateUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
-				result, response, operationErr := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModel)
+				result, response, operationErr := cloudDatabasesService.UpdateUser(updateUserOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
 
 				// Enable retries and test again
 				cloudDatabasesService.EnableRetries(0, 0)
-				result, response, operationErr = cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModel)
+				result, response, operationErr = cloudDatabasesService.UpdateUser(updateUserOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).To(BeNil())
@@ -1124,15 +1119,15 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
-	Describe(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
-		changeUserPasswordPath := "/deployments/testString/users/database/user"
+	Describe(`UpdateUser(updateUserOptions *UpdateUserOptions)`, func() {
+		updateUserPath := "/deployments/testString/users/database/user"
 		Context(`Using mock server endpoint with timeout`, func() {
 			BeforeEach(func() {
 				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(changeUserPasswordPath))
+					Expect(req.URL.EscapedPath()).To(Equal(updateUserPath))
 					Expect(req.Method).To(Equal("PATCH"))
 
 					// For gzip-disabled operation, verify Content-Encoding is not set.
@@ -1160,7 +1155,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
-			It(`Invoke ChangeUserPassword successfully with retries`, func() {
+			It(`Invoke UpdateUser successfully with retries`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1169,28 +1164,28 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				cloudDatabasesService.EnableRetries(0, 0)
 
-				// Construct an instance of the APasswordSettingUser model
-				aPasswordSettingUserModel := new(clouddatabasesv5.APasswordSettingUser)
-				aPasswordSettingUserModel.Password = core.StringPtr("xyzzyyzzyx")
+				// Construct an instance of the UserUpdatePasswordSetting model
+				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
+				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
 
-				// Construct an instance of the ChangeUserPasswordOptions model
-				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
-				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
-				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
-				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
-				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateUserOptions model
+				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
+				updateUserOptionsModel.ID = core.StringPtr("testString")
+				updateUserOptionsModel.UserType = core.StringPtr("database")
+				updateUserOptionsModel.Username = core.StringPtr("user")
+				updateUserOptionsModel.User = userUpdateModel
+				updateUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
 				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc()
-				_, _, operationErr := cloudDatabasesService.ChangeUserPasswordWithContext(ctx, changeUserPasswordOptionsModel)
+				_, _, operationErr := cloudDatabasesService.UpdateUserWithContext(ctx, updateUserOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 
 				// Disable retries and test again
 				cloudDatabasesService.DisableRetries()
-				result, response, operationErr := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModel)
+				result, response, operationErr := cloudDatabasesService.UpdateUser(updateUserOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
@@ -1198,7 +1193,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Re-test the timeout error with retries disabled
 				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
 				defer cancelFunc2()
-				_, _, operationErr = cloudDatabasesService.ChangeUserPasswordWithContext(ctx, changeUserPasswordOptionsModel)
+				_, _, operationErr = cloudDatabasesService.UpdateUserWithContext(ctx, updateUserOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
 			})
@@ -1212,7 +1207,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					defer GinkgoRecover()
 
 					// Verify the contents of the request
-					Expect(req.URL.EscapedPath()).To(Equal(changeUserPasswordPath))
+					Expect(req.URL.EscapedPath()).To(Equal(updateUserPath))
 					Expect(req.Method).To(Equal("PATCH"))
 
 					// For gzip-disabled operation, verify Content-Encoding is not set.
@@ -1237,7 +1232,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
-			It(`Invoke ChangeUserPassword successfully`, func() {
+			It(`Invoke UpdateUser successfully`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1246,31 +1241,31 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
 				// Invoke operation with nil options model (negative test)
-				result, response, operationErr := cloudDatabasesService.ChangeUserPassword(nil)
+				result, response, operationErr := cloudDatabasesService.UpdateUser(nil)
 				Expect(operationErr).NotTo(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
 
-				// Construct an instance of the APasswordSettingUser model
-				aPasswordSettingUserModel := new(clouddatabasesv5.APasswordSettingUser)
-				aPasswordSettingUserModel.Password = core.StringPtr("xyzzyyzzyx")
+				// Construct an instance of the UserUpdatePasswordSetting model
+				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
+				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
 
-				// Construct an instance of the ChangeUserPasswordOptions model
-				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
-				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
-				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
-				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
-				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateUserOptions model
+				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
+				updateUserOptionsModel.ID = core.StringPtr("testString")
+				updateUserOptionsModel.UserType = core.StringPtr("database")
+				updateUserOptionsModel.Username = core.StringPtr("user")
+				updateUserOptionsModel.User = userUpdateModel
+				updateUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
-				result, response, operationErr = cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModel)
+				result, response, operationErr = cloudDatabasesService.UpdateUser(updateUserOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 				Expect(result).ToNot(BeNil())
 
 			})
-			It(`Invoke ChangeUserPassword with error: Operation validation and request error`, func() {
+			It(`Invoke UpdateUser with error: Operation validation and request error`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1278,29 +1273,29 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the APasswordSettingUser model
-				aPasswordSettingUserModel := new(clouddatabasesv5.APasswordSettingUser)
-				aPasswordSettingUserModel.Password = core.StringPtr("xyzzyyzzyx")
+				// Construct an instance of the UserUpdatePasswordSetting model
+				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
+				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
 
-				// Construct an instance of the ChangeUserPasswordOptions model
-				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
-				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
-				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
-				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
-				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateUserOptions model
+				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
+				updateUserOptionsModel.ID = core.StringPtr("testString")
+				updateUserOptionsModel.UserType = core.StringPtr("database")
+				updateUserOptionsModel.Username = core.StringPtr("user")
+				updateUserOptionsModel.User = userUpdateModel
+				updateUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
 				Expect(err).To(BeNil())
-				result, response, operationErr := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModel)
+				result, response, operationErr := cloudDatabasesService.UpdateUser(updateUserOptionsModel)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
-				// Construct a second instance of the ChangeUserPasswordOptions model with no property values
-				changeUserPasswordOptionsModelNew := new(clouddatabasesv5.ChangeUserPasswordOptions)
+				// Construct a second instance of the UpdateUserOptions model with no property values
+				updateUserOptionsModelNew := new(clouddatabasesv5.UpdateUserOptions)
 				// Invoke operation with invalid model (negative test)
-				result, response, operationErr = cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModelNew)
+				result, response, operationErr = cloudDatabasesService.UpdateUser(updateUserOptionsModelNew)
 				Expect(operationErr).ToNot(BeNil())
 				Expect(response).To(BeNil())
 				Expect(result).To(BeNil())
@@ -1318,7 +1313,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					res.WriteHeader(202)
 				}))
 			})
-			It(`Invoke ChangeUserPassword successfully`, func() {
+			It(`Invoke UpdateUser successfully`, func() {
 				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
 					URL:           testServer.URL,
 					Authenticator: &core.NoAuthAuthenticator{},
@@ -1326,20 +1321,20 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(serviceErr).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
 
-				// Construct an instance of the APasswordSettingUser model
-				aPasswordSettingUserModel := new(clouddatabasesv5.APasswordSettingUser)
-				aPasswordSettingUserModel.Password = core.StringPtr("xyzzyyzzyx")
+				// Construct an instance of the UserUpdatePasswordSetting model
+				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
+				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
 
-				// Construct an instance of the ChangeUserPasswordOptions model
-				changeUserPasswordOptionsModel := new(clouddatabasesv5.ChangeUserPasswordOptions)
-				changeUserPasswordOptionsModel.ID = core.StringPtr("testString")
-				changeUserPasswordOptionsModel.UserType = core.StringPtr("database")
-				changeUserPasswordOptionsModel.Username = core.StringPtr("user")
-				changeUserPasswordOptionsModel.User = aPasswordSettingUserModel
-				changeUserPasswordOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Construct an instance of the UpdateUserOptions model
+				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
+				updateUserOptionsModel.ID = core.StringPtr("testString")
+				updateUserOptionsModel.UserType = core.StringPtr("database")
+				updateUserOptionsModel.Username = core.StringPtr("user")
+				updateUserOptionsModel.User = userUpdateModel
+				updateUserOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
-				result, response, operationErr := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptionsModel)
+				result, response, operationErr := cloudDatabasesService.UpdateUser(updateUserOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -7482,30 +7477,6 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(addAllowlistEntryOptionsModel.IPAddress).To(Equal(allowlistEntryModel))
 				Expect(addAllowlistEntryOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
-			It(`Invoke NewChangeUserPasswordOptions successfully`, func() {
-				// Construct an instance of the APasswordSettingUser model
-				aPasswordSettingUserModel := new(clouddatabasesv5.APasswordSettingUser)
-				Expect(aPasswordSettingUserModel).ToNot(BeNil())
-				aPasswordSettingUserModel.Password = core.StringPtr("xyzzyyzzyx")
-				Expect(aPasswordSettingUserModel.Password).To(Equal(core.StringPtr("xyzzyyzzyx")))
-
-				// Construct an instance of the ChangeUserPasswordOptions model
-				id := "testString"
-				userType := "database"
-				username := "user"
-				changeUserPasswordOptionsModel := cloudDatabasesService.NewChangeUserPasswordOptions(id, userType, username)
-				changeUserPasswordOptionsModel.SetID("testString")
-				changeUserPasswordOptionsModel.SetUserType("database")
-				changeUserPasswordOptionsModel.SetUsername("user")
-				changeUserPasswordOptionsModel.SetUser(aPasswordSettingUserModel)
-				changeUserPasswordOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
-				Expect(changeUserPasswordOptionsModel).ToNot(BeNil())
-				Expect(changeUserPasswordOptionsModel.ID).To(Equal(core.StringPtr("testString")))
-				Expect(changeUserPasswordOptionsModel.UserType).To(Equal(core.StringPtr("database")))
-				Expect(changeUserPasswordOptionsModel.Username).To(Equal(core.StringPtr("user")))
-				Expect(changeUserPasswordOptionsModel.User).To(Equal(aPasswordSettingUserModel))
-				Expect(changeUserPasswordOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
-			})
 			It(`Invoke NewCompleteConnectionOptions successfully`, func() {
 				// Construct an instance of the CompleteConnectionOptions model
 				id := "testString"
@@ -7530,15 +7501,13 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(completeConnectionOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewCreateDatabaseUserOptions successfully`, func() {
-				// Construct an instance of the User model
-				userModel := new(clouddatabasesv5.User)
+				// Construct an instance of the UserDatabaseUser model
+				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				Expect(userModel).ToNot(BeNil())
 				userModel.Username = core.StringPtr("user")
 				userModel.Password = core.StringPtr("password123")
-				userModel.Role = core.StringPtr("group_data_access_admin")
 				Expect(userModel.Username).To(Equal(core.StringPtr("user")))
 				Expect(userModel.Password).To(Equal(core.StringPtr("password123")))
-				Expect(userModel.Role).To(Equal(core.StringPtr("group_data_access_admin")))
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				id := "testString"
@@ -7995,10 +7964,40 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(updateDatabaseConfigurationOptionsModel.Configuration).To(Equal(configurationModel))
 				Expect(updateDatabaseConfigurationOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
-			It(`Invoke NewUser successfully`, func() {
+			It(`Invoke NewUpdateUserOptions successfully`, func() {
+				// Construct an instance of the UserUpdatePasswordSetting model
+				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
+				Expect(userUpdateModel).ToNot(BeNil())
+				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
+				Expect(userUpdateModel.Password).To(Equal(core.StringPtr("xyzzyyzzyx")))
+
+				// Construct an instance of the UpdateUserOptions model
+				id := "testString"
+				userType := "database"
+				username := "user"
+				updateUserOptionsModel := cloudDatabasesService.NewUpdateUserOptions(id, userType, username)
+				updateUserOptionsModel.SetID("testString")
+				updateUserOptionsModel.SetUserType("database")
+				updateUserOptionsModel.SetUsername("user")
+				updateUserOptionsModel.SetUser(userUpdateModel)
+				updateUserOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(updateUserOptionsModel).ToNot(BeNil())
+				Expect(updateUserOptionsModel.ID).To(Equal(core.StringPtr("testString")))
+				Expect(updateUserOptionsModel.UserType).To(Equal(core.StringPtr("database")))
+				Expect(updateUserOptionsModel.Username).To(Equal(core.StringPtr("user")))
+				Expect(updateUserOptionsModel.User).To(Equal(userUpdateModel))
+				Expect(updateUserOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewUserUpdatePasswordSetting successfully`, func() {
+				password := "password123"
+				_model, err := cloudDatabasesService.NewUserUpdatePasswordSetting(password)
+				Expect(_model).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+			It(`Invoke NewUserDatabaseUser successfully`, func() {
 				username := "user"
 				password := "password123"
-				_model, err := cloudDatabasesService.NewUser(username, password)
+				_model, err := cloudDatabasesService.NewUserDatabaseUser(username, password)
 				Expect(_model).ToNot(BeNil())
 				Expect(err).To(BeNil())
 			})
