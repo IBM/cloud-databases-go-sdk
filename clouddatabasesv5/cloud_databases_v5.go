@@ -416,8 +416,8 @@ func (cloudDatabases *CloudDatabasesV5) CreateDatabaseUserWithContext(ctx contex
 	return
 }
 
-// UpdateUser : Update user's password role
-// Sets the password or role of a specified user. Updating roles is only supported for Redis 6.0 and greater.
+// UpdateUser : Update a user's password or role
+// Sets the password or role of a specified user. Updating roles is only supported for Redis 6.0 or greater.
 func (cloudDatabases *CloudDatabasesV5) UpdateUser(updateUserOptions *UpdateUserOptions) (result *UpdateUserResponse, response *core.DetailedResponse, err error) {
 	return cloudDatabases.UpdateUserWithContext(context.Background(), updateUserOptions)
 }
@@ -5998,10 +5998,10 @@ type User struct {
 	// Username for new user.
 	Username *string `json:"username,omitempty"`
 
-	// Password for new user.
+	// Password for new user. Password must be at least 15 characters in length and contain a letter and number.
 	Password *string `json:"password,omitempty"`
 
-	// RBAC role for redis database user types. Available for Redis 6.0 and above. Must use Redis ACL syntax to add or
+	// RBAC role for Redis database user types. Available for Redis 6.0 and newer. Must use Redis ACL syntax to add or
 	// remove command categories. Allowed categories are `read`, `write`, `admin` and `all`.
 	Role *string `json:"role,omitempty"`
 }
@@ -6038,7 +6038,7 @@ func UnmarshalUser(m map[string]json.RawMessage, result interface{}) (err error)
 // - UserUpdatePasswordSetting
 // - UserUpdateRedisRoleSetting
 type UserUpdate struct {
-	// Password for new user.
+	// Password for user. Password must be at least 15 characters in length and contain a letter and number.
 	Password *string `json:"password,omitempty"`
 
 	// RBAC role for redis database user types. Available for Redis 6.0 and above. Must use Redis ACL syntax to add or
@@ -6865,7 +6865,7 @@ func UnmarshalConnectionRedisConnection(m map[string]json.RawMessage, result int
 // UserUpdatePasswordSetting : UserUpdatePasswordSetting struct
 // This model "extends" UserUpdate
 type UserUpdatePasswordSetting struct {
-	// Password for new user.
+	// Password for user. Password must be at least 15 characters in length and contain a letter and number.
 	Password *string `json:"password" validate:"required"`
 }
 
@@ -6898,7 +6898,16 @@ func UnmarshalUserUpdatePasswordSetting(m map[string]json.RawMessage, result int
 type UserUpdateRedisRoleSetting struct {
 	// RBAC role for redis database user types. Available for Redis 6.0 and above. Must use Redis ACL syntax to add or
 	// remove command categories. Allowed categories are `read`, `write`, `admin` and `all`.
-	Role *string `json:"role,omitempty"`
+	Role *string `json:"role" validate:"required"`
+}
+
+// NewUserUpdateRedisRoleSetting : Instantiate UserUpdateRedisRoleSetting (Generic Model Constructor)
+func (*CloudDatabasesV5) NewUserUpdateRedisRoleSetting(role string) (_model *UserUpdateRedisRoleSetting, err error) {
+	_model = &UserUpdateRedisRoleSetting{
+		Role: core.StringPtr(role),
+	}
+	err = core.ValidateStruct(_model, "required parameters")
+	return
 }
 
 func (*UserUpdateRedisRoleSetting) isaUserUpdate() bool {
@@ -6922,7 +6931,7 @@ type UserDatabaseUser struct {
 	// Username for new user.
 	Username *string `json:"username" validate:"required"`
 
-	// Password for new user.
+	// Password for new user. Password must be at least 15 characters in length and contain a letter and number.
 	Password *string `json:"password" validate:"required"`
 }
 
@@ -6959,10 +6968,11 @@ func UnmarshalUserDatabaseUser(m map[string]json.RawMessage, result interface{})
 // This model "extends" User
 type UserOpsManagerUser struct {
 	// Username for new user.
-	Username *string `json:"username,omitempty"`
+	Username *string `json:"username" validate:"required"`
 
-	// Password for new user.
-	Password *string `json:"password,omitempty"`
+	// Password for new Ops Manager user. Password must be at least 15 characters in length and contain a letter, number
+	// and a special character.
+	Password *string `json:"password" validate:"required"`
 
 	// Role for new user. Available for MongoDB Enterprise Ops Manager users.
 	Role *string `json:"role,omitempty"`
@@ -6974,6 +6984,16 @@ const (
 	UserOpsManagerUserRoleGroupDataAccessAdminConst = "group_data_access_admin"
 	UserOpsManagerUserRoleGroupReadOnlyConst        = "group_read_only"
 )
+
+// NewUserOpsManagerUser : Instantiate UserOpsManagerUser (Generic Model Constructor)
+func (*CloudDatabasesV5) NewUserOpsManagerUser(username string, password string) (_model *UserOpsManagerUser, err error) {
+	_model = &UserOpsManagerUser{
+		Username: core.StringPtr(username),
+		Password: core.StringPtr(password),
+	}
+	err = core.ValidateStruct(_model, "required parameters")
+	return
+}
 
 func (*UserOpsManagerUser) isaUser() bool {
 	return true
@@ -7002,14 +7022,24 @@ func UnmarshalUserOpsManagerUser(m map[string]json.RawMessage, result interface{
 // This model "extends" User
 type UserRedisDatabaseUser struct {
 	// Username for new user.
-	Username *string `json:"username,omitempty"`
+	Username *string `json:"username" validate:"required"`
 
-	// Password for new user.
-	Password *string `json:"password,omitempty"`
+	// Password for new user. Password must be at least 15 characters in length and contain a letter and number.
+	Password *string `json:"password" validate:"required"`
 
-	// RBAC role for redis database user types. Available for Redis 6.0 and above. Must use Redis ACL syntax to add or
+	// RBAC role for Redis database user types. Available for Redis 6.0 and newer. Must use Redis ACL syntax to add or
 	// remove command categories. Allowed categories are `read`, `write`, `admin` and `all`.
 	Role *string `json:"role,omitempty"`
+}
+
+// NewUserRedisDatabaseUser : Instantiate UserRedisDatabaseUser (Generic Model Constructor)
+func (*CloudDatabasesV5) NewUserRedisDatabaseUser(username string, password string) (_model *UserRedisDatabaseUser, err error) {
+	_model = &UserRedisDatabaseUser{
+		Username: core.StringPtr(username),
+		Password: core.StringPtr(password),
+	}
+	err = core.ValidateStruct(_model, "required parameters")
+	return
 }
 
 func (*UserRedisDatabaseUser) isaUser() bool {

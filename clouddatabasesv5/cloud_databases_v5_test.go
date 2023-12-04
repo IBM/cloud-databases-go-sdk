@@ -814,7 +814,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the UserDatabaseUser model
 				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
-				userModel.Password = core.StringPtr("password123")
+				userModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -888,7 +888,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the UserDatabaseUser model
 				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
-				userModel.Password = core.StringPtr("password123")
+				userModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -970,7 +970,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the UserDatabaseUser model
 				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
-				userModel.Password = core.StringPtr("password123")
+				userModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -997,7 +997,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the UserDatabaseUser model
 				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
-				userModel.Password = core.StringPtr("password123")
+				userModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -1045,7 +1045,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the UserDatabaseUser model
 				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				userModel.Username = core.StringPtr("user")
-				userModel.Password = core.StringPtr("password123")
+				userModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				createDatabaseUserOptionsModel := new(clouddatabasesv5.CreateDatabaseUserOptions)
@@ -1092,7 +1092,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 
 				// Construct an instance of the UserUpdatePasswordSetting model
 				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
-				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
+				userUpdateModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the UpdateUserOptions model
 				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
@@ -1166,7 +1166,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 
 				// Construct an instance of the UserUpdatePasswordSetting model
 				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
-				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
+				userUpdateModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the UpdateUserOptions model
 				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
@@ -1248,7 +1248,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 
 				// Construct an instance of the UserUpdatePasswordSetting model
 				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
-				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
+				userUpdateModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the UpdateUserOptions model
 				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
@@ -1275,7 +1275,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 
 				// Construct an instance of the UserUpdatePasswordSetting model
 				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
-				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
+				userUpdateModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the UpdateUserOptions model
 				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
@@ -1323,7 +1323,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 
 				// Construct an instance of the UserUpdatePasswordSetting model
 				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
-				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
+				userUpdateModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 
 				// Construct an instance of the UpdateUserOptions model
 				updateUserOptionsModel := new(clouddatabasesv5.UpdateUserOptions)
@@ -7505,9 +7505,9 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				userModel := new(clouddatabasesv5.UserDatabaseUser)
 				Expect(userModel).ToNot(BeNil())
 				userModel.Username = core.StringPtr("user")
-				userModel.Password = core.StringPtr("password123")
+				userModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
 				Expect(userModel.Username).To(Equal(core.StringPtr("user")))
-				Expect(userModel.Password).To(Equal(core.StringPtr("password123")))
+				Expect(userModel.Password).To(Equal(core.StringPtr("v3ry-1-secUre-pAssword-2")))
 
 				// Construct an instance of the CreateDatabaseUserOptions model
 				id := "testString"
@@ -7968,8 +7968,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the UserUpdatePasswordSetting model
 				userUpdateModel := new(clouddatabasesv5.UserUpdatePasswordSetting)
 				Expect(userUpdateModel).ToNot(BeNil())
-				userUpdateModel.Password = core.StringPtr("xyzzyyzzyx")
-				Expect(userUpdateModel.Password).To(Equal(core.StringPtr("xyzzyyzzyx")))
+				userUpdateModel.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
+				Expect(userUpdateModel.Password).To(Equal(core.StringPtr("v3ry-1-secUre-pAssword-2")))
 
 				// Construct an instance of the UpdateUserOptions model
 				id := "testString"
@@ -7989,15 +7989,35 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(updateUserOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewUserUpdatePasswordSetting successfully`, func() {
-				password := "password123"
+				password := "v3ry-1-secUre-pAssword-2"
 				_model, err := cloudDatabasesService.NewUserUpdatePasswordSetting(password)
+				Expect(_model).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+			It(`Invoke NewUserUpdateRedisRoleSetting successfully`, func() {
+				role := "-@all -@read"
+				_model, err := cloudDatabasesService.NewUserUpdateRedisRoleSetting(role)
 				Expect(_model).ToNot(BeNil())
 				Expect(err).To(BeNil())
 			})
 			It(`Invoke NewUserDatabaseUser successfully`, func() {
 				username := "user"
-				password := "password123"
+				password := "v3ry-1-secUre-pAssword-2"
 				_model, err := cloudDatabasesService.NewUserDatabaseUser(username, password)
+				Expect(_model).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+			It(`Invoke NewUserOpsManagerUser successfully`, func() {
+				username := "user"
+				password := "v3ry-1-secUre-pAssword-2"
+				_model, err := cloudDatabasesService.NewUserOpsManagerUser(username, password)
+				Expect(_model).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+			It(`Invoke NewUserRedisDatabaseUser successfully`, func() {
+				username := "user"
+				password := "v3ry-1-secUre-pAssword-2"
+				_model, err := cloudDatabasesService.NewUserRedisDatabaseUser(username, password)
 				Expect(_model).ToNot(BeNil())
 				Expect(err).To(BeNil())
 			})
