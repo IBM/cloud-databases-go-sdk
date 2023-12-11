@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.3.2...v0.4.0) (2023-12-11)
+
+
+### Features
+
+* add Redis RBAC support ([#20](https://github.com/IBM/cloud-databases-go-sdk/issues/20)) ([d595356](https://github.com/IBM/cloud-databases-go-sdk/commit/d595356b8f1dfcd689c6905c3ef2c13aaae9a4ab))
+
 ## [0.3.2](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.3.1...v0.3.2) (2023-05-24)
 
 
