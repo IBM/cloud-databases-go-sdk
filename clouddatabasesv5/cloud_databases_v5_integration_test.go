@@ -77,6 +77,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		}
 	}
 
+	var skipTestNotRedis = func() {
+		if !strings.Contains(deploymentID, "redis") {
+			Skip("Not Redis, skipping tests...")
+		}
+	}
+
 	var skipTestConfiguration = func() {
 		if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") && !strings.Contains(deploymentID, "redis") && !strings.Contains(deploymentID, "mysql") {
 			Skip("Cannot configure resource, skipping tests...")
@@ -270,14 +276,11 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`UpdateDatabaseConfiguration - Change your database configuration`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotRedis()
 			skipTestConfiguration()
 		})
 
 		It(`UpdateDatabaseConfiguration for Redis`, func() {
-
-			if !strings.Contains(deploymentID, "redis") {
-				Skip("Database is not redis, skipping tests...")
-			}
 
 			configurationModel := &clouddatabasesv5.ConfigurationRedisConfiguration{
 				MaxmemoryPolicy: core.StringPtr("allkeys-lru"),
@@ -362,20 +365,20 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
-			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
-				Password: core.StringPtr("password12"),
+			userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
+				Password: core.StringPtr("password12345679"),
 			}
 
-			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
+			updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
 				ID:       &deploymentID,
 				UserType: core.StringPtr("database"),
 				Username: core.StringPtr("repl"),
-				User:     aPasswordSettingUserModel,
+				User:     userUpdateModel,
 			}
 
-			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+			updateUserResponse, response, err := cloudDatabasesService.UpdateUser(updateUserOptions)
 
-			passTaskIDLink := *changeUserPasswordResponse.Task.ID
+			passTaskIDLink := *updateUserResponse.Task.ID
 
 			waitForTask(passTaskIDLink)
 
@@ -435,7 +438,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			userModel := &clouddatabasesv5.User{
 				Username: core.StringPtr("user"),
-				Password: core.StringPtr("password123"),
+				Password: core.StringPtr("password12345679"),
 			}
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
@@ -456,32 +459,63 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-	Describe(`ChangeUserPassword - Set specified user's password`, func() {
+	Describe(`UpdateUser`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
-		It(`ChangeUserPassword(changeUserPasswordOptions *ChangeUserPasswordOptions)`, func() {
 
-			aPasswordSettingUserModel := &clouddatabasesv5.APasswordSettingUser{
-				Password: core.StringPtr("xyzzyyzzyx"),
-			}
+		Context("updating a user's password", func() {
+			It(`changes the password successfully`, func() {
 
-			changeUserPasswordOptions := &clouddatabasesv5.ChangeUserPasswordOptions{
-				ID:       &deploymentID,
-				UserType: core.StringPtr("database"),
-				Username: core.StringPtr("user"),
-				User:     aPasswordSettingUserModel,
-			}
+				userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
+					Password: core.StringPtr("xyzzyyzzyx111111111"),
+				}
 
-			changeUserPasswordResponse, response, err := cloudDatabasesService.ChangeUserPassword(changeUserPasswordOptions)
+				updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
+					ID:       &deploymentID,
+					UserType: core.StringPtr("database"),
+					Username: core.StringPtr("user"),
+					User:     userUpdateModel,
+				}
 
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(202))
-			Expect(changeUserPasswordResponse).ToNot(BeNil())
+				updateUserResponse, response, err := cloudDatabasesService.UpdateUser(updateUserOptions)
 
-			taskIDLink = *changeUserPasswordResponse.Task.ID
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(202))
+				Expect(updateUserResponse).ToNot(BeNil())
 
-			waitForTask(taskIDLink)
+				taskIDLink = *updateUserResponse.Task.ID
+
+				waitForTask(taskIDLink)
+			})
+		})
+		Context("updating a user's role", func() {
+			BeforeEach(func() {
+				skipTestNotRedis()
+			})
+
+			It(`updates the role successfully`, func() {
+				userUpdateModel := &clouddatabasesv5.UserUpdateRedisRoleSetting{
+					Role: core.StringPtr("-@all +@read"),
+				}
+
+				updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
+					ID:       &deploymentID,
+					UserType: core.StringPtr("database"),
+					Username: core.StringPtr("user"),
+					User:     userUpdateModel,
+				}
+
+				updateUserResponse, response, err := cloudDatabasesService.UpdateUser(updateUserOptions)
+
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(202))
+				Expect(updateUserResponse).ToNot(BeNil())
+
+				taskIDLink = *updateUserResponse.Task.ID
+
+				waitForTask(taskIDLink)
+			})
 		})
 	})
 
@@ -542,7 +576,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
 				EndpointType:    core.StringPtr("public"),
-				Password:        core.StringPtr("providedpassword"),
+				Password:        core.StringPtr("prov1dedpassword"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
