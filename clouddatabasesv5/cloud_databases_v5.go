@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4789,7 +4789,15 @@ func UnmarshalGroupScalingDisk(m map[string]json.RawMessage, result interface{})
 
 // GroupScalingHostFlavor : GroupScalingHostFlavor struct
 type GroupScalingHostFlavor struct {
-	// Host flavor id.
+	// **Beta feature:** The hosting infrastructure identifier. Selecting `multitenant` places your database on a logically
+	// separated, multi-tenanted machine. With this identifier, minimum resource configurations apply. Alternatively,
+	// setting the identifier to any of the following host sizes provides a machine with hypervisor-level isolation.
+	//  - `b3c.4x16.encrypted`
+	// - `b3c.8x32.encrypted`
+	// - `m3c.8x64.encrypted`
+	// - `b3c.16x64.encrypted`
+	// - `b3c.32x128.encrypted`
+	//  - `m3c.30x240.encrypted`.
 	ID *string `json:"id,omitempty"`
 }
 
