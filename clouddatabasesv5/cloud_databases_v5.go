@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4370,6 +4370,8 @@ type Group struct {
 	CPU *GroupCPU `json:"cpu,omitempty"`
 
 	Disk *GroupDisk `json:"disk,omitempty"`
+
+	HostFlavor *GroupHostFlavor `json:"host_flavor,omitempty"`
 }
 
 // Constants associated with the Group.ID property.
@@ -4405,6 +4407,10 @@ func UnmarshalGroup(m map[string]json.RawMessage, result interface{}) (err error
 		return
 	}
 	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalGroupDisk)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "host_flavor", &obj.HostFlavor, UnmarshalGroupHostFlavor)
 	if err != nil {
 		return
 	}
@@ -4537,6 +4543,37 @@ func UnmarshalGroupDisk(m map[string]json.RawMessage, result interface{}) (err e
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "can_scale_down", &obj.CanScaleDown)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// GroupHostFlavor : GroupHostFlavor struct
+type GroupHostFlavor struct {
+	// Group's host flavor id.
+	ID *string `json:"id,omitempty"`
+
+	// Group's hostflavor name.
+	Name *string `json:"name,omitempty"`
+
+	// Group's host flavor size.
+	HostingSize *string `json:"hosting_size,omitempty"`
+}
+
+// UnmarshalGroupHostFlavor unmarshals an instance of GroupHostFlavor from the specified map of raw messages.
+func UnmarshalGroupHostFlavor(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupHostFlavor)
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "hosting_size", &obj.HostingSize)
 	if err != nil {
 		return
 	}
@@ -4685,6 +4722,8 @@ type GroupScaling struct {
 	CPU *GroupScalingCPU `json:"cpu,omitempty"`
 
 	Disk *GroupScalingDisk `json:"disk,omitempty"`
+
+	HostFlavor *GroupScalingHostFlavor `json:"host_flavor,omitempty"`
 }
 
 // UnmarshalGroupScaling unmarshals an instance of GroupScaling from the specified map of raw messages.
@@ -4703,6 +4742,10 @@ func UnmarshalGroupScaling(m map[string]json.RawMessage, result interface{}) (er
 		return
 	}
 	err = core.UnmarshalModel(m, "disk", &obj.Disk, UnmarshalGroupScalingDisk)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalModel(m, "host_flavor", &obj.HostFlavor, UnmarshalGroupScalingHostFlavor)
 	if err != nil {
 		return
 	}
@@ -4737,6 +4780,32 @@ type GroupScalingDisk struct {
 func UnmarshalGroupScalingDisk(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(GroupScalingDisk)
 	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
+	if err != nil {
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// GroupScalingHostFlavor : GroupScalingHostFlavor struct
+type GroupScalingHostFlavor struct {
+	// **Beta feature:** The hosting infrastructure identifier. Selecting `multitenant` places your database on a logically
+	// separated, multi-tenant machine. With this identifier, minimum resource configurations apply. Alternatively, setting
+	// the identifier to any of the following host sizes places your database on the specified host size with no other
+	// tenants.
+	// - `b3c.4x16.encrypted`
+	// - `b3c.8x32.encrypted`
+	// - `m3c.8x64.encrypted`
+	// - `b3c.16x64.encrypted`
+	// - `b3c.32x128.encrypted`
+	// - `m3c.30x240.encrypted`.
+	ID *string `json:"id,omitempty"`
+}
+
+// UnmarshalGroupScalingHostFlavor unmarshals an instance of GroupScalingHostFlavor from the specified map of raw messages.
+func UnmarshalGroupScalingHostFlavor(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GroupScalingHostFlavor)
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
 	if err != nil {
 		return
 	}
