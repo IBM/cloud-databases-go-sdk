@@ -1,3 +1,10 @@
+# [0.5.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.4.0...v0.5.0) (2024-01-24)
+
+
+### Features
+
+* **Cloud Databases:** support isolated compute ([#16](https://github.com/IBM/cloud-databases-go-sdk/issues/16)) ([1d23857](https://github.com/IBM/cloud-databases-go-sdk/commit/1d238578ff049c9de74b5d90a88b7a286a790ebe))
+
 # [0.4.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.3.2...v0.4.0) (2023-12-11)
 
 
