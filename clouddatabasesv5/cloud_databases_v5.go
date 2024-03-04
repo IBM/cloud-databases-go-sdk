@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.82.1-2082d402-20231115-195014
+ * IBM OpenAPI SDK Code Generator Version: 3.61.0-1667892a-20221109-194550
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -1419,6 +1419,10 @@ func (cloudDatabases *CloudDatabasesV5) GetDefaultScalingGroupsWithContext(ctx c
 		builder.AddHeader(headerName, headerValue)
 	}
 	builder.AddHeader("Accept", "application/json")
+
+	if getDefaultScalingGroupsOptions.HostFlavor != nil {
+		builder.AddQuery("host_flavor", fmt.Sprint(*getDefaultScalingGroupsOptions.HostFlavor))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
@@ -4177,6 +4181,10 @@ type GetDefaultScalingGroupsOptions struct {
 	// Database type name.
 	Type *string `json:"type" validate:"required,ne="`
 
+	// When a host_flavor of 'multitenant' is included with the request, IBM Cloud Database's new shared compute default
+	// groups will be returned.
+	HostFlavor *string `json:"host_flavor,omitempty"`
+
 	// Allows users to set headers on API requests
 	Headers map[string]string
 }
@@ -4186,6 +4194,13 @@ type GetDefaultScalingGroupsOptions struct {
 const (
 	GetDefaultScalingGroupsOptionsTypeEtcdConst       = "etcd"
 	GetDefaultScalingGroupsOptionsTypePostgresqlConst = "postgresql"
+)
+
+// Constants associated with the GetDefaultScalingGroupsOptions.HostFlavor property.
+// When a host_flavor of 'multitenant' is included with the request, IBM Cloud Database's new shared compute default
+// groups will be returned.
+const (
+	GetDefaultScalingGroupsOptionsHostFlavorMultitenantConst = "multitenant"
 )
 
 // NewGetDefaultScalingGroupsOptions : Instantiate GetDefaultScalingGroupsOptions
@@ -4198,6 +4213,12 @@ func (*CloudDatabasesV5) NewGetDefaultScalingGroupsOptions(typeVar string) *GetD
 // SetType : Allow user to set Type
 func (_options *GetDefaultScalingGroupsOptions) SetType(typeVar string) *GetDefaultScalingGroupsOptions {
 	_options.Type = core.StringPtr(typeVar)
+	return _options
+}
+
+// SetHostFlavor : Allow user to set HostFlavor
+func (_options *GetDefaultScalingGroupsOptions) SetHostFlavor(hostFlavor string) *GetDefaultScalingGroupsOptions {
+	_options.HostFlavor = core.StringPtr(hostFlavor)
 	return _options
 }
 
@@ -4672,6 +4693,12 @@ type GroupMemory struct {
 
 	// Can this group's memory scale down?.
 	CanScaleDown *bool `json:"can_scale_down,omitempty"`
+
+	// The amount of memory required before the cpu/memory ratio is no longer enforced. (multitenant only).
+	CPUEnforcementRatioCeilingMb *int64 `json:"cpu_enforcement_ratio_ceiling_mb,omitempty"`
+
+	// The maximum memory allowed per CPU until the ratio ceiling is reached. (multitenant only).
+	CPUEnforcementRatioMb *int64 `json:"cpu_enforcement_ratio_mb,omitempty"`
 }
 
 // UnmarshalGroupMemory unmarshals an instance of GroupMemory from the specified map of raw messages.
@@ -4706,6 +4733,14 @@ func UnmarshalGroupMemory(m map[string]json.RawMessage, result interface{}) (err
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "can_scale_down", &obj.CanScaleDown)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "cpu_enforcement_ratio_ceiling_mb", &obj.CPUEnforcementRatioCeilingMb)
+	if err != nil {
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "cpu_enforcement_ratio_mb", &obj.CPUEnforcementRatioMb)
 	if err != nil {
 		return
 	}
