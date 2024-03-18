@@ -1,3 +1,10 @@
+# [0.6.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.5.0...v0.6.0) (2024-03-18)
+
+
+### Features
+
+* **Cloud Databases:** Support new minimum validations for multitenant ([#22](https://github.com/IBM/cloud-databases-go-sdk/issues/22)) ([5aa129d](https://github.com/IBM/cloud-databases-go-sdk/commit/5aa129dc8e608e51ed0e344daba9eb6b99c1e2d8))
+
 # [0.5.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.4.0...v0.5.0) (2024-01-24)
 
 
