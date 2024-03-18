@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4423,7 +4423,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
+					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
 				}))
 			})
 			It(`Invoke ListDeploymentScalingGroups successfully with retries`, func() {
@@ -4477,7 +4477,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
+					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
 				}))
 			})
 			It(`Invoke ListDeploymentScalingGroups successfully`, func() {
@@ -4583,6 +4583,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Verify the contents of the request
 					Expect(req.URL.EscapedPath()).To(Equal(getDefaultScalingGroupsPath))
 					Expect(req.Method).To(Equal("GET"))
+					Expect(req.URL.Query()["host_flavor"]).To(Equal([]string{"multitenant"}))
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
 					fmt.Fprint(res, `} this is not valid json {`)
@@ -4599,6 +4600,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the GetDefaultScalingGroupsOptions model
 				getDefaultScalingGroupsOptionsModel := new(clouddatabasesv5.GetDefaultScalingGroupsOptions)
 				getDefaultScalingGroupsOptionsModel.Type = core.StringPtr("postgresql")
+				getDefaultScalingGroupsOptionsModel.HostFlavor = core.StringPtr("multitenant")
 				getDefaultScalingGroupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptionsModel)
@@ -4629,13 +4631,14 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.URL.EscapedPath()).To(Equal(getDefaultScalingGroupsPath))
 					Expect(req.Method).To(Equal("GET"))
 
+					Expect(req.URL.Query()["host_flavor"]).To(Equal([]string{"multitenant"}))
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
+					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
 				}))
 			})
 			It(`Invoke GetDefaultScalingGroups successfully with retries`, func() {
@@ -4650,6 +4653,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the GetDefaultScalingGroupsOptions model
 				getDefaultScalingGroupsOptionsModel := new(clouddatabasesv5.GetDefaultScalingGroupsOptions)
 				getDefaultScalingGroupsOptionsModel.Type = core.StringPtr("postgresql")
+				getDefaultScalingGroupsOptionsModel.HostFlavor = core.StringPtr("multitenant")
 				getDefaultScalingGroupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -4686,10 +4690,11 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.URL.EscapedPath()).To(Equal(getDefaultScalingGroupsPath))
 					Expect(req.Method).To(Equal("GET"))
 
+					Expect(req.URL.Query()["host_flavor"]).To(Equal([]string{"multitenant"}))
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
+					fmt.Fprintf(res, "%s", `{"groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}]}`)
 				}))
 			})
 			It(`Invoke GetDefaultScalingGroups successfully`, func() {
@@ -4709,6 +4714,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the GetDefaultScalingGroupsOptions model
 				getDefaultScalingGroupsOptionsModel := new(clouddatabasesv5.GetDefaultScalingGroupsOptions)
 				getDefaultScalingGroupsOptionsModel.Type = core.StringPtr("postgresql")
+				getDefaultScalingGroupsOptionsModel.HostFlavor = core.StringPtr("multitenant")
 				getDefaultScalingGroupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -4729,6 +4735,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the GetDefaultScalingGroupsOptions model
 				getDefaultScalingGroupsOptionsModel := new(clouddatabasesv5.GetDefaultScalingGroupsOptions)
 				getDefaultScalingGroupsOptionsModel.Type = core.StringPtr("postgresql")
+				getDefaultScalingGroupsOptionsModel.HostFlavor = core.StringPtr("multitenant")
 				getDefaultScalingGroupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -4770,6 +4777,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				// Construct an instance of the GetDefaultScalingGroupsOptions model
 				getDefaultScalingGroupsOptionsModel := new(clouddatabasesv5.GetDefaultScalingGroupsOptions)
 				getDefaultScalingGroupsOptionsModel.Type = core.StringPtr("postgresql")
+				getDefaultScalingGroupsOptionsModel.HostFlavor = core.StringPtr("multitenant")
 				getDefaultScalingGroupsOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
@@ -7671,9 +7679,11 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				typeVar := "postgresql"
 				getDefaultScalingGroupsOptionsModel := cloudDatabasesService.NewGetDefaultScalingGroupsOptions(typeVar)
 				getDefaultScalingGroupsOptionsModel.SetType("postgresql")
+				getDefaultScalingGroupsOptionsModel.SetHostFlavor("multitenant")
 				getDefaultScalingGroupsOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getDefaultScalingGroupsOptionsModel).ToNot(BeNil())
 				Expect(getDefaultScalingGroupsOptionsModel.Type).To(Equal(core.StringPtr("postgresql")))
+				Expect(getDefaultScalingGroupsOptionsModel.HostFlavor).To(Equal(core.StringPtr("multitenant")))
 				Expect(getDefaultScalingGroupsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetDeploymentInfoOptions successfully`, func() {
