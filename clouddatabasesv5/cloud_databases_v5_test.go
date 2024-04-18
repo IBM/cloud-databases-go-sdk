@@ -19,6 +19,7 @@ package clouddatabasesv5_test
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -8066,6 +8067,743 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
+	Describe(`Model unmarshaling tests`, func() {
+		It(`Invoke UnmarshalAllowlistEntry successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AllowlistEntry)
+			model.Address = core.StringPtr("testString")
+			model.Description = core.StringPtr("testString")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AllowlistEntry
+			err = clouddatabasesv5.UnmarshalAllowlistEntry(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingCPUGroupCPU successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingCPUGroupCPU)
+			model.Scalers = map[string]interface{}{"anyKey": "anyValue"}
+			model.Rate = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingCPUGroupCPU
+			err = clouddatabasesv5.UnmarshalAutoscalingCPUGroupCPU(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingCPUGroupCPURate successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingCPUGroupCPURate)
+			model.IncreasePercent = core.Float64Ptr(float64(10))
+			model.PeriodSeconds = core.Int64Ptr(int64(900))
+			model.LimitCountPerMember = core.Int64Ptr(int64(10))
+			model.Units = core.StringPtr("count")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingCPUGroupCPURate
+			err = clouddatabasesv5.UnmarshalAutoscalingCPUGroupCPURate(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingDiskGroupDisk successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingDiskGroupDisk)
+			model.Scalers = nil
+			model.Rate = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingDiskGroupDisk
+			err = clouddatabasesv5.UnmarshalAutoscalingDiskGroupDisk(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingDiskGroupDiskRate successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingDiskGroupDiskRate)
+			model.IncreasePercent = core.Float64Ptr(float64(20))
+			model.PeriodSeconds = core.Int64Ptr(int64(900))
+			model.LimitMbPerMember = core.Float64Ptr(float64(3670016))
+			model.Units = core.StringPtr("mb")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingDiskGroupDiskRate
+			err = clouddatabasesv5.UnmarshalAutoscalingDiskGroupDiskRate(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingDiskGroupDiskScalers successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingDiskGroupDiskScalers)
+			model.Capacity = nil
+			model.IoUtilization = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingDiskGroupDiskScalers
+			err = clouddatabasesv5.UnmarshalAutoscalingDiskGroupDiskScalers(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingDiskGroupDiskScalersCapacity successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingDiskGroupDiskScalersCapacity)
+			model.Enabled = core.BoolPtr(true)
+			model.FreeSpaceLessThanPercent = core.Int64Ptr(int64(10))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingDiskGroupDiskScalersCapacity
+			err = clouddatabasesv5.UnmarshalAutoscalingDiskGroupDiskScalersCapacity(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingDiskGroupDiskScalersIoUtilization successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingDiskGroupDiskScalersIoUtilization)
+			model.Enabled = core.BoolPtr(true)
+			model.OverPeriod = core.StringPtr("30m")
+			model.AbovePercent = core.Int64Ptr(int64(45))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingDiskGroupDiskScalersIoUtilization
+			err = clouddatabasesv5.UnmarshalAutoscalingDiskGroupDiskScalersIoUtilization(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingMemoryGroupMemory successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingMemoryGroupMemory)
+			model.Scalers = nil
+			model.Rate = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingMemoryGroupMemory
+			err = clouddatabasesv5.UnmarshalAutoscalingMemoryGroupMemory(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingMemoryGroupMemoryRate successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingMemoryGroupMemoryRate)
+			model.IncreasePercent = core.Float64Ptr(float64(10))
+			model.PeriodSeconds = core.Int64Ptr(int64(900))
+			model.LimitMbPerMember = core.Float64Ptr(float64(3670016))
+			model.Units = core.StringPtr("mb")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingMemoryGroupMemoryRate
+			err = clouddatabasesv5.UnmarshalAutoscalingMemoryGroupMemoryRate(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingMemoryGroupMemoryScalers successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingMemoryGroupMemoryScalers)
+			model.IoUtilization = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingMemoryGroupMemoryScalers
+			err = clouddatabasesv5.UnmarshalAutoscalingMemoryGroupMemoryScalers(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingMemoryGroupMemoryScalersIoUtilization successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization)
+			model.Enabled = core.BoolPtr(true)
+			model.OverPeriod = core.StringPtr("30m")
+			model.AbovePercent = core.Int64Ptr(int64(45))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization
+			err = clouddatabasesv5.UnmarshalAutoscalingMemoryGroupMemoryScalersIoUtilization(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingSetGroupAutoscaling successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingSetGroupAutoscaling)
+			model.Disk = nil
+			model.Memory = nil
+			model.CPU = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingSetGroupAutoscaling
+			err = clouddatabasesv5.UnmarshalAutoscalingSetGroupAutoscaling(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalConfiguration successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.Configuration)
+			model.ArchiveTimeout = core.Int64Ptr(int64(300))
+			model.DeadlockTimeout = core.Int64Ptr(int64(100))
+			model.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+			model.LogConnections = core.StringPtr("off")
+			model.LogDisconnections = core.StringPtr("off")
+			model.LogMinDurationStatement = core.Int64Ptr(int64(100))
+			model.MaxConnections = core.Int64Ptr(int64(115))
+			model.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+			model.MaxReplicationSlots = core.Int64Ptr(int64(10))
+			model.MaxWalSenders = core.Int64Ptr(int64(12))
+			model.SharedBuffers = core.Int64Ptr(int64(16))
+			model.SynchronousCommit = core.StringPtr("local")
+			model.TCPKeepalivesCount = core.Int64Ptr(int64(0))
+			model.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
+			model.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
+			model.WalLevel = core.StringPtr("hot_standby")
+			model.Maxmemory = core.Int64Ptr(int64(0))
+			model.MaxmemoryPolicy = core.StringPtr("volatile-lru")
+			model.Appendonly = core.StringPtr("yes")
+			model.MaxmemorySamples = core.Int64Ptr(int64(0))
+			model.StopWritesOnBgsaveError = core.StringPtr("yes")
+			model.DeleteUndefinedQueues = core.BoolPtr(true)
+			model.DefaultAuthenticationPlugin = core.StringPtr("sha256_password")
+			model.InnodbBufferPoolSizePercentage = core.Int64Ptr(int64(10))
+			model.InnodbFlushLogAtTrxCommit = core.Int64Ptr(int64(0))
+			model.InnodbLogBufferSize = core.Int64Ptr(int64(1048576))
+			model.InnodbLogFileSize = core.Int64Ptr(int64(4194304))
+			model.InnodbLruScanDepth = core.Int64Ptr(int64(128))
+			model.InnodbReadIoThreads = core.Int64Ptr(int64(1))
+			model.InnodbWriteIoThreads = core.Int64Ptr(int64(1))
+			model.MaxAllowedPacket = core.Int64Ptr(int64(1024))
+			model.MysqlMaxBinlogAgeSec = core.Int64Ptr(int64(1800))
+			model.NetReadTimeout = core.Int64Ptr(int64(1))
+			model.NetWriteTimeout = core.Int64Ptr(int64(1))
+			model.SQLMode = core.StringPtr("testString")
+			model.WaitTimeout = core.Int64Ptr(int64(1))
+			model.MaxPreparedStmtCount = core.Int64Ptr(int64(0))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.Configuration
+			err = clouddatabasesv5.UnmarshalConfiguration(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalGroupScaling successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.GroupScaling)
+			model.Members = nil
+			model.Memory = nil
+			model.CPU = nil
+			model.Disk = nil
+			model.HostFlavor = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.GroupScaling
+			err = clouddatabasesv5.UnmarshalGroupScaling(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalGroupScalingCPU successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.GroupScalingCPU)
+			model.AllocationCount = core.Int64Ptr(int64(2))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.GroupScalingCPU
+			err = clouddatabasesv5.UnmarshalGroupScalingCPU(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalGroupScalingDisk successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.GroupScalingDisk)
+			model.AllocationMb = core.Int64Ptr(int64(20480))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.GroupScalingDisk
+			err = clouddatabasesv5.UnmarshalGroupScalingDisk(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalGroupScalingHostFlavor successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.GroupScalingHostFlavor)
+			model.ID = core.StringPtr("b3c.16x64.encrypted")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.GroupScalingHostFlavor
+			err = clouddatabasesv5.UnmarshalGroupScalingHostFlavor(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalGroupScalingMembers successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.GroupScalingMembers)
+			model.AllocationCount = core.Int64Ptr(int64(4))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.GroupScalingMembers
+			err = clouddatabasesv5.UnmarshalGroupScalingMembers(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalGroupScalingMemory successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.GroupScalingMemory)
+			model.AllocationMb = core.Int64Ptr(int64(12288))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.GroupScalingMemory
+			err = clouddatabasesv5.UnmarshalGroupScalingMemory(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalLogicalReplicationSlot successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.LogicalReplicationSlot)
+			model.Name = core.StringPtr("customer_replication")
+			model.DatabaseName = core.StringPtr("customers")
+			model.PluginType = core.StringPtr("wal2json")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.LogicalReplicationSlot
+			err = clouddatabasesv5.UnmarshalLogicalReplicationSlot(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalUser successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.User)
+			model.Username = core.StringPtr("user")
+			model.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
+			model.Role = core.StringPtr("-@all -@read")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.User
+			err = clouddatabasesv5.UnmarshalUser(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalUserUpdate successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.UserUpdate)
+			model.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
+			model.Role = core.StringPtr("-@all -@read")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.UserUpdate
+			err = clouddatabasesv5.UnmarshalUserUpdate(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingSetGroupAutoscalingAutoscalingCPUGroup successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingCPUGroup)
+			model.CPU = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingCPUGroup
+			err = clouddatabasesv5.UnmarshalAutoscalingSetGroupAutoscalingAutoscalingCPUGroup(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingSetGroupAutoscalingAutoscalingDiskGroup successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingDiskGroup)
+			model.Disk = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingDiskGroup
+			err = clouddatabasesv5.UnmarshalAutoscalingSetGroupAutoscalingAutoscalingDiskGroup(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalAutoscalingSetGroupAutoscalingAutoscalingMemoryGroup successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup)
+			model.Memory = nil
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup
+			err = clouddatabasesv5.UnmarshalAutoscalingSetGroupAutoscalingAutoscalingMemoryGroup(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalConfigurationMySQLConfiguration successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.ConfigurationMySQLConfiguration)
+			model.DefaultAuthenticationPlugin = core.StringPtr("sha256_password")
+			model.InnodbBufferPoolSizePercentage = core.Int64Ptr(int64(10))
+			model.InnodbFlushLogAtTrxCommit = core.Int64Ptr(int64(0))
+			model.InnodbLogBufferSize = core.Int64Ptr(int64(1048576))
+			model.InnodbLogFileSize = core.Int64Ptr(int64(4194304))
+			model.InnodbLruScanDepth = core.Int64Ptr(int64(128))
+			model.InnodbReadIoThreads = core.Int64Ptr(int64(1))
+			model.InnodbWriteIoThreads = core.Int64Ptr(int64(1))
+			model.MaxAllowedPacket = core.Int64Ptr(int64(1024))
+			model.MaxConnections = core.Int64Ptr(int64(100))
+			model.MysqlMaxBinlogAgeSec = core.Int64Ptr(int64(1800))
+			model.NetReadTimeout = core.Int64Ptr(int64(1))
+			model.NetWriteTimeout = core.Int64Ptr(int64(1))
+			model.SQLMode = core.StringPtr("testString")
+			model.WaitTimeout = core.Int64Ptr(int64(1))
+			model.MaxPreparedStmtCount = core.Int64Ptr(int64(0))
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.ConfigurationMySQLConfiguration
+			err = clouddatabasesv5.UnmarshalConfigurationMySQLConfiguration(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalConfigurationPgConfiguration successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.ConfigurationPgConfiguration)
+			model.ArchiveTimeout = core.Int64Ptr(int64(300))
+			model.DeadlockTimeout = core.Int64Ptr(int64(100))
+			model.EffectiveIoConcurrency = core.Int64Ptr(int64(1))
+			model.LogConnections = core.StringPtr("off")
+			model.LogDisconnections = core.StringPtr("off")
+			model.LogMinDurationStatement = core.Int64Ptr(int64(100))
+			model.MaxConnections = core.Int64Ptr(int64(115))
+			model.MaxPreparedTransactions = core.Int64Ptr(int64(0))
+			model.MaxReplicationSlots = core.Int64Ptr(int64(10))
+			model.MaxWalSenders = core.Int64Ptr(int64(12))
+			model.SharedBuffers = core.Int64Ptr(int64(16))
+			model.SynchronousCommit = core.StringPtr("local")
+			model.TCPKeepalivesCount = core.Int64Ptr(int64(0))
+			model.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
+			model.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
+			model.WalLevel = core.StringPtr("hot_standby")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.ConfigurationPgConfiguration
+			err = clouddatabasesv5.UnmarshalConfigurationPgConfiguration(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalConfigurationRabbitMqConfiguration successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.ConfigurationRabbitMqConfiguration)
+			model.DeleteUndefinedQueues = core.BoolPtr(true)
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.ConfigurationRabbitMqConfiguration
+			err = clouddatabasesv5.UnmarshalConfigurationRabbitMqConfiguration(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalConfigurationRedisConfiguration successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.ConfigurationRedisConfiguration)
+			model.Maxmemory = core.Int64Ptr(int64(0))
+			model.MaxmemoryPolicy = core.StringPtr("volatile-lru")
+			model.Appendonly = core.StringPtr("yes")
+			model.MaxmemorySamples = core.Int64Ptr(int64(0))
+			model.StopWritesOnBgsaveError = core.StringPtr("yes")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.ConfigurationRedisConfiguration
+			err = clouddatabasesv5.UnmarshalConfigurationRedisConfiguration(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalUserUpdatePasswordSetting successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.UserUpdatePasswordSetting)
+			model.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.UserUpdatePasswordSetting
+			err = clouddatabasesv5.UnmarshalUserUpdatePasswordSetting(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalUserUpdateRedisRoleSetting successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.UserUpdateRedisRoleSetting)
+			model.Role = core.StringPtr("-@all -@read")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.UserUpdateRedisRoleSetting
+			err = clouddatabasesv5.UnmarshalUserUpdateRedisRoleSetting(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalUserDatabaseUser successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.UserDatabaseUser)
+			model.Username = core.StringPtr("user")
+			model.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.UserDatabaseUser
+			err = clouddatabasesv5.UnmarshalUserDatabaseUser(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalUserOpsManagerUser successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.UserOpsManagerUser)
+			model.Username = core.StringPtr("user")
+			model.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
+			model.Role = core.StringPtr("group_data_access_admin")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.UserOpsManagerUser
+			err = clouddatabasesv5.UnmarshalUserOpsManagerUser(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalUserRedisDatabaseUser successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.UserRedisDatabaseUser)
+			model.Username = core.StringPtr("user")
+			model.Password = core.StringPtr("v3ry-1-secUre-pAssword-2")
+			model.Role = core.StringPtr("-@all -@read")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.UserRedisDatabaseUser
+			err = clouddatabasesv5.UnmarshalUserRedisDatabaseUser(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+	})
 	Describe(`Utility function tests`, func() {
 		It(`Invoke CreateMockByteArray() successfully`, func() {
 			mockByteArray := CreateMockByteArray("This is a test")
@@ -8095,8 +8833,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 //
 
 func CreateMockByteArray(mockData string) *[]byte {
-	ba := make([]byte, 0)
-	ba = append(ba, mockData...)
+	ba := []byte(mockData)
 	return &ba
 }
 
