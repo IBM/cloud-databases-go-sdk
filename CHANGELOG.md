@@ -1,3 +1,10 @@
+# [0.7.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.6.0...v0.7.0) (2024-05-02)
+
+
+### Features
+
+* **Cloud Databases:** Add new error toolchain ([#24](https://github.com/IBM/cloud-databases-go-sdk/issues/24)) ([bc1793d](https://github.com/IBM/cloud-databases-go-sdk/commit/bc1793daa703a07ca7cd4c77738257d443c16ba0))
+
 # [0.6.0](https://github.com/IBM/cloud-databases-go-sdk/compare/v0.5.0...v0.6.0) (2024-03-18)
 
 
