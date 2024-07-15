@@ -3497,6 +3497,7 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 // - ConnectionMongoDbeeConnection
 // - ConnectionMongoDbeeOpsManagerConnection
 // - ConnectionMySQLConnection
+// - ConnectionDataStaxConnection
 // - ConnectionEnterpriseDbConnection
 type Connection struct {
 	Postgres *PostgreSQLConnectionURI `json:"postgres,omitempty"`
@@ -3525,6 +3526,8 @@ type Connection struct {
 	OpsManager *ConnectionURI `json:"ops_manager,omitempty"`
 
 	Mysql *MySQLConnectionURI `json:"mysql,omitempty"`
+
+	Secure *DataStaxConnectionURI `json:"secure,omitempty"`
 
 	Emp *ConnectionURI `json:"emp,omitempty"`
 }
@@ -3603,6 +3606,11 @@ func UnmarshalConnection(m map[string]json.RawMessage, result interface{}) (err 
 	err = core.UnmarshalModel(m, "mysql", &obj.Mysql, UnmarshalMySQLConnectionURI)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "mysql-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "secure", &obj.Secure, UnmarshalDataStaxConnectionURI)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "secure-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalModel(m, "emp", &obj.Emp, UnmarshalConnectionURI)
@@ -3980,6 +3988,38 @@ func UnmarshalCreateLogicalReplicationSlotResponse(m map[string]json.RawMessage,
 	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "task-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// DataStaxConnectionURI : DataStaxConnectionURI struct
+type DataStaxConnectionURI struct {
+	Hosts []ConnectionHost `json:"hosts,omitempty"`
+
+	// Authentication data for Connection String.
+	Authentication *ConnectionAuthentication `json:"authentication,omitempty"`
+
+	Bundle *ConnectionBundle `json:"bundle,omitempty"`
+}
+
+// UnmarshalDataStaxConnectionURI unmarshals an instance of DataStaxConnectionURI from the specified map of raw messages.
+func UnmarshalDataStaxConnectionURI(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(DataStaxConnectionURI)
+	err = core.UnmarshalModel(m, "hosts", &obj.Hosts, UnmarshalConnectionHost)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "hosts-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "authentication", &obj.Authentication, UnmarshalConnectionAuthentication)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "authentication-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "bundle", &obj.Bundle, UnmarshalConnectionBundle)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "bundle-error", common.GetComponentInfo())
 		return
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
@@ -7215,6 +7255,28 @@ func UnmarshalConfigurationRedisConfiguration(m map[string]json.RawMessage, resu
 	err = core.UnmarshalPrimitive(m, "stop-writes-on-bgsave-error", &obj.StopWritesOnBgsaveError)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "stop-writes-on-bgsave-error-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// ConnectionDataStaxConnection : DataStax Connection Strings.
+// This model "extends" Connection
+type ConnectionDataStaxConnection struct {
+	Secure *DataStaxConnectionURI `json:"secure" validate:"required"`
+}
+
+func (*ConnectionDataStaxConnection) isaConnection() bool {
+	return true
+}
+
+// UnmarshalConnectionDataStaxConnection unmarshals an instance of ConnectionDataStaxConnection from the specified map of raw messages.
+func UnmarshalConnectionDataStaxConnection(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(ConnectionDataStaxConnection)
+	err = core.UnmarshalModel(m, "secure", &obj.Secure, UnmarshalDataStaxConnectionURI)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "secure-error", common.GetComponentInfo())
 		return
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
