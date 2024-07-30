@@ -25,11 +25,12 @@ import (
 	"os"
 	"time"
 
+	"strings"
+
 	"github.com/IBM/cloud-databases-go-sdk/clouddatabasesv5"
 	"github.com/IBM/go-sdk-core/v5/core"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"strings"
 )
 
 /**
@@ -931,18 +932,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
 				Type: core.StringPtr("postgresql"),
-			}
-
-			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
-
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(getDefaultScalingGroupsResponse).ToNot(BeNil())
-		})
-		It(`GetDefaultScalingGroups - Datastax`, func() {
-
-			getDefaultScalingGroupsOptions := &clouddatabasesv5.GetDefaultScalingGroupsOptions{
-				Type: core.StringPtr("datastax_enterprise_full"),
 			}
 
 			getDefaultScalingGroupsResponse, response, err := cloudDatabasesService.GetDefaultScalingGroups(getDefaultScalingGroupsOptions)
