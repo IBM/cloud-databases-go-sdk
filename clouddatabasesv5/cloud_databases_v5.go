@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.89.0-f33c767b-20240410-144451
+ * IBM OpenAPI SDK Code Generator Version: 3.96.1-5136e54a-20241108-203028
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -3124,6 +3124,9 @@ type Configuration struct {
 	// Maximum connections allowed.
 	MaxConnections *int64 `json:"max_connections,omitempty"`
 
+	// This parameter limits the average number of object locks used by each transaction.
+	MaxLocksPerTransaction *int64 `json:"max_locks_per_transaction,omitempty"`
+
 	// Max number of transactions that can be in the "prepared" state simultaneously.
 	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
 
@@ -3151,7 +3154,8 @@ type Configuration struct {
 	// retransmitted.
 	TCPKeepalivesInterval *int64 `json:"tcp_keepalives_interval,omitempty"`
 
-	// WAL level.  Set to logical to use logical decoding or logical replication.
+	// Controls WAL level. Allowed values are replica or logical. Set to logical to use logical decoding. If you are not
+	// using logical decoding, using logical increases the WAL size, which has several disadvantages and no real advantage.
 	WalLevel *string `json:"wal_level,omitempty"`
 
 	// The maximum memory Redis should use, as bytes.
@@ -3246,10 +3250,11 @@ const (
 )
 
 // Constants associated with the Configuration.WalLevel property.
-// WAL level.  Set to logical to use logical decoding or logical replication.
+// Controls WAL level. Allowed values are replica or logical. Set to logical to use logical decoding. If you are not
+// using logical decoding, using logical increases the WAL size, which has several disadvantages and no real advantage.
 const (
-	ConfigurationWalLevelHotStandbyConst = "hot_standby"
-	ConfigurationWalLevelLogicalConst    = "logical"
+	ConfigurationWalLevelLogicalConst = "logical"
+	ConfigurationWalLevelReplicaConst = "replica"
 )
 
 // Constants associated with the Configuration.MaxmemoryPolicy property.
@@ -3330,6 +3335,11 @@ func UnmarshalConfiguration(m map[string]json.RawMessage, result interface{}) (e
 	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "max_connections-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_locks_per_transaction", &obj.MaxLocksPerTransaction)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "max_locks_per_transaction-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
@@ -3642,32 +3652,6 @@ func UnmarshalConnectionAuthentication(m map[string]json.RawMessage, result inte
 	err = core.UnmarshalPrimitive(m, "password", &obj.Password)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "password-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// ConnectionBundle : ConnectionBundle struct
-type ConnectionBundle struct {
-	// Name associated with the certificate.
-	Name *string `json:"name,omitempty"`
-
-	// Base64 encoded version of the certificate bundle.
-	BundleBase64 *string `json:"bundle_base64,omitempty"`
-}
-
-// UnmarshalConnectionBundle unmarshals an instance of ConnectionBundle from the specified map of raw messages.
-func UnmarshalConnectionBundle(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(ConnectionBundle)
-	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "name-error", common.GetComponentInfo())
-		return
-	}
-	err = core.UnmarshalPrimitive(m, "bundle_base64", &obj.BundleBase64)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "bundle_base64-error", common.GetComponentInfo())
 		return
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
@@ -6965,6 +6949,9 @@ type ConfigurationPgConfiguration struct {
 	// Maximum connections allowed.
 	MaxConnections *int64 `json:"max_connections,omitempty"`
 
+	// This parameter limits the average number of object locks used by each transaction.
+	MaxLocksPerTransaction *int64 `json:"max_locks_per_transaction,omitempty"`
+
 	// Max number of transactions that can be in the "prepared" state simultaneously.
 	MaxPreparedTransactions *int64 `json:"max_prepared_transactions,omitempty"`
 
@@ -6992,7 +6979,8 @@ type ConfigurationPgConfiguration struct {
 	// retransmitted.
 	TCPKeepalivesInterval *int64 `json:"tcp_keepalives_interval,omitempty"`
 
-	// WAL level.  Set to logical to use logical decoding or logical replication.
+	// Controls WAL level. Allowed values are replica or logical. Set to logical to use logical decoding. If you are not
+	// using logical decoding, using logical increases the WAL size, which has several disadvantages and no real advantage.
 	WalLevel *string `json:"wal_level,omitempty"`
 }
 
@@ -7021,10 +7009,11 @@ const (
 )
 
 // Constants associated with the ConfigurationPgConfiguration.WalLevel property.
-// WAL level.  Set to logical to use logical decoding or logical replication.
+// Controls WAL level. Allowed values are replica or logical. Set to logical to use logical decoding. If you are not
+// using logical decoding, using logical increases the WAL size, which has several disadvantages and no real advantage.
 const (
-	ConfigurationPgConfigurationWalLevelHotStandbyConst = "hot_standby"
-	ConfigurationPgConfigurationWalLevelLogicalConst    = "logical"
+	ConfigurationPgConfigurationWalLevelLogicalConst = "logical"
+	ConfigurationPgConfigurationWalLevelReplicaConst = "replica"
 )
 
 func (*ConfigurationPgConfiguration) isaConfiguration() bool {
@@ -7067,6 +7056,11 @@ func UnmarshalConfigurationPgConfiguration(m map[string]json.RawMessage, result 
 	err = core.UnmarshalPrimitive(m, "max_connections", &obj.MaxConnections)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "max_connections-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "max_locks_per_transaction", &obj.MaxLocksPerTransaction)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "max_locks_per_transaction-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "max_prepared_transactions", &obj.MaxPreparedTransactions)
