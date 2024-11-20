@@ -8,9 +8,6 @@ travis-ci: test-cov lint tidy
 fmt:
 	gofmt -w $(GOFMT_FILES)
 
-tidy:
-	go mod tidy
-
 test:
 	go test `go list ./...`
 
@@ -25,3 +22,6 @@ test-int-cov:
 
 lint:
 	golangci-lint run
+
+tidy:
+	go mod tidy
