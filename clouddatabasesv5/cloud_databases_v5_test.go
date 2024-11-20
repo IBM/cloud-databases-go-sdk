@@ -19,6 +19,7 @@ package clouddatabasesv5_test
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -1601,6 +1602,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.LogDisconnections = core.StringPtr("off")
 				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
 				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -1609,7 +1611,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.WalLevel = core.StringPtr("replica")
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
@@ -1688,6 +1690,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.LogDisconnections = core.StringPtr("off")
 				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
 				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -1696,7 +1699,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.WalLevel = core.StringPtr("replica")
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
@@ -1783,6 +1786,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.LogDisconnections = core.StringPtr("off")
 				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
 				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -1791,7 +1795,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.WalLevel = core.StringPtr("replica")
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
@@ -1823,6 +1827,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.LogDisconnections = core.StringPtr("off")
 				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
 				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -1831,7 +1836,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.WalLevel = core.StringPtr("replica")
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
@@ -1884,6 +1889,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.LogDisconnections = core.StringPtr("off")
 				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
 				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -1892,7 +1898,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.WalLevel = core.StringPtr("replica")
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				updateDatabaseConfigurationOptionsModel := new(clouddatabasesv5.UpdateDatabaseConfigurationOptions)
@@ -7971,6 +7977,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.LogDisconnections = core.StringPtr("off")
 				configurationModel.LogMinDurationStatement = core.Int64Ptr(int64(100))
 				configurationModel.MaxConnections = core.Int64Ptr(int64(200))
+				configurationModel.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 				configurationModel.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 				configurationModel.MaxReplicationSlots = core.Int64Ptr(int64(10))
 				configurationModel.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -7979,7 +7986,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				configurationModel.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 				configurationModel.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-				configurationModel.WalLevel = core.StringPtr("hot_standby")
+				configurationModel.WalLevel = core.StringPtr("replica")
 				Expect(configurationModel.ArchiveTimeout).To(Equal(core.Int64Ptr(int64(300))))
 				Expect(configurationModel.DeadlockTimeout).To(Equal(core.Int64Ptr(int64(100))))
 				Expect(configurationModel.EffectiveIoConcurrency).To(Equal(core.Int64Ptr(int64(1))))
@@ -7987,6 +7994,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(configurationModel.LogDisconnections).To(Equal(core.StringPtr("off")))
 				Expect(configurationModel.LogMinDurationStatement).To(Equal(core.Int64Ptr(int64(100))))
 				Expect(configurationModel.MaxConnections).To(Equal(core.Int64Ptr(int64(200))))
+				Expect(configurationModel.MaxLocksPerTransaction).To(Equal(core.Int64Ptr(int64(10))))
 				Expect(configurationModel.MaxPreparedTransactions).To(Equal(core.Int64Ptr(int64(0))))
 				Expect(configurationModel.MaxReplicationSlots).To(Equal(core.Int64Ptr(int64(10))))
 				Expect(configurationModel.MaxWalSenders).To(Equal(core.Int64Ptr(int64(12))))
@@ -7995,7 +8003,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(configurationModel.TCPKeepalivesCount).To(Equal(core.Int64Ptr(int64(0))))
 				Expect(configurationModel.TCPKeepalivesIdle).To(Equal(core.Int64Ptr(int64(0))))
 				Expect(configurationModel.TCPKeepalivesInterval).To(Equal(core.Int64Ptr(int64(0))))
-				Expect(configurationModel.WalLevel).To(Equal(core.StringPtr("hot_standby")))
+				Expect(configurationModel.WalLevel).To(Equal(core.StringPtr("replica")))
 
 				// Construct an instance of the UpdateDatabaseConfigurationOptions model
 				id := "testString"
@@ -8333,6 +8341,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			model.LogDisconnections = core.StringPtr("off")
 			model.LogMinDurationStatement = core.Int64Ptr(int64(100))
 			model.MaxConnections = core.Int64Ptr(int64(115))
+			model.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 			model.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 			model.MaxReplicationSlots = core.Int64Ptr(int64(10))
 			model.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -8341,7 +8350,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			model.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 			model.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 			model.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-			model.WalLevel = core.StringPtr("hot_standby")
+			model.WalLevel = core.StringPtr("replica")
 			model.Maxmemory = core.Int64Ptr(int64(0))
 			model.MaxmemoryPolicy = core.StringPtr("volatile-lru")
 			model.Appendonly = core.StringPtr("yes")
@@ -8645,6 +8654,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			model.LogDisconnections = core.StringPtr("off")
 			model.LogMinDurationStatement = core.Int64Ptr(int64(100))
 			model.MaxConnections = core.Int64Ptr(int64(115))
+			model.MaxLocksPerTransaction = core.Int64Ptr(int64(10))
 			model.MaxPreparedTransactions = core.Int64Ptr(int64(0))
 			model.MaxReplicationSlots = core.Int64Ptr(int64(10))
 			model.MaxWalSenders = core.Int64Ptr(int64(12))
@@ -8653,7 +8663,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			model.TCPKeepalivesCount = core.Int64Ptr(int64(0))
 			model.TCPKeepalivesIdle = core.Int64Ptr(int64(0))
 			model.TCPKeepalivesInterval = core.Int64Ptr(int64(0))
-			model.WalLevel = core.StringPtr("hot_standby")
+			model.WalLevel = core.StringPtr("replica")
 
 			b, err := json.Marshal(model)
 			Expect(err).To(BeNil())
@@ -8806,7 +8816,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 	})
 	Describe(`Utility function tests`, func() {
 		It(`Invoke CreateMockByteArray() successfully`, func() {
-			mockByteArray := CreateMockByteArray("This is a test")
+			mockByteArray := CreateMockByteArray("VGhpcyBpcyBhIHRlc3Qgb2YgdGhlIGVtZXJnZW5jeSBicm9hZGNhc3Qgc3lzdGVt")
 			Expect(mockByteArray).ToNot(BeNil())
 		})
 		It(`Invoke CreateMockUUID() successfully`, func() {
@@ -8832,8 +8842,11 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 // Utility functions used by the generated test code
 //
 
-func CreateMockByteArray(mockData string) *[]byte {
-	ba := []byte(mockData)
+func CreateMockByteArray(encodedString string) *[]byte {
+	ba, err := base64.StdEncoding.DecodeString(encodedString)
+	if err != nil {
+		panic(err)
+	}
 	return &ba
 }
 
