@@ -160,9 +160,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	})
 
 	Describe(`Client initialization`, func() {
-		BeforeEach(func() {
-			shouldSkipTest()
-		})
 		It("Successfully construct the service client instance", func() {
 
 			cloudDatabasesServiceOptions := &clouddatabasesv5.CloudDatabasesV5Options{}
@@ -872,9 +869,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			} else if strings.Contains(deploymentID, "mysql") {
 				disk = 46080
 				memory = 6912
-			} else if strings.Contains(deploymentID, "cassandra") {
-				disk = 76800
-				memory = 40704
 			} else if strings.Contains(deploymentID, "enterprisedb") {
 				disk = 76800
 				memory = 6912
@@ -889,7 +883,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				memory = 6912
 			} else if strings.Contains(deploymentID, "redis") {
 				disk = 12288
-				memory = 4608
+				memory = 8192
 			}
 
 			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
@@ -1130,4 +1124,97 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(getTaskResponse).ToNot(BeNil())
 		})
 	})
+
+		// ------------------ CAPABILITY -----------------
+
+		Describe(`Capability - Retrieve the capabilities for a deployment`, func() {
+			BeforeEach(func() {
+				shouldSkipTest()
+			})
+
+			capabilityRequestDeploymentModel := &clouddatabasesv5.CapabilityRequestDeployment{
+				Type:     core.StringPtr("postgresql"),
+				Version:  core.StringPtr("16"),
+				Platform: core.StringPtr("classic"),
+				Location: core.StringPtr("us-south"),
+			}
+
+			It(`Capability - Autoscaling`, func() {
+				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+					"autoscaling",
+				)
+				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+	
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(capabilityResponse).ToNot(BeNil())
+			})
+
+			It(`Capability - Endpoints`, func() {
+				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+					"endpoints",
+				)
+				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+	
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(capabilityResponse).ToNot(BeNil())
+			})
+
+			It(`Capability - Encryption`, func() {
+				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+					"encryption",
+				)
+				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+	
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(capabilityResponse).ToNot(BeNil())
+			})
+
+			It(`Capability - Groups`, func() {
+				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+					"groups",
+				)
+				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+	
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(capabilityResponse).ToNot(BeNil())
+			})
+
+			It(`Capability - Flavors`, func() {
+				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+					"flavors",
+				)
+				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+	
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(capabilityResponse).ToNot(BeNil())
+			})
+
+			It(`Capability - Versions`, func() {
+				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+					"versions",
+				)
+				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+	
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(capabilityResponse).ToNot(BeNil())
+			})
+		})
 })
