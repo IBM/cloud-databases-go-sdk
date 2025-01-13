@@ -160,6 +160,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	})
 
 	Describe(`Client initialization`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
 		It("Successfully construct the service client instance", func() {
 
 			cloudDatabasesServiceOptions := &clouddatabasesv5.CloudDatabasesV5Options{}
