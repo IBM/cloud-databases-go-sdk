@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,13 +68,14 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
+				"CLOUD_DATABASES_URL": "https://clouddatabasesv5/api",
 				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
 			}
 
 			It(`Create service client using external config successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
+				})
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
 				ClearTestEnvironment(testEnvironment)
@@ -103,7 +104,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 			It(`Create service client using external config and set url programatically successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
+				})
 				err := cloudDatabasesService.SetServiceURL("https://testService/api")
 				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
@@ -121,12 +123,13 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
+				"CLOUD_DATABASES_URL": "https://clouddatabasesv5/api",
 				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
+			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
+			})
 
 			It(`Instantiate service client with error`, func() {
 				Expect(cloudDatabasesService).To(BeNil())
@@ -137,7 +140,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
+				"CLOUD_DATABASES_AUTH_TYPE":   "NOAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
@@ -7491,6 +7494,370 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 		})
 	})
+	Describe(`Capability(capabilityOptions *CapabilityOptions) - Operation response error`, func() {
+		capabilityPath := "/capability/autoscaling"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(capabilityPath))
+					Expect(req.Method).To(Equal("POST"))
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprint(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke Capability with error: Operation response processing error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the CapabilityRequestDeployment model
+				capabilityRequestDeploymentModel := new(clouddatabasesv5.CapabilityRequestDeployment)
+				capabilityRequestDeploymentModel.Type = core.StringPtr("postgresql")
+				capabilityRequestDeploymentModel.Version = core.StringPtr("10")
+				capabilityRequestDeploymentModel.Platform = core.StringPtr("classic")
+				capabilityRequestDeploymentModel.Location = core.StringPtr("us-south")
+				capabilityRequestDeploymentModel.Plan = core.StringPtr("standard")
+
+				// Construct an instance of the CapabilityRequestBackup model
+				capabilityRequestBackupModel := new(clouddatabasesv5.CapabilityRequestBackup)
+				capabilityRequestBackupModel.Type = core.StringPtr("PostgreSQL")
+				capabilityRequestBackupModel.Version = core.StringPtr("10")
+				capabilityRequestBackupModel.Platform = core.StringPtr("satellite")
+				capabilityRequestBackupModel.Location = core.StringPtr("us-south")
+
+				// Construct an instance of the CapabilityRequestOptions model
+				capabilityRequestOptionsModel := new(clouddatabasesv5.CapabilityRequestOptions)
+				capabilityRequestOptionsModel.TargetPlatform = core.StringPtr("classic")
+				capabilityRequestOptionsModel.TargetLocation = core.StringPtr("us-east")
+				capabilityRequestOptionsModel.HostFlavor = core.StringPtr("multitenant")
+
+				// Construct an instance of the CapabilityOptions model
+				capabilityOptionsModel := new(clouddatabasesv5.CapabilityOptions)
+				capabilityOptionsModel.CapabilityID = core.StringPtr("autoscaling")
+				capabilityOptionsModel.Deployment = capabilityRequestDeploymentModel
+				capabilityOptionsModel.Backup = capabilityRequestBackupModel
+				capabilityOptionsModel.Options = capabilityRequestOptionsModel
+				capabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := cloudDatabasesService.Capability(capabilityOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				cloudDatabasesService.EnableRetries(0, 0)
+				result, response, operationErr = cloudDatabasesService.Capability(capabilityOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`Capability(capabilityOptions *CapabilityOptions)`, func() {
+		capabilityPath := "/capability/autoscaling"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(capabilityPath))
+					Expect(req.Method).To(Equal("POST"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}}}`)
+				}))
+			})
+			It(`Invoke Capability successfully with retries`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+				cloudDatabasesService.EnableRetries(0, 0)
+
+				// Construct an instance of the CapabilityRequestDeployment model
+				capabilityRequestDeploymentModel := new(clouddatabasesv5.CapabilityRequestDeployment)
+				capabilityRequestDeploymentModel.Type = core.StringPtr("postgresql")
+				capabilityRequestDeploymentModel.Version = core.StringPtr("10")
+				capabilityRequestDeploymentModel.Platform = core.StringPtr("classic")
+				capabilityRequestDeploymentModel.Location = core.StringPtr("us-south")
+				capabilityRequestDeploymentModel.Plan = core.StringPtr("standard")
+
+				// Construct an instance of the CapabilityRequestBackup model
+				capabilityRequestBackupModel := new(clouddatabasesv5.CapabilityRequestBackup)
+				capabilityRequestBackupModel.Type = core.StringPtr("PostgreSQL")
+				capabilityRequestBackupModel.Version = core.StringPtr("10")
+				capabilityRequestBackupModel.Platform = core.StringPtr("satellite")
+				capabilityRequestBackupModel.Location = core.StringPtr("us-south")
+
+				// Construct an instance of the CapabilityRequestOptions model
+				capabilityRequestOptionsModel := new(clouddatabasesv5.CapabilityRequestOptions)
+				capabilityRequestOptionsModel.TargetPlatform = core.StringPtr("classic")
+				capabilityRequestOptionsModel.TargetLocation = core.StringPtr("us-east")
+				capabilityRequestOptionsModel.HostFlavor = core.StringPtr("multitenant")
+
+				// Construct an instance of the CapabilityOptions model
+				capabilityOptionsModel := new(clouddatabasesv5.CapabilityOptions)
+				capabilityOptionsModel.CapabilityID = core.StringPtr("autoscaling")
+				capabilityOptionsModel.Deployment = capabilityRequestDeploymentModel
+				capabilityOptionsModel.Backup = capabilityRequestBackupModel
+				capabilityOptionsModel.Options = capabilityRequestOptionsModel
+				capabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := cloudDatabasesService.CapabilityWithContext(ctx, capabilityOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				cloudDatabasesService.DisableRetries()
+				result, response, operationErr := cloudDatabasesService.Capability(capabilityOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = cloudDatabasesService.CapabilityWithContext(ctx, capabilityOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(capabilityPath))
+					Expect(req.Method).To(Equal("POST"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}}}`)
+				}))
+			})
+			It(`Invoke Capability successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := cloudDatabasesService.Capability(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the CapabilityRequestDeployment model
+				capabilityRequestDeploymentModel := new(clouddatabasesv5.CapabilityRequestDeployment)
+				capabilityRequestDeploymentModel.Type = core.StringPtr("postgresql")
+				capabilityRequestDeploymentModel.Version = core.StringPtr("10")
+				capabilityRequestDeploymentModel.Platform = core.StringPtr("classic")
+				capabilityRequestDeploymentModel.Location = core.StringPtr("us-south")
+				capabilityRequestDeploymentModel.Plan = core.StringPtr("standard")
+
+				// Construct an instance of the CapabilityRequestBackup model
+				capabilityRequestBackupModel := new(clouddatabasesv5.CapabilityRequestBackup)
+				capabilityRequestBackupModel.Type = core.StringPtr("PostgreSQL")
+				capabilityRequestBackupModel.Version = core.StringPtr("10")
+				capabilityRequestBackupModel.Platform = core.StringPtr("satellite")
+				capabilityRequestBackupModel.Location = core.StringPtr("us-south")
+
+				// Construct an instance of the CapabilityRequestOptions model
+				capabilityRequestOptionsModel := new(clouddatabasesv5.CapabilityRequestOptions)
+				capabilityRequestOptionsModel.TargetPlatform = core.StringPtr("classic")
+				capabilityRequestOptionsModel.TargetLocation = core.StringPtr("us-east")
+				capabilityRequestOptionsModel.HostFlavor = core.StringPtr("multitenant")
+
+				// Construct an instance of the CapabilityOptions model
+				capabilityOptionsModel := new(clouddatabasesv5.CapabilityOptions)
+				capabilityOptionsModel.CapabilityID = core.StringPtr("autoscaling")
+				capabilityOptionsModel.Deployment = capabilityRequestDeploymentModel
+				capabilityOptionsModel.Backup = capabilityRequestBackupModel
+				capabilityOptionsModel.Options = capabilityRequestOptionsModel
+				capabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = cloudDatabasesService.Capability(capabilityOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke Capability with error: Operation validation and request error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the CapabilityRequestDeployment model
+				capabilityRequestDeploymentModel := new(clouddatabasesv5.CapabilityRequestDeployment)
+				capabilityRequestDeploymentModel.Type = core.StringPtr("postgresql")
+				capabilityRequestDeploymentModel.Version = core.StringPtr("10")
+				capabilityRequestDeploymentModel.Platform = core.StringPtr("classic")
+				capabilityRequestDeploymentModel.Location = core.StringPtr("us-south")
+				capabilityRequestDeploymentModel.Plan = core.StringPtr("standard")
+
+				// Construct an instance of the CapabilityRequestBackup model
+				capabilityRequestBackupModel := new(clouddatabasesv5.CapabilityRequestBackup)
+				capabilityRequestBackupModel.Type = core.StringPtr("PostgreSQL")
+				capabilityRequestBackupModel.Version = core.StringPtr("10")
+				capabilityRequestBackupModel.Platform = core.StringPtr("satellite")
+				capabilityRequestBackupModel.Location = core.StringPtr("us-south")
+
+				// Construct an instance of the CapabilityRequestOptions model
+				capabilityRequestOptionsModel := new(clouddatabasesv5.CapabilityRequestOptions)
+				capabilityRequestOptionsModel.TargetPlatform = core.StringPtr("classic")
+				capabilityRequestOptionsModel.TargetLocation = core.StringPtr("us-east")
+				capabilityRequestOptionsModel.HostFlavor = core.StringPtr("multitenant")
+
+				// Construct an instance of the CapabilityOptions model
+				capabilityOptionsModel := new(clouddatabasesv5.CapabilityOptions)
+				capabilityOptionsModel.CapabilityID = core.StringPtr("autoscaling")
+				capabilityOptionsModel.Deployment = capabilityRequestDeploymentModel
+				capabilityOptionsModel.Backup = capabilityRequestBackupModel
+				capabilityOptionsModel.Options = capabilityRequestOptionsModel
+				capabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := cloudDatabasesService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := cloudDatabasesService.Capability(capabilityOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+				// Construct a second instance of the CapabilityOptions model with no property values
+				capabilityOptionsModelNew := new(clouddatabasesv5.CapabilityOptions)
+				// Invoke operation with invalid model (negative test)
+				result, response, operationErr = cloudDatabasesService.Capability(capabilityOptionsModelNew)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke Capability successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the CapabilityRequestDeployment model
+				capabilityRequestDeploymentModel := new(clouddatabasesv5.CapabilityRequestDeployment)
+				capabilityRequestDeploymentModel.Type = core.StringPtr("postgresql")
+				capabilityRequestDeploymentModel.Version = core.StringPtr("10")
+				capabilityRequestDeploymentModel.Platform = core.StringPtr("classic")
+				capabilityRequestDeploymentModel.Location = core.StringPtr("us-south")
+				capabilityRequestDeploymentModel.Plan = core.StringPtr("standard")
+
+				// Construct an instance of the CapabilityRequestBackup model
+				capabilityRequestBackupModel := new(clouddatabasesv5.CapabilityRequestBackup)
+				capabilityRequestBackupModel.Type = core.StringPtr("PostgreSQL")
+				capabilityRequestBackupModel.Version = core.StringPtr("10")
+				capabilityRequestBackupModel.Platform = core.StringPtr("satellite")
+				capabilityRequestBackupModel.Location = core.StringPtr("us-south")
+
+				// Construct an instance of the CapabilityRequestOptions model
+				capabilityRequestOptionsModel := new(clouddatabasesv5.CapabilityRequestOptions)
+				capabilityRequestOptionsModel.TargetPlatform = core.StringPtr("classic")
+				capabilityRequestOptionsModel.TargetLocation = core.StringPtr("us-east")
+				capabilityRequestOptionsModel.HostFlavor = core.StringPtr("multitenant")
+
+				// Construct an instance of the CapabilityOptions model
+				capabilityOptionsModel := new(clouddatabasesv5.CapabilityOptions)
+				capabilityOptionsModel.CapabilityID = core.StringPtr("autoscaling")
+				capabilityOptionsModel.Deployment = capabilityRequestDeploymentModel
+				capabilityOptionsModel.Backup = capabilityRequestBackupModel
+				capabilityOptionsModel.Options = capabilityRequestOptionsModel
+				capabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.Capability(capabilityOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
 	Describe(`Model constructor tests`, func() {
 		Context(`Using a service client instance`, func() {
 			cloudDatabasesService, _ := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
@@ -7516,6 +7883,58 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(addAllowlistEntryOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(addAllowlistEntryOptionsModel.IPAddress).To(Equal(allowlistEntryModel))
 				Expect(addAllowlistEntryOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewCapabilityOptions successfully`, func() {
+				// Construct an instance of the CapabilityRequestDeployment model
+				capabilityRequestDeploymentModel := new(clouddatabasesv5.CapabilityRequestDeployment)
+				Expect(capabilityRequestDeploymentModel).ToNot(BeNil())
+				capabilityRequestDeploymentModel.Type = core.StringPtr("postgresql")
+				capabilityRequestDeploymentModel.Version = core.StringPtr("10")
+				capabilityRequestDeploymentModel.Platform = core.StringPtr("classic")
+				capabilityRequestDeploymentModel.Location = core.StringPtr("us-south")
+				capabilityRequestDeploymentModel.Plan = core.StringPtr("standard")
+				Expect(capabilityRequestDeploymentModel.Type).To(Equal(core.StringPtr("postgresql")))
+				Expect(capabilityRequestDeploymentModel.Version).To(Equal(core.StringPtr("10")))
+				Expect(capabilityRequestDeploymentModel.Platform).To(Equal(core.StringPtr("classic")))
+				Expect(capabilityRequestDeploymentModel.Location).To(Equal(core.StringPtr("us-south")))
+				Expect(capabilityRequestDeploymentModel.Plan).To(Equal(core.StringPtr("standard")))
+
+				// Construct an instance of the CapabilityRequestBackup model
+				capabilityRequestBackupModel := new(clouddatabasesv5.CapabilityRequestBackup)
+				Expect(capabilityRequestBackupModel).ToNot(BeNil())
+				capabilityRequestBackupModel.Type = core.StringPtr("PostgreSQL")
+				capabilityRequestBackupModel.Version = core.StringPtr("10")
+				capabilityRequestBackupModel.Platform = core.StringPtr("satellite")
+				capabilityRequestBackupModel.Location = core.StringPtr("us-south")
+				Expect(capabilityRequestBackupModel.Type).To(Equal(core.StringPtr("PostgreSQL")))
+				Expect(capabilityRequestBackupModel.Version).To(Equal(core.StringPtr("10")))
+				Expect(capabilityRequestBackupModel.Platform).To(Equal(core.StringPtr("satellite")))
+				Expect(capabilityRequestBackupModel.Location).To(Equal(core.StringPtr("us-south")))
+
+				// Construct an instance of the CapabilityRequestOptions model
+				capabilityRequestOptionsModel := new(clouddatabasesv5.CapabilityRequestOptions)
+				Expect(capabilityRequestOptionsModel).ToNot(BeNil())
+				capabilityRequestOptionsModel.TargetPlatform = core.StringPtr("classic")
+				capabilityRequestOptionsModel.TargetLocation = core.StringPtr("us-east")
+				capabilityRequestOptionsModel.HostFlavor = core.StringPtr("multitenant")
+				Expect(capabilityRequestOptionsModel.TargetPlatform).To(Equal(core.StringPtr("classic")))
+				Expect(capabilityRequestOptionsModel.TargetLocation).To(Equal(core.StringPtr("us-east")))
+				Expect(capabilityRequestOptionsModel.HostFlavor).To(Equal(core.StringPtr("multitenant")))
+
+				// Construct an instance of the CapabilityOptions model
+				capabilityID := "autoscaling"
+				capabilityOptionsModel := cloudDatabasesService.NewCapabilityOptions(capabilityID)
+				capabilityOptionsModel.SetCapabilityID("autoscaling")
+				capabilityOptionsModel.SetDeployment(capabilityRequestDeploymentModel)
+				capabilityOptionsModel.SetBackup(capabilityRequestBackupModel)
+				capabilityOptionsModel.SetOptions(capabilityRequestOptionsModel)
+				capabilityOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(capabilityOptionsModel).ToNot(BeNil())
+				Expect(capabilityOptionsModel.CapabilityID).To(Equal(core.StringPtr("autoscaling")))
+				Expect(capabilityOptionsModel.Deployment).To(Equal(capabilityRequestDeploymentModel))
+				Expect(capabilityOptionsModel.Backup).To(Equal(capabilityRequestBackupModel))
+				Expect(capabilityOptionsModel.Options).To(Equal(capabilityRequestOptionsModel))
+				Expect(capabilityOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewCompleteConnectionOptions successfully`, func() {
 				// Construct an instance of the CompleteConnectionOptions model
@@ -8327,6 +8746,69 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 
 			var result *clouddatabasesv5.AutoscalingSetGroupAutoscaling
 			err = clouddatabasesv5.UnmarshalAutoscalingSetGroupAutoscaling(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalCapabilityRequestBackup successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.CapabilityRequestBackup)
+			model.Type = core.StringPtr("PostgreSQL")
+			model.Version = core.StringPtr("10")
+			model.Platform = core.StringPtr("satellite")
+			model.Location = core.StringPtr("us-south")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.CapabilityRequestBackup
+			err = clouddatabasesv5.UnmarshalCapabilityRequestBackup(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalCapabilityRequestDeployment successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.CapabilityRequestDeployment)
+			model.Type = core.StringPtr("PostgreSQL")
+			model.Version = core.StringPtr("10")
+			model.Platform = core.StringPtr("satellite")
+			model.Location = core.StringPtr("us-south")
+			model.Plan = core.StringPtr("standard")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.CapabilityRequestDeployment
+			err = clouddatabasesv5.UnmarshalCapabilityRequestDeployment(raw, &result)
+			Expect(err).To(BeNil())
+			Expect(result).ToNot(BeNil())
+			Expect(result).To(Equal(model))
+		})
+		It(`Invoke UnmarshalCapabilityRequestOptions successfully`, func() {
+			// Construct an instance of the model.
+			model := new(clouddatabasesv5.CapabilityRequestOptions)
+			model.TargetPlatform = core.StringPtr("classic")
+			model.TargetLocation = core.StringPtr("us-east")
+			model.HostFlavor = core.StringPtr("multitenant")
+
+			b, err := json.Marshal(model)
+			Expect(err).To(BeNil())
+
+			var raw map[string]json.RawMessage
+			err = json.Unmarshal(b, &raw)
+			Expect(err).To(BeNil())
+
+			var result *clouddatabasesv5.CapabilityRequestOptions
+			err = clouddatabasesv5.UnmarshalCapabilityRequestOptions(raw, &result)
 			Expect(err).To(BeNil())
 			Expect(result).ToNot(BeNil())
 			Expect(result).To(Equal(model))
