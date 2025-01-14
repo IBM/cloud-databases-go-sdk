@@ -883,8 +883,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				memory = 6912
 			} else if strings.Contains(deploymentID, "redis") {
 				disk = 12288
-				memory = 
-				// test
+				memory = 8192
 			}
 
 			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
