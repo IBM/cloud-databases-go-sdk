@@ -1204,6 +1204,19 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				Expect(capabilityResponse).ToNot(BeNil())
 			})
 
+			It(`Capability - Locations`, func() {
+				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+					"locations",
+				)
+				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+	
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(capabilityResponse).ToNot(BeNil())
+			})
+
 			It(`Capability - Versions`, func() {
 				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
 					"versions",
