@@ -68,14 +68,13 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL": "https://clouddatabasesv5/api",
+				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
 				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
 			}
 
 			It(`Create service client using external config successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				})
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
 				ClearTestEnvironment(testEnvironment)
@@ -104,8 +103,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 			It(`Create service client using external config and set url programatically successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				})
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
 				err := cloudDatabasesService.SetServiceURL("https://testService/api")
 				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
@@ -123,13 +121,12 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL": "https://clouddatabasesv5/api",
+				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
 				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-			})
+			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
 
 			It(`Instantiate service client with error`, func() {
 				Expect(cloudDatabasesService).To(BeNil())
@@ -140,7 +137,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE":   "NOAuth",
+				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)

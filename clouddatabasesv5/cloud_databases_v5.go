@@ -59,7 +59,7 @@ const ParameterizedServiceURL = "https://api.{region}.databases.cloud.ibm.com/v5
 
 var defaultUrlVariables = map[string]string{
 	"platform": "ibm",
-	"region": "us-south",
+	"region":   "us-south",
 }
 
 // CloudDatabasesV5Options : Service options
@@ -402,7 +402,7 @@ func (cloudDatabases *CloudDatabasesV5) CreateDatabaseUserWithContext(ctx contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *createDatabaseUserOptions.ID,
+		"id":        *createDatabaseUserOptions.ID,
 		"user_type": *createDatabaseUserOptions.UserType,
 	}
 
@@ -483,9 +483,9 @@ func (cloudDatabases *CloudDatabasesV5) UpdateUserWithContext(ctx context.Contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *updateUserOptions.ID,
+		"id":        *updateUserOptions.ID,
 		"user_type": *updateUserOptions.UserType,
-		"username": *updateUserOptions.Username,
+		"username":  *updateUserOptions.Username,
 	}
 
 	builder := core.NewRequestBuilder(core.PATCH)
@@ -565,9 +565,9 @@ func (cloudDatabases *CloudDatabasesV5) DeleteDatabaseUserWithContext(ctx contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *deleteDatabaseUserOptions.ID,
+		"id":        *deleteDatabaseUserOptions.ID,
 		"user_type": *deleteDatabaseUserOptions.UserType,
-		"username": *deleteDatabaseUserOptions.Username,
+		"username":  *deleteDatabaseUserOptions.Username,
 	}
 
 	builder := core.NewRequestBuilder(core.DELETE)
@@ -1353,9 +1353,9 @@ func (cloudDatabases *CloudDatabasesV5) GetConnectionWithContext(ctx context.Con
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *getConnectionOptions.ID,
-		"user_type": *getConnectionOptions.UserType,
-		"user_id": *getConnectionOptions.UserID,
+		"id":            *getConnectionOptions.ID,
+		"user_type":     *getConnectionOptions.UserType,
+		"user_id":       *getConnectionOptions.UserID,
 		"endpoint_type": *getConnectionOptions.EndpointType,
 	}
 
@@ -1430,9 +1430,9 @@ func (cloudDatabases *CloudDatabasesV5) CompleteConnectionWithContext(ctx contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *completeConnectionOptions.ID,
-		"user_type": *completeConnectionOptions.UserType,
-		"user_id": *completeConnectionOptions.UserID,
+		"id":            *completeConnectionOptions.ID,
+		"user_type":     *completeConnectionOptions.UserType,
+		"user_id":       *completeConnectionOptions.UserID,
 		"endpoint_type": *completeConnectionOptions.EndpointType,
 	}
 
@@ -1662,7 +1662,7 @@ func (cloudDatabases *CloudDatabasesV5) SetDeploymentScalingGroupWithContext(ctx
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *setDeploymentScalingGroupOptions.ID,
+		"id":       *setDeploymentScalingGroupOptions.ID,
 		"group_id": *setDeploymentScalingGroupOptions.GroupID,
 	}
 
@@ -1744,7 +1744,7 @@ func (cloudDatabases *CloudDatabasesV5) GetAutoscalingConditionsWithContext(ctx 
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *getAutoscalingConditionsOptions.ID,
+		"id":       *getAutoscalingConditionsOptions.ID,
 		"group_id": *getAutoscalingConditionsOptions.GroupID,
 	}
 
@@ -1815,7 +1815,7 @@ func (cloudDatabases *CloudDatabasesV5) SetAutoscalingConditionsWithContext(ctx 
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *setAutoscalingConditionsOptions.ID,
+		"id":       *setAutoscalingConditionsOptions.ID,
 		"group_id": *setAutoscalingConditionsOptions.GroupID,
 	}
 
@@ -2045,7 +2045,7 @@ func (cloudDatabases *CloudDatabasesV5) DeleteLogicalReplicationSlotWithContext(
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *deleteLogicalReplicationSlotOptions.ID,
+		"id":   *deleteLogicalReplicationSlotOptions.ID,
 		"name": *deleteLogicalReplicationSlotOptions.Name,
 	}
 
@@ -2349,7 +2349,7 @@ func (cloudDatabases *CloudDatabasesV5) DeleteAllowlistEntryWithContext(ctx cont
 	}
 
 	pathParamsMap := map[string]string{
-		"id": *deleteAllowlistEntryOptions.ID,
+		"id":        *deleteAllowlistEntryOptions.ID,
 		"ipaddress": *deleteAllowlistEntryOptions.Ipaddress,
 	}
 
@@ -2939,6 +2939,7 @@ type AutoscalingSetGroupAutoscaling struct {
 
 	CPU *AutoscalingCPUGroupCPU `json:"cpu,omitempty"`
 }
+
 func (*AutoscalingSetGroupAutoscaling) isaAutoscalingSetGroupAutoscaling() bool {
 	return true
 }
@@ -2999,7 +3000,7 @@ type Backup struct {
 // Constants associated with the Backup.Type property.
 // The type of backup.
 const (
-	BackupTypeOnDemandConst = "on_demand"
+	BackupTypeOnDemandConst  = "on_demand"
 	BackupTypeScheduledConst = "scheduled"
 )
 
@@ -3007,8 +3008,8 @@ const (
 // The status of this backup.
 const (
 	BackupStatusCompletedConst = "completed"
-	BackupStatusFailedConst = "failed"
-	BackupStatusRunningConst = "running"
+	BackupStatusFailedConst    = "failed"
+	BackupStatusRunningConst   = "running"
 )
 
 // UnmarshalBackup unmarshals an instance of Backup from the specified map of raw messages.
@@ -3114,6 +3115,7 @@ type Capability struct {
 	// An array of versions of the database, their status, preferedness, and transitions.
 	Versions []CapabilityVersionsItem `json:"versions,omitempty"`
 }
+
 func (*Capability) isaCapability() bool {
 	return true
 }
@@ -3524,16 +3526,16 @@ type CapabilityOptions struct {
 // Constants associated with the CapabilityOptions.CapabilityID property.
 // Capability ID.
 const (
-	CapabilityOptionsCapabilityIDAutoscalingConst = "autoscaling"
-	CapabilityOptionsCapabilityIDEncryptionConst = "encryption"
-	CapabilityOptionsCapabilityIDEndpointsConst = "endpoints"
-	CapabilityOptionsCapabilityIDFlavorsConst = "flavors"
-	CapabilityOptionsCapabilityIDGroupsConst = "groups"
-	CapabilityOptionsCapabilityIDLocationsConst = "locations"
+	CapabilityOptionsCapabilityIDAutoscalingConst         = "autoscaling"
+	CapabilityOptionsCapabilityIDEncryptionConst          = "encryption"
+	CapabilityOptionsCapabilityIDEndpointsConst           = "endpoints"
+	CapabilityOptionsCapabilityIDFlavorsConst             = "flavors"
+	CapabilityOptionsCapabilityIDGroupsConst              = "groups"
+	CapabilityOptionsCapabilityIDLocationsConst           = "locations"
 	CapabilityOptionsCapabilityIDPointInTimeRecoveryConst = "point_in_time_recovery"
-	CapabilityOptionsCapabilityIDRemotesConst = "remotes"
-	CapabilityOptionsCapabilityIDRestoresConst = "restores"
-	CapabilityOptionsCapabilityIDVersionsConst = "versions"
+	CapabilityOptionsCapabilityIDRemotesConst             = "remotes"
+	CapabilityOptionsCapabilityIDRestoresConst            = "restores"
+	CapabilityOptionsCapabilityIDVersionsConst            = "versions"
 )
 
 // NewCapabilityOptions : Instantiate CapabilityOptions
@@ -3810,9 +3812,9 @@ type CapabilityVersionsCapabilityVersionsItem struct {
 // Constants associated with the CapabilityVersionsCapabilityVersionsItem.Status property.
 // The status of this version: To be finalized.
 const (
-	CapabilityVersionsCapabilityVersionsItemStatusBetaConst = "beta"
+	CapabilityVersionsCapabilityVersionsItemStatusBetaConst       = "beta"
 	CapabilityVersionsCapabilityVersionsItemStatusDeprecatedConst = "deprecated"
-	CapabilityVersionsCapabilityVersionsItemStatusStableConst = "stable"
+	CapabilityVersionsCapabilityVersionsItemStatusStableConst     = "stable"
 )
 
 // UnmarshalCapabilityVersionsCapabilityVersionsItem unmarshals an instance of CapabilityVersionsCapabilityVersionsItem from the specified map of raw messages.
@@ -3910,9 +3912,9 @@ type CapabilityVersionsItem struct {
 // Constants associated with the CapabilityVersionsItem.Status property.
 // The status of this version: To be finalized.
 const (
-	CapabilityVersionsItemStatusBetaConst = "beta"
+	CapabilityVersionsItemStatusBetaConst       = "beta"
 	CapabilityVersionsItemStatusDeprecatedConst = "deprecated"
-	CapabilityVersionsItemStatusStableConst = "stable"
+	CapabilityVersionsItemStatusStableConst     = "stable"
 )
 
 // UnmarshalCapabilityVersionsItem unmarshals an instance of CapabilityVersionsItem from the specified map of raw messages.
@@ -4020,15 +4022,15 @@ type CompleteConnectionOptions struct {
 // fetched.
 const (
 	CompleteConnectionOptionsEndpointTypePrivateConst = "private"
-	CompleteConnectionOptionsEndpointTypePublicConst = "public"
+	CompleteConnectionOptionsEndpointTypePublicConst  = "public"
 )
 
 // NewCompleteConnectionOptions : Instantiate CompleteConnectionOptions
 func (*CloudDatabasesV5) NewCompleteConnectionOptions(id string, userType string, userID string, endpointType string) *CompleteConnectionOptions {
 	return &CompleteConnectionOptions{
-		ID: core.StringPtr(id),
-		UserType: core.StringPtr(userType),
-		UserID: core.StringPtr(userID),
+		ID:           core.StringPtr(id),
+		UserType:     core.StringPtr(userType),
+		UserID:       core.StringPtr(userID),
 		EndpointType: core.StringPtr(endpointType),
 	}
 }
@@ -4229,7 +4231,7 @@ type Configuration struct {
 // authentication.
 const (
 	ConfigurationLogConnectionsOffConst = "off"
-	ConfigurationLogConnectionsOnConst = "on"
+	ConfigurationLogConnectionsOnConst  = "on"
 )
 
 // Constants associated with the Configuration.LogDisconnections property.
@@ -4237,7 +4239,7 @@ const (
 // duration of the session.
 const (
 	ConfigurationLogDisconnectionsOffConst = "off"
-	ConfigurationLogDisconnectionsOnConst = "on"
+	ConfigurationLogDisconnectionsOnConst  = "on"
 )
 
 // Constants associated with the Configuration.SynchronousCommit property.
@@ -4245,7 +4247,7 @@ const (
 // synchronous replication which will impact performance and availabilty.
 const (
 	ConfigurationSynchronousCommitLocalConst = "local"
-	ConfigurationSynchronousCommitOffConst = "off"
+	ConfigurationSynchronousCommitOffConst   = "off"
 )
 
 // Constants associated with the Configuration.WalLevel property.
@@ -4259,25 +4261,25 @@ const (
 // Constants associated with the Configuration.MaxmemoryPolicy property.
 // The policy with which Redis evicts keys when maximum memory is reached.
 const (
-	ConfigurationMaxmemoryPolicyAllkeysLruConst = "allkeys-lru"
-	ConfigurationMaxmemoryPolicyAllkeysRandomConst = "allkeys-random"
-	ConfigurationMaxmemoryPolicyNoevictionConst = "noeviction"
-	ConfigurationMaxmemoryPolicyVolatileLruConst = "volatile-lru"
+	ConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
+	ConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
+	ConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
+	ConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
 	ConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
-	ConfigurationMaxmemoryPolicyVolatileTTLConst = "volatile-ttl"
+	ConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
 )
 
 // Constants associated with the Configuration.Appendonly property.
 // If set to yes this will enable AOF persistence.
 const (
-	ConfigurationAppendonlyNoConst = "no"
+	ConfigurationAppendonlyNoConst  = "no"
 	ConfigurationAppendonlyYesConst = "yes"
 )
 
 // Constants associated with the Configuration.StopWritesOnBgsaveError property.
 // Whether or not to stop accepting writes when background persistence actions fail.
 const (
-	ConfigurationStopWritesOnBgsaveErrorNoConst = "no"
+	ConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
 	ConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
 )
 
@@ -4287,8 +4289,9 @@ const (
 const (
 	ConfigurationDefaultAuthenticationPluginCachingSha2PasswordConst = "caching_sha2_password"
 	ConfigurationDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
-	ConfigurationDefaultAuthenticationPluginSha256PasswordConst = "sha256_password"
+	ConfigurationDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
 )
+
 func (*Configuration) isaConfiguration() bool {
 	return true
 }
@@ -4536,6 +4539,7 @@ type Connection struct {
 
 	Emp *ConnectionURI `json:"emp,omitempty"`
 }
+
 func (*Connection) isaConnection() bool {
 	return true
 }
@@ -4868,7 +4872,7 @@ type CreateDatabaseUserOptions struct {
 // NewCreateDatabaseUserOptions : Instantiate CreateDatabaseUserOptions
 func (*CloudDatabasesV5) NewCreateDatabaseUserOptions(id string, userType string) *CreateDatabaseUserOptions {
 	return &CreateDatabaseUserOptions{
-		ID: core.StringPtr(id),
+		ID:       core.StringPtr(id),
 		UserType: core.StringPtr(userType),
 	}
 }
@@ -4982,7 +4986,7 @@ type DeleteAllowlistEntryOptions struct {
 // NewDeleteAllowlistEntryOptions : Instantiate DeleteAllowlistEntryOptions
 func (*CloudDatabasesV5) NewDeleteAllowlistEntryOptions(id string, ipaddress string) *DeleteAllowlistEntryOptions {
 	return &DeleteAllowlistEntryOptions{
-		ID: core.StringPtr(id),
+		ID:        core.StringPtr(id),
 		Ipaddress: core.StringPtr(ipaddress),
 	}
 }
@@ -5040,7 +5044,7 @@ type DeleteDatabaseUserOptions struct {
 // NewDeleteDatabaseUserOptions : Instantiate DeleteDatabaseUserOptions
 func (*CloudDatabasesV5) NewDeleteDatabaseUserOptions(id string, userType string, username string) *DeleteDatabaseUserOptions {
 	return &DeleteDatabaseUserOptions{
-		ID: core.StringPtr(id),
+		ID:       core.StringPtr(id),
 		UserType: core.StringPtr(userType),
 		Username: core.StringPtr(username),
 	}
@@ -5102,7 +5106,7 @@ type DeleteLogicalReplicationSlotOptions struct {
 // NewDeleteLogicalReplicationSlotOptions : Instantiate DeleteLogicalReplicationSlotOptions
 func (*CloudDatabasesV5) NewDeleteLogicalReplicationSlotOptions(id string, name string) *DeleteLogicalReplicationSlotOptions {
 	return &DeleteLogicalReplicationSlotOptions{
-		ID: core.StringPtr(id),
+		ID:   core.StringPtr(id),
 		Name: core.StringPtr(name),
 	}
 }
@@ -5186,9 +5190,9 @@ type DeployablesVersionsItem struct {
 // Constants associated with the DeployablesVersionsItem.Status property.
 // The status of this version: To be finalized.
 const (
-	DeployablesVersionsItemStatusBetaConst = "beta"
+	DeployablesVersionsItemStatusBetaConst       = "beta"
 	DeployablesVersionsItemStatusDeprecatedConst = "deprecated"
-	DeployablesVersionsItemStatusStableConst = "stable"
+	DeployablesVersionsItemStatusStableConst     = "stable"
 )
 
 // UnmarshalDeployablesVersionsItem unmarshals an instance of DeployablesVersionsItem from the specified map of raw messages.
@@ -5404,7 +5408,7 @@ type GetAutoscalingConditionsOptions struct {
 // NewGetAutoscalingConditionsOptions : Instantiate GetAutoscalingConditionsOptions
 func (*CloudDatabasesV5) NewGetAutoscalingConditionsOptions(id string, groupID string) *GetAutoscalingConditionsOptions {
 	return &GetAutoscalingConditionsOptions{
-		ID: core.StringPtr(id),
+		ID:      core.StringPtr(id),
 		GroupID: core.StringPtr(groupID),
 	}
 }
@@ -5498,15 +5502,15 @@ type GetConnectionOptions struct {
 // Endpoint Type. The endpoint must be enabled on the deployment before its connection information can be fetched.
 const (
 	GetConnectionOptionsEndpointTypePrivateConst = "private"
-	GetConnectionOptionsEndpointTypePublicConst = "public"
+	GetConnectionOptionsEndpointTypePublicConst  = "public"
 )
 
 // NewGetConnectionOptions : Instantiate GetConnectionOptions
 func (*CloudDatabasesV5) NewGetConnectionOptions(id string, userType string, userID string, endpointType string) *GetConnectionOptions {
 	return &GetConnectionOptions{
-		ID: core.StringPtr(id),
-		UserType: core.StringPtr(userType),
-		UserID: core.StringPtr(userID),
+		ID:           core.StringPtr(id),
+		UserType:     core.StringPtr(userType),
+		UserID:       core.StringPtr(userID),
 		EndpointType: core.StringPtr(endpointType),
 	}
 }
@@ -5580,7 +5584,7 @@ type GetDefaultScalingGroupsOptions struct {
 // Constants associated with the GetDefaultScalingGroupsOptions.Type property.
 // Database type name.
 const (
-	GetDefaultScalingGroupsOptionsTypeEtcdConst = "etcd"
+	GetDefaultScalingGroupsOptionsTypeEtcdConst       = "etcd"
 	GetDefaultScalingGroupsOptionsTypePostgresqlConst = "postgresql"
 )
 
@@ -5790,10 +5794,10 @@ type Group struct {
 // Constants associated with the Group.ID property.
 // Id/name for group.
 const (
-	GroupIDAnalyticsConst = "analytics"
+	GroupIDAnalyticsConst   = "analytics"
 	GroupIDBiConnectorConst = "bi_connector"
-	GroupIDMemberConst = "member"
-	GroupIDSearchConst = "search"
+	GroupIDMemberConst      = "member"
+	GroupIDSearchConst      = "search"
 )
 
 // UnmarshalGroup unmarshals an instance of Group from the specified map of raw messages.
@@ -6606,9 +6610,9 @@ type LogicalReplicationSlot struct {
 // NewLogicalReplicationSlot : Instantiate LogicalReplicationSlot (Generic Model Constructor)
 func (*CloudDatabasesV5) NewLogicalReplicationSlot(name string, databaseName string, pluginType string) (_model *LogicalReplicationSlot, err error) {
 	_model = &LogicalReplicationSlot{
-		Name: core.StringPtr(name),
+		Name:         core.StringPtr(name),
 		DatabaseName: core.StringPtr(databaseName),
-		PluginType: core.StringPtr(pluginType),
+		PluginType:   core.StringPtr(pluginType),
 	}
 	err = core.ValidateStruct(_model, "required parameters")
 	if err != nil {
@@ -7267,8 +7271,8 @@ type SetAutoscalingConditionsOptions struct {
 // NewSetAutoscalingConditionsOptions : Instantiate SetAutoscalingConditionsOptions
 func (*CloudDatabasesV5) NewSetAutoscalingConditionsOptions(id string, groupID string, autoscaling AutoscalingSetGroupAutoscalingIntf) *SetAutoscalingConditionsOptions {
 	return &SetAutoscalingConditionsOptions{
-		ID: core.StringPtr(id),
-		GroupID: core.StringPtr(groupID),
+		ID:          core.StringPtr(id),
+		GroupID:     core.StringPtr(groupID),
 		Autoscaling: autoscaling,
 	}
 }
@@ -7331,7 +7335,7 @@ type SetDeploymentScalingGroupOptions struct {
 // NewSetDeploymentScalingGroupOptions : Instantiate SetDeploymentScalingGroupOptions
 func (*CloudDatabasesV5) NewSetDeploymentScalingGroupOptions(id string, groupID string) *SetDeploymentScalingGroupOptions {
 	return &SetDeploymentScalingGroupOptions{
-		ID: core.StringPtr(id),
+		ID:      core.StringPtr(id),
 		GroupID: core.StringPtr(groupID),
 	}
 }
@@ -7447,8 +7451,8 @@ type Task struct {
 // The status of the task.
 const (
 	TaskStatusCompletedConst = "completed"
-	TaskStatusFailedConst = "failed"
-	TaskStatusRunningConst = "running"
+	TaskStatusFailedConst    = "failed"
+	TaskStatusRunningConst   = "running"
 )
 
 // UnmarshalTask unmarshals an instance of Task from the specified map of raw messages.
@@ -7578,7 +7582,7 @@ type UpdateUserOptions struct {
 // NewUpdateUserOptions : Instantiate UpdateUserOptions
 func (*CloudDatabasesV5) NewUpdateUserOptions(id string, userType string, username string) *UpdateUserOptions {
 	return &UpdateUserOptions{
-		ID: core.StringPtr(id),
+		ID:       core.StringPtr(id),
 		UserType: core.StringPtr(userType),
 		Username: core.StringPtr(username),
 	}
@@ -7647,6 +7651,7 @@ type User struct {
 	// remove command categories. Allowed categories are `read`, `write`, `admin` and `all`.
 	Role *string `json:"role,omitempty"`
 }
+
 func (*User) isaUser() bool {
 	return true
 }
@@ -7689,6 +7694,7 @@ type UserUpdate struct {
 	// remove command categories. Allowed categories are `read`, `write`, `admin` and `all`.
 	Role *string `json:"role,omitempty"`
 }
+
 func (*UserUpdate) isaUserUpdate() bool {
 	return true
 }
@@ -8066,7 +8072,7 @@ type ConfigurationMySQLConfiguration struct {
 const (
 	ConfigurationMySQLConfigurationDefaultAuthenticationPluginCachingSha2PasswordConst = "caching_sha2_password"
 	ConfigurationMySQLConfigurationDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
-	ConfigurationMySQLConfigurationDefaultAuthenticationPluginSha256PasswordConst = "sha256_password"
+	ConfigurationMySQLConfigurationDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
 )
 
 func (*ConfigurationMySQLConfiguration) isaConfiguration() bool {
@@ -8227,7 +8233,7 @@ type ConfigurationPgConfiguration struct {
 // authentication.
 const (
 	ConfigurationPgConfigurationLogConnectionsOffConst = "off"
-	ConfigurationPgConfigurationLogConnectionsOnConst = "on"
+	ConfigurationPgConfigurationLogConnectionsOnConst  = "on"
 )
 
 // Constants associated with the ConfigurationPgConfiguration.LogDisconnections property.
@@ -8235,7 +8241,7 @@ const (
 // duration of the session.
 const (
 	ConfigurationPgConfigurationLogDisconnectionsOffConst = "off"
-	ConfigurationPgConfigurationLogDisconnectionsOnConst = "on"
+	ConfigurationPgConfigurationLogDisconnectionsOnConst  = "on"
 )
 
 // Constants associated with the ConfigurationPgConfiguration.SynchronousCommit property.
@@ -8243,7 +8249,7 @@ const (
 // synchronous replication which will impact performance and availabilty.
 const (
 	ConfigurationPgConfigurationSynchronousCommitLocalConst = "local"
-	ConfigurationPgConfigurationSynchronousCommitOffConst = "off"
+	ConfigurationPgConfigurationSynchronousCommitOffConst   = "off"
 )
 
 // Constants associated with the ConfigurationPgConfiguration.WalLevel property.
@@ -8395,25 +8401,25 @@ type ConfigurationRedisConfiguration struct {
 // Constants associated with the ConfigurationRedisConfiguration.MaxmemoryPolicy property.
 // The policy with which Redis evicts keys when maximum memory is reached.
 const (
-	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysLruConst = "allkeys-lru"
-	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysRandomConst = "allkeys-random"
-	ConfigurationRedisConfigurationMaxmemoryPolicyNoevictionConst = "noeviction"
-	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileLruConst = "volatile-lru"
+	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
+	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
+	ConfigurationRedisConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
+	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
 	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
-	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileTTLConst = "volatile-ttl"
+	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
 )
 
 // Constants associated with the ConfigurationRedisConfiguration.Appendonly property.
 // If set to yes this will enable AOF persistence.
 const (
-	ConfigurationRedisConfigurationAppendonlyNoConst = "no"
+	ConfigurationRedisConfigurationAppendonlyNoConst  = "no"
 	ConfigurationRedisConfigurationAppendonlyYesConst = "yes"
 )
 
 // Constants associated with the ConfigurationRedisConfiguration.StopWritesOnBgsaveError property.
 // Whether or not to stop accepting writes when background persistence actions fail.
 const (
-	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorNoConst = "no"
+	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
 	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
 )
 
@@ -8920,7 +8926,7 @@ type UserOpsManagerUser struct {
 // Role for new user. Available for MongoDB Enterprise Ops Manager users.
 const (
 	UserOpsManagerUserRoleGroupDataAccessAdminConst = "group_data_access_admin"
-	UserOpsManagerUserRoleGroupReadOnlyConst = "group_read_only"
+	UserOpsManagerUserRoleGroupReadOnlyConst        = "group_read_only"
 )
 
 // NewUserOpsManagerUser : Instantiate UserOpsManagerUser (Generic Model Constructor)

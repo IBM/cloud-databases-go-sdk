@@ -554,7 +554,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
+				EndpointType:    core.StringPtr("private"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -576,7 +576,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
+				EndpointType:    core.StringPtr("private"),
 				Password:        core.StringPtr("prov1dedpassword"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}

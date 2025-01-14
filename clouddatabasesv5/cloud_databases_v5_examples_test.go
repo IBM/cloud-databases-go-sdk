@@ -29,7 +29,6 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-//
 // This file provides an example of how to use the Cloud Databases service.
 //
 // The following configuration properties are assumed to be defined:
@@ -41,14 +40,13 @@ import (
 // These configuration properties can be exported as environment variables, or stored
 // in a configuration file and then:
 // export IBM_CREDENTIALS_FILE=<name of configuration file>
-//
 var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 
 	const externalConfigFile = "../cloud_databases_v5.env"
 
 	var (
 		cloudDatabasesService *clouddatabasesv5.CloudDatabasesV5
-		config       map[string]string
+		config                map[string]string
 
 		// Variables to hold link values
 		taskIDLink string
@@ -252,8 +250,8 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-setAutoscalingConditions
 
 			autoscalingMemoryGroupMemoryScalersIoUtilizationModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryScalersIoUtilization{
-				Enabled: core.BoolPtr(true),
-				OverPeriod: core.StringPtr("5m"),
+				Enabled:      core.BoolPtr(true),
+				OverPeriod:   core.StringPtr("5m"),
 				AbovePercent: core.Int64Ptr(int64(90)),
 			}
 
@@ -262,15 +260,15 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			}
 
 			autoscalingMemoryGroupMemoryRateModel := &clouddatabasesv5.AutoscalingMemoryGroupMemoryRate{
-				IncreasePercent: core.Float64Ptr(float64(10)),
-				PeriodSeconds: core.Int64Ptr(int64(300)),
+				IncreasePercent:  core.Float64Ptr(float64(10)),
+				PeriodSeconds:    core.Int64Ptr(int64(300)),
 				LimitMbPerMember: core.Float64Ptr(float64(125952)),
-				Units: core.StringPtr("mb"),
+				Units:            core.StringPtr("mb"),
 			}
 
 			autoscalingMemoryGroupMemoryModel := &clouddatabasesv5.AutoscalingMemoryGroupMemory{
 				Scalers: autoscalingMemoryGroupMemoryScalersModel,
-				Rate: autoscalingMemoryGroupMemoryRateModel,
+				Rate:    autoscalingMemoryGroupMemoryRateModel,
 			}
 
 			autoscalingSetGroupAutoscalingModel := &clouddatabasesv5.AutoscalingSetGroupAutoscalingAutoscalingMemoryGroup{
@@ -328,9 +326,9 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-createLogicalReplicationSlot
 
 			logicalReplicationSlotModel := &clouddatabasesv5.LogicalReplicationSlot{
-				Name: core.StringPtr("customer_replication"),
+				Name:         core.StringPtr("customer_replication"),
 				DatabaseName: core.StringPtr("customers"),
-				PluginType: core.StringPtr("wal2json"),
+				PluginType:   core.StringPtr("wal2json"),
 			}
 
 			createLogicalReplicationSlotOptions := cloudDatabasesService.NewCreateLogicalReplicationSlotOptions(
@@ -384,7 +382,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-setAllowlist
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address: core.StringPtr("195.212.0.0/16"),
+				Address:     core.StringPtr("195.212.0.0/16"),
 				Description: core.StringPtr("Dev IP space 1"),
 			}
 
@@ -414,7 +412,7 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-addAllowlistEntry
 
 			allowlistEntryModel := &clouddatabasesv5.AllowlistEntry{
-				Address: core.StringPtr("172.16.0.0/16"),
+				Address:     core.StringPtr("172.16.0.0/16"),
 				Description: core.StringPtr("Dev IP space 3"),
 			}
 
@@ -852,8 +850,8 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-capability
 
 			capabilityRequestDeploymentModel := &clouddatabasesv5.CapabilityRequestDeployment{
-				Type: core.StringPtr("postgresql"),
-				Version: core.StringPtr("10"),
+				Type:     core.StringPtr("postgresql"),
+				Version:  core.StringPtr("10"),
 				Platform: core.StringPtr("classic"),
 				Location: core.StringPtr("us-south"),
 			}
