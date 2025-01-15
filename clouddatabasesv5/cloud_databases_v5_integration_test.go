@@ -1125,109 +1125,109 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 	})
 
-		// ------------------ CAPABILITY -----------------
+	// ------------------ CAPABILITY -----------------
 
-		Describe(`Capability - Retrieve the capabilities for a deployment`, func() {
-			BeforeEach(func() {
-				shouldSkipTest()
-			})
-
-			capabilityRequestDeploymentModel := &clouddatabasesv5.CapabilityRequestDeployment{
-				Type:     core.StringPtr("postgresql"),
-				Version:  core.StringPtr("16"),
-				Platform: core.StringPtr("classic"),
-				Location: core.StringPtr("us-south"),
-			}
-
-			It(`Capability - Autoscaling`, func() {
-				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
-					"autoscaling",
-				)
-				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
-
-				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-	
-				Expect(err).To(BeNil())
-				Expect(response.StatusCode).To(Equal(200))
-				Expect(capabilityResponse).ToNot(BeNil())
-			})
-
-			It(`Capability - Endpoints`, func() {
-				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
-					"endpoints",
-				)
-				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
-
-				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-	
-				Expect(err).To(BeNil())
-				Expect(response.StatusCode).To(Equal(200))
-				Expect(capabilityResponse).ToNot(BeNil())
-			})
-
-			It(`Capability - Encryption`, func() {
-				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
-					"encryption",
-				)
-				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
-
-				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-	
-				Expect(err).To(BeNil())
-				Expect(response.StatusCode).To(Equal(200))
-				Expect(capabilityResponse).ToNot(BeNil())
-			})
-
-			It(`Capability - Groups`, func() {
-				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
-					"groups",
-				)
-				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
-
-				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-	
-				Expect(err).To(BeNil())
-				Expect(response.StatusCode).To(Equal(200))
-				Expect(capabilityResponse).ToNot(BeNil())
-			})
-
-			It(`Capability - Flavors`, func() {
-				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
-					"flavors",
-				)
-				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
-
-				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-	
-				Expect(err).To(BeNil())
-				Expect(response.StatusCode).To(Equal(200))
-				Expect(capabilityResponse).ToNot(BeNil())
-			})
-
-			It(`Capability - Locations`, func() {
-				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
-					"locations",
-				)
-				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
-
-				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-	
-				Expect(err).To(BeNil())
-				Expect(response.StatusCode).To(Equal(200))
-				Expect(capabilityResponse).ToNot(BeNil())
-			})
-
-			It(`Capability - Versions`, func() {
-				capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
-					"versions",
-				)
-				capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
-
-				capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-	
-				Expect(err).To(BeNil())
-				Expect(response.StatusCode).To(Equal(200))
-				Expect(capabilityResponse).ToNot(BeNil())
-			})
+	Describe(`Capability - Retrieve the capabilities for a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
 		})
+
+		capabilityRequestDeploymentModel := &clouddatabasesv5.CapabilityRequestDeployment{
+			Type:     core.StringPtr("postgresql"),
+			Version:  core.StringPtr("16"),
+			Platform: core.StringPtr("classic"),
+			Location: core.StringPtr("us-south"),
+		}
+
+		It(`Capability - Autoscaling`, func() {
+			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+				"autoscaling",
+			)
+			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(capabilityResponse).ToNot(BeNil())
+		})
+
+		It(`Capability - Endpoints`, func() {
+			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+				"endpoints",
+			)
+			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(capabilityResponse).ToNot(BeNil())
+		})
+
+		It(`Capability - Encryption`, func() {
+			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+				"encryption",
+			)
+			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(capabilityResponse).ToNot(BeNil())
+		})
+
+		It(`Capability - Groups`, func() {
+			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+				"groups",
+			)
+			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(capabilityResponse).ToNot(BeNil())
+		})
+
+		It(`Capability - Flavors`, func() {
+			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+				"flavors",
+			)
+			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(capabilityResponse).ToNot(BeNil())
+		})
+
+		It(`Capability - Locations`, func() {
+			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+				"locations",
+			)
+			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(capabilityResponse).ToNot(BeNil())
+		})
+
+		It(`Capability - Versions`, func() {
+			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+				"versions",
+			)
+			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+
+			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(capabilityResponse).ToNot(BeNil())
+		})
+	})
 })
