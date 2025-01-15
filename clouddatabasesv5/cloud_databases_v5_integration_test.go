@@ -1133,16 +1133,16 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 
 		capabilityRequestDeploymentModel := &clouddatabasesv5.CapabilityRequestDeployment{
-			Type: core.StringPtr("postgresql"),
-			Version: core.StringPtr("10"),
+			Type:     core.StringPtr("postgresql"),
+			Version:  core.StringPtr("10"),
 			Platform: core.StringPtr("classic"),
 			Location: core.StringPtr("us-south"),
-			Plan: core.StringPtr("standard"),
+			Plan:     core.StringPtr("standard"),
 		}
 
 		capabilityRequestBackupModel := &clouddatabasesv5.CapabilityRequestBackup{
-			Type: core.StringPtr("PostgreSQL"),
-			Version: core.StringPtr("10"),
+			Type:     core.StringPtr("PostgreSQL"),
+			Version:  core.StringPtr("10"),
 			Platform: core.StringPtr("satellite"),
 			Location: core.StringPtr("us-south"),
 		}
@@ -1150,16 +1150,15 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		capabilityRequestOptionsModel := &clouddatabasesv5.CapabilityRequestOptions{
 			TargetPlatform: core.StringPtr("classic"),
 			TargetLocation: core.StringPtr("us-east"),
-			HostFlavor: core.StringPtr("multitenant"),
+			HostFlavor:     core.StringPtr("multitenant"),
 		}
-
 
 		It(`Capability - autoscaling`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("autoscaling"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1171,9 +1170,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - endpoints`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("endpoints"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1185,9 +1184,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - encryption`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("encryption"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1199,9 +1198,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - groups`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("groups"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1213,9 +1212,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - flavors`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("flavors"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1227,9 +1226,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - locations`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("locations"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1241,9 +1240,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - remotes`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("remotes"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1255,9 +1254,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - PITR`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("point_in_time_recovery"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
@@ -1269,9 +1268,9 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`Capability - versions`, func() {
 			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
 				CapabilityID: core.StringPtr("versions"),
-				Deployment: capabilityRequestDeploymentModel,
-				Backup: capabilityRequestBackupModel,
-				Options: capabilityRequestOptionsModel,
+				Deployment:   capabilityRequestDeploymentModel,
+				Backup:       capabilityRequestBackupModel,
+				Options:      capabilityRequestOptionsModel,
 			}
 
 			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
