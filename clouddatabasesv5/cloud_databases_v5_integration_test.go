@@ -883,7 +883,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				memory = 6912
 			} else if strings.Contains(deploymentID, "redis") {
 				disk = 12288
-				memory = 8192
+				memory = 4608
 			}
 
 			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
@@ -1127,156 +1127,63 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 	// ------------------ CAPABILITY -----------------
 
-	Describe(`Capability - Discover capability information`, func() {
+	Describe(`CreateCapability - Discover capability information`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
 		})
+		It(`CreateCapability(createCapabilityOptions *CreateCapabilityOptions)`, func() {
+			createCapabilityRequestDeploymentModel := &clouddatabasesv5.CreateCapabilityRequestDeployment{
+				Type: core.StringPtr("postgresql"),
+				Version: core.StringPtr("10"),
+				Platform: core.StringPtr("classic"),
+				Location: core.StringPtr("us-south"),
+				Plan: core.StringPtr("standard"),
+			}
 
-		capabilityRequestDeploymentModel := &clouddatabasesv5.CapabilityRequestDeployment{
-			Type:     core.StringPtr("postgresql"),
-			Version:  core.StringPtr("10"),
-			Platform: core.StringPtr("classic"),
-			Location: core.StringPtr("us-south"),
-			Plan:     core.StringPtr("standard"),
-		}
+			createCapabilityRequestBackupModel := &clouddatabasesv5.CreateCapabilityRequestBackup{
+				Type: core.StringPtr("PostgreSQL"),
+				Version: core.StringPtr("10"),
+				Platform: core.StringPtr("satellite"),
+				Location: core.StringPtr("us-south"),
+			}
 
-		capabilityRequestBackupModel := &clouddatabasesv5.CapabilityRequestBackup{
-			Type:     core.StringPtr("PostgreSQL"),
-			Version:  core.StringPtr("10"),
-			Platform: core.StringPtr("satellite"),
-			Location: core.StringPtr("us-south"),
-		}
+			createCapabilityRequestOptionsModel := &clouddatabasesv5.CreateCapabilityRequestOptions{
+				TargetPlatform: core.StringPtr("classic"),
+				TargetLocation: core.StringPtr("us-east"),
+				HostFlavor: core.StringPtr("multitenant"),
+			}
 
-		capabilityRequestOptionsModel := &clouddatabasesv5.CapabilityRequestOptions{
-			TargetPlatform: core.StringPtr("classic"),
-			TargetLocation: core.StringPtr("us-east"),
-			HostFlavor:     core.StringPtr("multitenant"),
-		}
-
-		It(`Capability - autoscaling`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
+			createCapabilityOptions := &clouddatabasesv5.CreateCapabilityOptions{
 				CapabilityID: core.StringPtr("autoscaling"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
+				Deployment: createCapabilityRequestDeploymentModel,
+				Backup: createCapabilityRequestBackupModel,
+				Options: createCapabilityRequestOptionsModel,
 			}
 
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+			createCapabilityResponse, response, err := cloudDatabasesService.CreateCapability(createCapabilityOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
+			Expect(createCapabilityResponse).ToNot(BeNil())
 		})
+	})
 
-		It(`Capability - endpoints`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("endpoints"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
-			}
-
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
+	Describe(`GetDeploymentCapability - Discover capability information from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
 		})
-
-		It(`Capability - encryption`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("encryption"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
+		It(`GetDeploymentCapability(getDeploymentCapabilityOptions *GetDeploymentCapabilityOptions)`, func() {
+			getDeploymentCapabilityOptions := &clouddatabasesv5.GetDeploymentCapabilityOptions{
+				ID: &deploymentID,
+				CapabilityID: core.StringPtr("autoscaling"),
+				TargetPlatform: core.StringPtr("target_platform=classic"),
+				TargetLocation: core.StringPtr("target_location=us-east"),
+				HostFlavor: core.StringPtr("host_flavor=multitenant"),
 			}
 
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+			getDeploymentCapabilityResponse, response, err := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptions)
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
-		})
-
-		It(`Capability - groups`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("groups"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
-			}
-
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
-		})
-
-		It(`Capability - flavors`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("flavors"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
-			}
-
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
-		})
-
-		It(`Capability - locations`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("locations"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
-			}
-
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
-		})
-
-		It(`Capability - remotes`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("remotes"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
-			}
-
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
-		})
-
-		It(`Capability - PITR`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("point_in_time_recovery"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
-			}
-
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
-		})
-
-		It(`Capability - versions`, func() {
-			capabilityOptions := &clouddatabasesv5.CapabilityOptions{
-				CapabilityID: core.StringPtr("versions"),
-				Deployment:   capabilityRequestDeploymentModel,
-				Backup:       capabilityRequestBackupModel,
-				Options:      capabilityRequestOptionsModel,
-			}
-
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
+			Expect(getDeploymentCapabilityResponse).ToNot(BeNil())
 		})
 	})
 })

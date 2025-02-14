@@ -992,34 +992,60 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(getAllowlistResponse).ToNot(BeNil())
 		})
 
-		It(`Capability request example`, func() {
-			fmt.Println("\nCapability() result:")
-			// begin-capability
+		It(`CreateCapability request example`, func() {
+			fmt.Println("\nCreateCapability() result:")
+			// begin-createCapability
 
-			capabilityRequestDeploymentModel := &clouddatabasesv5.CapabilityRequestDeployment{
-				Type:     core.StringPtr("postgresql"),
-				Version:  core.StringPtr("10"),
+			createCapabilityRequestDeploymentModel := &clouddatabasesv5.CreateCapabilityRequestDeployment{
+				Type: core.StringPtr("postgresql"),
+				Version: core.StringPtr("10"),
 				Platform: core.StringPtr("classic"),
 				Location: core.StringPtr("us-south"),
 			}
 
-			capabilityOptions := cloudDatabasesService.NewCapabilityOptions(
+			createCapabilityOptions := cloudDatabasesService.NewCreateCapabilityOptions(
 				"autoscaling",
 			)
-			capabilityOptions.SetDeployment(capabilityRequestDeploymentModel)
+			createCapabilityOptions.SetDeployment(createCapabilityRequestDeploymentModel)
 
-			capabilityResponse, response, err := cloudDatabasesService.Capability(capabilityOptions)
+			createCapabilityResponse, response, err := cloudDatabasesService.CreateCapability(createCapabilityOptions)
 			if err != nil {
 				panic(err)
 			}
-			b, _ := json.MarshalIndent(capabilityResponse, "", "  ")
+			b, _ := json.MarshalIndent(createCapabilityResponse, "", "  ")
 			fmt.Println(string(b))
 
-			// end-capability
+			// end-createCapability
 
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
-			Expect(capabilityResponse).ToNot(BeNil())
+			Expect(createCapabilityResponse).ToNot(BeNil())
+		})
+		
+		It(`GetDeploymentCapability request example`, func() {
+			fmt.Println("\nGetDeploymentCapability() result:")
+			// begin-getDeploymentCapability
+
+			getDeploymentCapabilityOptions := cloudDatabasesService.NewGetDeploymentCapabilityOptions(
+				"testString",
+				"autoscaling",
+			)
+			getDeploymentCapabilityOptions.SetTargetPlatform("target_platform=classic")
+			getDeploymentCapabilityOptions.SetTargetLocation("target_location=us-east")
+			getDeploymentCapabilityOptions.SetHostFlavor("host_flavor=multitenant")
+
+			getDeploymentCapabilityResponse, response, err := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(getDeploymentCapabilityResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-getDeploymentCapability
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDeploymentCapabilityResponse).ToNot(BeNil())
 		})
 	})
 })
