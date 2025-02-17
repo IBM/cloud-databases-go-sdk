@@ -3206,7 +3206,8 @@ type Capability struct {
 
 	Restores *RestoresCapability `json:"restores,omitempty"`
 
-	Versions *VersionsCapability `json:"versions,omitempty"`
+	// An array of versions of the database, their status, preferedness, and transitions.
+	Versions []VersionsCapabilityItem `json:"versions,omitempty"`
 }
 func (*Capability) isaCapability() bool {
 	return true
@@ -3264,7 +3265,7 @@ func UnmarshalCapability(m map[string]json.RawMessage, result interface{}) (err 
 		err = core.SDKErrorf(err, "", "restores-error", common.GetComponentInfo())
 		return
 	}
-	err = core.UnmarshalModel(m, "versions", &obj.Versions, UnmarshalVersionsCapability)
+	err = core.UnmarshalModel(m, "versions", &obj.Versions, UnmarshalVersionsCapabilityItem)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "versions-error", common.GetComponentInfo())
 		return
@@ -7559,26 +7560,8 @@ func UnmarshalUserUpdate(m map[string]json.RawMessage, result interface{}) (err 
 	return
 }
 
-// VersionsCapability : VersionsCapability struct
-type VersionsCapability struct {
-	// An array of versions of the database, their status, preferedness, and transitions.
-	Versions []VersionsCapabilityVersionsItem `json:"versions,omitempty"`
-}
-
-// UnmarshalVersionsCapability unmarshals an instance of VersionsCapability from the specified map of raw messages.
-func UnmarshalVersionsCapability(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(VersionsCapability)
-	err = core.UnmarshalModel(m, "versions", &obj.Versions, UnmarshalVersionsCapabilityVersionsItem)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "versions-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// VersionsCapabilityVersionsItem : VersionsCapabilityVersionsItem struct
-type VersionsCapabilityVersionsItem struct {
+// VersionsCapabilityItem : VersionsCapabilityItem struct
+type VersionsCapabilityItem struct {
 	// The database type.
 	Type *string `json:"type,omitempty"`
 
@@ -7592,20 +7575,20 @@ type VersionsCapabilityVersionsItem struct {
 	IsPreferred *bool `json:"is_preferred,omitempty"`
 
 	// versions that this version can be upgraded to.
-	Transitions []VersionsCapabilityVersionsItemTransitionsItem `json:"transitions,omitempty"`
+	Transitions []VersionsCapabilityItemTransitionsItem `json:"transitions,omitempty"`
 }
 
-// Constants associated with the VersionsCapabilityVersionsItem.Status property.
+// Constants associated with the VersionsCapabilityItem.Status property.
 // The status of this version: To be finalized.
 const (
-	VersionsCapabilityVersionsItemStatusBetaConst = "beta"
-	VersionsCapabilityVersionsItemStatusDeprecatedConst = "deprecated"
-	VersionsCapabilityVersionsItemStatusStableConst = "stable"
+	VersionsCapabilityItemStatusBetaConst = "beta"
+	VersionsCapabilityItemStatusDeprecatedConst = "deprecated"
+	VersionsCapabilityItemStatusStableConst = "stable"
 )
 
-// UnmarshalVersionsCapabilityVersionsItem unmarshals an instance of VersionsCapabilityVersionsItem from the specified map of raw messages.
-func UnmarshalVersionsCapabilityVersionsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(VersionsCapabilityVersionsItem)
+// UnmarshalVersionsCapabilityItem unmarshals an instance of VersionsCapabilityItem from the specified map of raw messages.
+func UnmarshalVersionsCapabilityItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VersionsCapabilityItem)
 	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "type-error", common.GetComponentInfo())
@@ -7626,7 +7609,7 @@ func UnmarshalVersionsCapabilityVersionsItem(m map[string]json.RawMessage, resul
 		err = core.SDKErrorf(err, "", "is_preferred-error", common.GetComponentInfo())
 		return
 	}
-	err = core.UnmarshalModel(m, "transitions", &obj.Transitions, UnmarshalVersionsCapabilityVersionsItemTransitionsItem)
+	err = core.UnmarshalModel(m, "transitions", &obj.Transitions, UnmarshalVersionsCapabilityItemTransitionsItem)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "transitions-error", common.GetComponentInfo())
 		return
@@ -7635,8 +7618,8 @@ func UnmarshalVersionsCapabilityVersionsItem(m map[string]json.RawMessage, resul
 	return
 }
 
-// VersionsCapabilityVersionsItemTransitionsItem : VersionsCapabilityVersionsItemTransitionsItem struct
-type VersionsCapabilityVersionsItemTransitionsItem struct {
+// VersionsCapabilityItemTransitionsItem : VersionsCapabilityItemTransitionsItem struct
+type VersionsCapabilityItemTransitionsItem struct {
 	// The database type.
 	Application *string `json:"application,omitempty"`
 
@@ -7650,9 +7633,9 @@ type VersionsCapabilityVersionsItemTransitionsItem struct {
 	ToVersion *string `json:"to_version,omitempty"`
 }
 
-// UnmarshalVersionsCapabilityVersionsItemTransitionsItem unmarshals an instance of VersionsCapabilityVersionsItemTransitionsItem from the specified map of raw messages.
-func UnmarshalVersionsCapabilityVersionsItemTransitionsItem(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(VersionsCapabilityVersionsItemTransitionsItem)
+// UnmarshalVersionsCapabilityItemTransitionsItem unmarshals an instance of VersionsCapabilityItemTransitionsItem from the specified map of raw messages.
+func UnmarshalVersionsCapabilityItemTransitionsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VersionsCapabilityItemTransitionsItem)
 	err = core.UnmarshalPrimitive(m, "application", &obj.Application)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "application-error", common.GetComponentInfo())
@@ -7944,7 +7927,8 @@ func UnmarshalCapabilityRestores(m map[string]json.RawMessage, result interface{
 // CapabilityVersions : CapabilityVersions struct
 // This model "extends" Capability
 type CapabilityVersions struct {
-	Versions *VersionsCapability `json:"versions,omitempty"`
+	// An array of versions of the database, their status, preferedness, and transitions.
+	Versions []VersionsCapabilityItem `json:"versions,omitempty"`
 }
 
 func (*CapabilityVersions) isaCapability() bool {
@@ -7954,7 +7938,7 @@ func (*CapabilityVersions) isaCapability() bool {
 // UnmarshalCapabilityVersions unmarshals an instance of CapabilityVersions from the specified map of raw messages.
 func UnmarshalCapabilityVersions(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(CapabilityVersions)
-	err = core.UnmarshalModel(m, "versions", &obj.Versions, UnmarshalVersionsCapability)
+	err = core.UnmarshalModel(m, "versions", &obj.Versions, UnmarshalVersionsCapabilityItem)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "versions-error", common.GetComponentInfo())
 		return
