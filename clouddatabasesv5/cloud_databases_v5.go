@@ -7626,6 +7626,9 @@ type VersionsCapabilityItemTransitionsItem struct {
 	// method of going from from_version to to_version.
 	Method *string `json:"method,omitempty"`
 
+	// Option to upgrade instance without taking a backup. Only applicable for in-place versions.
+	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
+
 	// The version the transition in from.
 	FromVersion *string `json:"from_version,omitempty"`
 
@@ -7644,6 +7647,11 @@ func UnmarshalVersionsCapabilityItemTransitionsItem(m map[string]json.RawMessage
 	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "method-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)
