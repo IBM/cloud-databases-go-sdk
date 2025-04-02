@@ -1262,8 +1262,8 @@ func (cloudDatabases *CloudDatabasesV5) StartOndemandBackupWithContext(ctx conte
 }
 
 // GetPitrData : Get earliest point-in-time-recovery timestamp
-// Returns the earliest available time for point-in-time-recovery in ISO8601 UTC format. PostgreSQL and EnterpriseDB
-// only.
+// Returns the earliest available time for point-in-time-recovery in ISO8601 UTC format. PostgreSQL, EnterpriseDB, MySQL
+// and MongoDB Enterprise only.
 func (cloudDatabases *CloudDatabasesV5) GetPitrData(getPitrDataOptions *GetPitrDataOptions) (result *GetPitrDataResponse, response *core.DetailedResponse, err error) {
 	result, response, err = cloudDatabases.GetPitrDataWithContext(context.Background(), getPitrDataOptions)
 	err = core.RepurposeSDKProblem(err, "")
@@ -7626,6 +7626,9 @@ type VersionsCapabilityItemTransitionsItem struct {
 	// method of going from from_version to to_version.
 	Method *string `json:"method,omitempty"`
 
+	// Option to upgrade instance without taking a backup.
+	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
+
 	// The version the transition in from.
 	FromVersion *string `json:"from_version,omitempty"`
 
@@ -7644,6 +7647,11 @@ func UnmarshalVersionsCapabilityItemTransitionsItem(m map[string]json.RawMessage
 	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "method-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)
