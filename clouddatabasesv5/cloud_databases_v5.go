@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /*
- * IBM OpenAPI SDK Code Generator Version: 3.96.1-5136e54a-20241108-203028
+ * IBM OpenAPI SDK Code Generator Version: 3.102.0-615ec964-20250307-203034
  */
 
 // Package clouddatabasesv5 : Operations and models for the CloudDatabasesV5 service
@@ -1262,8 +1262,8 @@ func (cloudDatabases *CloudDatabasesV5) StartOndemandBackupWithContext(ctx conte
 }
 
 // GetPitrData : Get earliest point-in-time-recovery timestamp
-// Returns the earliest available time for point-in-time-recovery in ISO8601 UTC format. PostgreSQL and EnterpriseDB
-// only.
+// Returns the earliest available time for point-in-time-recovery in ISO8601 UTC format. PostgreSQL, EnterpriseDB, MySQL
+// and MongoDB Enterprise only.
 func (cloudDatabases *CloudDatabasesV5) GetPitrData(getPitrDataOptions *GetPitrDataOptions) (result *GetPitrDataResponse, response *core.DetailedResponse, err error) {
 	result, response, err = cloudDatabases.GetPitrDataWithContext(context.Background(), getPitrDataOptions)
 	err = core.RepurposeSDKProblem(err, "")
@@ -2396,6 +2396,93 @@ func (cloudDatabases *CloudDatabasesV5) DeleteAllowlistEntryWithContext(ctx cont
 
 	return
 }
+
+// SetDatabaseInplaceVersionUpgrade : Upgrade your database version
+// Upgrade your database version. See version upgrade documentation for details.
+func (cloudDatabases *CloudDatabasesV5) SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions) (result *SetDatabaseInplaceVersionUpgradeResponse, response *core.DetailedResponse, err error) {
+	result, response, err = cloudDatabases.SetDatabaseInplaceVersionUpgradeWithContext(context.Background(), setDatabaseInplaceVersionUpgradeOptions)
+	err = core.RepurposeSDKProblem(err, "")
+	return
+}
+
+// SetDatabaseInplaceVersionUpgradeWithContext is an alternate form of the SetDatabaseInplaceVersionUpgrade method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) SetDatabaseInplaceVersionUpgradeWithContext(ctx context.Context, setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions) (result *SetDatabaseInplaceVersionUpgradeResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(setDatabaseInplaceVersionUpgradeOptions, "setDatabaseInplaceVersionUpgradeOptions cannot be nil")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "unexpected-nil-param", common.GetComponentInfo())
+		return
+	}
+	err = core.ValidateStruct(setDatabaseInplaceVersionUpgradeOptions, "setDatabaseInplaceVersionUpgradeOptions")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "struct-validation-error", common.GetComponentInfo())
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"id": *setDatabaseInplaceVersionUpgradeOptions.ID,
+	}
+
+	builder := core.NewRequestBuilder(core.PATCH)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/version`, pathParamsMap)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "url-resolve-error", common.GetComponentInfo())
+		return
+	}
+
+	for headerName, headerValue := range setDatabaseInplaceVersionUpgradeOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "SetDatabaseInplaceVersionUpgrade")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	if setDatabaseInplaceVersionUpgradeOptions.SkipBackup != nil {
+		builder.AddQuery("skip_backup", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.SkipBackup))
+	}
+	if setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime != nil {
+		builder.AddQuery("expiration_datetime", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime))
+	}
+
+	body := make(map[string]interface{})
+	if setDatabaseInplaceVersionUpgradeOptions.Version != nil {
+		body["version"] = setDatabaseInplaceVersionUpgradeOptions.Version
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "set-json-body-error", common.GetComponentInfo())
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		err = core.SDKErrorf(err, "", "build-error", common.GetComponentInfo())
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = cloudDatabases.Service.Request(request, &rawResponse)
+	if err != nil {
+		core.EnrichHTTPProblem(err, "setDatabaseInplaceVersionUpgrade", getServiceComponentInfo())
+		err = core.SDKErrorf(err, "", "http-request-err", common.GetComponentInfo())
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetDatabaseInplaceVersionUpgradeResponse)
+		if err != nil {
+			err = core.SDKErrorf(err, "", "unmarshal-resp-error", common.GetComponentInfo())
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
 func getServiceComponentInfo() *core.ProblemComponent {
 	return core.NewProblemComponent(DefaultServiceName, "5.0.0")
 }
@@ -2407,7 +2494,7 @@ type AddAllowlistEntryOptions struct {
 
 	IPAddress *AllowlistEntry `json:"ip_address,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -3012,7 +3099,7 @@ type CompleteConnectionOptions struct {
 	// by other commands.
 	CertificateRoot *string `json:"certificate_root,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -3864,7 +3951,7 @@ type CreateDatabaseUserOptions struct {
 
 	User UserIntf `json:"user,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -3924,7 +4011,7 @@ type CreateLogicalReplicationSlotOptions struct {
 
 	LogicalReplicationSlot *LogicalReplicationSlot `json:"logical_replication_slot,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -3978,7 +4065,7 @@ type DeleteAllowlistEntryOptions struct {
 	// An IPv4 address or a CIDR range (netmasked IPv4 address).
 	Ipaddress *string `json:"ipaddress" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4036,7 +4123,7 @@ type DeleteDatabaseUserOptions struct {
 	// Username.
 	Username *string `json:"username" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4098,7 +4185,7 @@ type DeleteLogicalReplicationSlotOptions struct {
 	// Name of the logical replication slot.
 	Name *string `json:"name" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4226,8 +4313,11 @@ type DeployablesVersionsItemTransitionsItem struct {
 	// The database type.
 	Application *string `json:"application,omitempty"`
 
-	// method of going from from_version to to_version.
+	// in-place or restore method of going from from_version to to_version.
 	Method *string `json:"method,omitempty"`
+
+	// Option to upgrade instance without taking a backup.
+	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
 
 	// The version the transition in from.
 	FromVersion *string `json:"from_version,omitempty"`
@@ -4247,6 +4337,11 @@ func UnmarshalDeployablesVersionsItemTransitionsItem(m map[string]json.RawMessag
 	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "method-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)
@@ -4352,7 +4447,7 @@ type GetAllowlistOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4400,7 +4495,7 @@ type GetAutoscalingConditionsOptions struct {
 	// Group ID.
 	GroupID *string `json:"group_id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4435,7 +4530,7 @@ type GetBackupInfoOptions struct {
 	// Backup ID.
 	BackupID *string `json:"backup_id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4493,7 +4588,7 @@ type GetConnectionOptions struct {
 	// by other commands.
 	CertificateRoot *string `json:"certificate_root,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4576,7 +4671,7 @@ type GetDefaultScalingGroupsOptions struct {
 	// groups will be returned.
 	HostFlavor *string `json:"host_flavor,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4641,7 +4736,7 @@ type GetDeploymentInfoOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4686,7 +4781,7 @@ type GetPitrDataOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4731,7 +4826,7 @@ type GetTaskOptions struct {
 	// Task ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5336,7 +5431,7 @@ type KillConnectionsOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5379,7 +5474,7 @@ func UnmarshalKillConnectionsResponse(m map[string]json.RawMessage, result inter
 // ListDeployablesOptions : The ListDeployables options.
 type ListDeployablesOptions struct {
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5416,7 +5511,7 @@ type ListDeploymentBackupsOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5444,7 +5539,7 @@ type ListDeploymentScalingGroupsOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5489,7 +5584,7 @@ type ListDeploymentTasksOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5515,7 +5610,7 @@ func (options *ListDeploymentTasksOptions) SetHeaders(param map[string]string) *
 // ListRegionsOptions : The ListRegions options.
 type ListRegionsOptions struct {
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5553,7 +5648,7 @@ type ListRemotesOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5960,7 +6055,7 @@ type PromoteReadOnlyReplicaOptions struct {
 	// Promotion and Upgrade options.
 	Promotion map[string]interface{} `json:"promotion,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6132,7 +6227,7 @@ type ResyncReplicaOptions struct {
 	// Deployment ID of the read-only replica.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6183,7 +6278,7 @@ type SetAllowlistOptions struct {
 	// header to ensure synchronicity between clients.
 	IfMatch *string `json:"If-Match,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6245,7 +6340,7 @@ type SetAutoscalingConditionsOptions struct {
 
 	Autoscaling AutoscalingSetGroupAutoscalingIntf `json:"autoscaling" validate:"required"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6299,6 +6394,81 @@ func UnmarshalSetAutoscalingConditionsResponse(m map[string]json.RawMessage, res
 	return
 }
 
+// SetDatabaseInplaceVersionUpgradeOptions : The SetDatabaseInplaceVersionUpgrade options.
+type SetDatabaseInplaceVersionUpgradeOptions struct {
+	// Deployment ID.
+	ID *string `json:"id" validate:"required,ne="`
+
+	// a database version.
+	Version *string `json:"version" validate:"required"`
+
+	// (Optional, Boolean) Whether to skip taking a backup before upgrading the database version. This is only applicable
+	// for supported database types. To learn more, refer to the version upgrade documentation.
+	SkipBackup *bool `json:"skip_backup,omitempty"`
+
+	// The expiration_datetime must be in the ISO8601 timestamp format and between 5 minutes and 24 hours from now. It
+	// allows you to specify how long to wait for the job to start before the upgrade is cancelled.
+	ExpirationDatetime *strfmt.DateTime `json:"expiration_datetime,omitempty"`
+
+	// Allows users to set headers on API requests.
+	Headers map[string]string
+}
+
+// NewSetDatabaseInplaceVersionUpgradeOptions : Instantiate SetDatabaseInplaceVersionUpgradeOptions
+func (*CloudDatabasesV5) NewSetDatabaseInplaceVersionUpgradeOptions(id string, version string) *SetDatabaseInplaceVersionUpgradeOptions {
+	return &SetDatabaseInplaceVersionUpgradeOptions{
+		ID:      core.StringPtr(id),
+		Version: core.StringPtr(version),
+	}
+}
+
+// SetID : Allow user to set ID
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetID(id string) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
+}
+
+// SetVersion : Allow user to set Version
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetVersion(version string) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.Version = core.StringPtr(version)
+	return _options
+}
+
+// SetSkipBackup : Allow user to set SkipBackup
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetSkipBackup(skipBackup bool) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.SkipBackup = core.BoolPtr(skipBackup)
+	return _options
+}
+
+// SetExpirationDatetime : Allow user to set ExpirationDatetime
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetExpirationDatetime(expirationDatetime *strfmt.DateTime) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.ExpirationDatetime = expirationDatetime
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *SetDatabaseInplaceVersionUpgradeOptions) SetHeaders(param map[string]string) *SetDatabaseInplaceVersionUpgradeOptions {
+	options.Headers = param
+	return options
+}
+
+// SetDatabaseInplaceVersionUpgradeResponse : SetDatabaseInplaceVersionUpgradeResponse struct
+type SetDatabaseInplaceVersionUpgradeResponse struct {
+	Task *Task `json:"task,omitempty"`
+}
+
+// UnmarshalSetDatabaseInplaceVersionUpgradeResponse unmarshals an instance of SetDatabaseInplaceVersionUpgradeResponse from the specified map of raw messages.
+func UnmarshalSetDatabaseInplaceVersionUpgradeResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(SetDatabaseInplaceVersionUpgradeResponse)
+	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "task-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // SetDeploymentScalingGroupOptions : The SetDeploymentScalingGroup options.
 type SetDeploymentScalingGroupOptions struct {
 	// Deployment ID.
@@ -6309,7 +6479,7 @@ type SetDeploymentScalingGroupOptions struct {
 
 	Group *GroupScaling `json:"group,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6367,7 +6537,7 @@ type StartOndemandBackupOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6412,6 +6582,9 @@ type Task struct {
 	// ID of the task.
 	ID *string `json:"id,omitempty"`
 
+	// The resource type of the task.
+	ResourceType *string `json:"resource_type,omitempty"`
+
 	// Human-readable description of the task.
 	Description *string `json:"description,omitempty"`
 
@@ -6428,11 +6601,25 @@ type Task struct {
 	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
 }
 
+// Constants associated with the Task.ResourceType property.
+// The resource type of the task.
+const (
+	TaskResourceTypeBackupConst        = "backup"
+	TaskResourceTypeConfigurationConst = "configuration"
+	TaskResourceTypeIPConst            = "ip"
+	TaskResourceTypeInstanceConst      = "instance"
+	TaskResourceTypePasswordConst      = "password"
+	TaskResourceTypeUpgradeConst       = "upgrade"
+	TaskResourceTypeUserConst          = "user"
+)
+
 // Constants associated with the Task.Status property.
 // The status of the task.
 const (
 	TaskStatusCompletedConst = "completed"
+	TaskStatusExpiredConst   = "expired"
 	TaskStatusFailedConst    = "failed"
+	TaskStatusQueuedConst    = "queued"
 	TaskStatusRunningConst   = "running"
 )
 
@@ -6442,6 +6629,11 @@ func UnmarshalTask(m map[string]json.RawMessage, result interface{}) (err error)
 	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "id-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "resource_type", &obj.ResourceType)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "resource_type-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
@@ -6497,7 +6689,7 @@ type UpdateDatabaseConfigurationOptions struct {
 
 	Configuration ConfigurationIntf `json:"configuration,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6556,7 +6748,7 @@ type UpdateUserOptions struct {
 
 	User UserUpdateIntf `json:"user,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 

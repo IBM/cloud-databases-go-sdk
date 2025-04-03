@@ -34,11 +34,11 @@ import (
 )
 
 /**
- * This file contains an integration test for the clouddatabasesv5 package.
- *
- * Notes:
- *
- * The integration test will automatically skip tests if the required config file is not available.
+* This file contains an integration test for the clouddatabasesv5 package.
+*
+* Notes:
+*
+* The integration test will automatically skip tests if the required config file is not available.
  */
 
 var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
@@ -1125,6 +1125,25 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getTaskResponse).ToNot(BeNil())
+		})
+	})
+
+	Describe(`SetDatabaseInplaceVersionUpgrade - Upgrade your database version`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
+			setDatabaseInplaceVersionUpgradeOptions := &clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions{
+				ID:                 core.StringPtr("testString"),
+				Version:            core.StringPtr("7"),
+				SkipBackup:         core.BoolPtr(true),
+				ExpirationDatetime: CreateMockDateTime("2025-10-05T17:17:17Z"),
+			}
+
+			setDatabaseInplaceVersionUpgradeResponse, response, err := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions)
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
 		})
 	})
 })
