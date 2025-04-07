@@ -367,7 +367,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
 			userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -439,7 +439,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			userModel := &clouddatabasesv5.User{
 				Username: core.StringPtr("user"),
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
@@ -469,7 +469,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			It(`changes the password successfully`, func() {
 
 				userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-					Password: core.StringPtr("xyzzyyzzyx111111111"),
+					Password: core.StringPtr("Xyzzyyzzyx111111111"),
 				}
 
 				updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -554,7 +554,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
+				EndpointType:    core.StringPtr("private"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -576,8 +576,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
-				Password:        core.StringPtr("prov1dedpassword"),
+				EndpointType:    core.StringPtr("private"),
+				Password:        core.StringPtr("Prov1dedpassword"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -886,7 +886,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				memory = 6912
 			} else if strings.Contains(deploymentID, "redis") {
 				disk = 12288
-				memory = 4608
+				memory = 12288
 			}
 
 			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
@@ -1133,17 +1133,35 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			shouldSkipTest()
 		})
 		It(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
+			// this test is in progress while in-place version upgrade is implemented
+			// in the future the request will return error when version upgrade is not supported on the defined database
+			// if the version upgrade is supported with the correct version in the request,
+			// the response will contain a task with resource_type of "upgrade"
+
+			expiry := time.Now().Add(10 * time.Minute).Format(time.RFC3339)
+
 			setDatabaseInplaceVersionUpgradeOptions := &clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions{
 				ID:                 core.StringPtr("testString"),
 				Version:            core.StringPtr("7"),
 				SkipBackup:         core.BoolPtr(true),
-				ExpirationDatetime: CreateMockDateTime("2025-10-05T17:17:17Z"),
+				ExpirationDatetime: CreateMockDateTime(expiry),
 			}
 
 			setDatabaseInplaceVersionUpgradeResponse, response, err := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions)
-			Expect(err).To(BeNil())
-			Expect(response.StatusCode).To(Equal(200))
-			Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
+
+			if strings.Contains(deploymentID, "mongodb") {
+				// this is not implemented on MongoDB yet
+				Expect(err).To(BeNil())
+				Expect(response.StatusCode).To(Equal(200))
+				Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
+			} else {
+				// currently the request for each database will return the 404 error
+				// when in-place version upgrade API is released to prod, the request should return the 422 error
+				Expect(err).ToNot(BeNil())
+				Expect(response.StatusCode).To(Equal(404))
+				Expect(setDatabaseInplaceVersionUpgradeResponse).To(BeNil())
+			}
+
 		})
 	})
 })
