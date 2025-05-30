@@ -367,7 +367,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
 			userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -439,7 +439,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			userModel := &clouddatabasesv5.User{
 				Username: core.StringPtr("user"),
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
@@ -469,7 +469,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			It(`changes the password successfully`, func() {
 
 				userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-					Password: core.StringPtr("xyzzyyzzyx111111111"),
+					Password: core.StringPtr("Xyzzyyzzyx111111111"),
 				}
 
 				updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -554,7 +554,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
+				EndpointType:    core.StringPtr("private"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -576,8 +576,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
-				Password:        core.StringPtr("prov1dedpassword"),
+				EndpointType:    core.StringPtr("private"),
+				Password:        core.StringPtr("Prov1dedpassword"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -886,7 +886,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				memory = 6912
 			} else if strings.Contains(deploymentID, "redis") {
 				disk = 12288
-				memory = 4608
+				memory = 12288
 			}
 
 			groupScalingMemoryModel := &clouddatabasesv5.GroupScalingMemory{
@@ -1125,6 +1125,25 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getTaskResponse).ToNot(BeNil())
+		})
+	})
+
+	Describe(`SetDatabaseInplaceVersionUpgrade - Upgrade your database version`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
+			setDatabaseInplaceVersionUpgradeOptions := &clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions{
+				ID:                 core.StringPtr("testString"),
+				Version:            core.StringPtr("7"),
+				SkipBackup:         core.BoolPtr(true),
+				ExpirationDatetime: CreateMockDateTime("2025-10-05T17:17:17Z"),
+			}
+
+			setDatabaseInplaceVersionUpgradeResponse, response, err := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions)
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
 		})
 	})
 })
