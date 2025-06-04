@@ -2564,6 +2564,93 @@ func (cloudDatabases *CloudDatabasesV5) GetDeploymentCapabilityWithContext(ctx c
 
 	return
 }
+
+// SetDatabaseInplaceVersionUpgrade : Upgrade your database version
+// Upgrade your database version. See version upgrade documentation for details.
+func (cloudDatabases *CloudDatabasesV5) SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions) (result *SetDatabaseInplaceVersionUpgradeResponse, response *core.DetailedResponse, err error) {
+	result, response, err = cloudDatabases.SetDatabaseInplaceVersionUpgradeWithContext(context.Background(), setDatabaseInplaceVersionUpgradeOptions)
+	err = core.RepurposeSDKProblem(err, "")
+	return
+}
+
+// SetDatabaseInplaceVersionUpgradeWithContext is an alternate form of the SetDatabaseInplaceVersionUpgrade method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) SetDatabaseInplaceVersionUpgradeWithContext(ctx context.Context, setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions) (result *SetDatabaseInplaceVersionUpgradeResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(setDatabaseInplaceVersionUpgradeOptions, "setDatabaseInplaceVersionUpgradeOptions cannot be nil")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "unexpected-nil-param", common.GetComponentInfo())
+		return
+	}
+	err = core.ValidateStruct(setDatabaseInplaceVersionUpgradeOptions, "setDatabaseInplaceVersionUpgradeOptions")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "struct-validation-error", common.GetComponentInfo())
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"id": *setDatabaseInplaceVersionUpgradeOptions.ID,
+	}
+
+	builder := core.NewRequestBuilder(core.PATCH)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/version`, pathParamsMap)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "url-resolve-error", common.GetComponentInfo())
+		return
+	}
+
+	for headerName, headerValue := range setDatabaseInplaceVersionUpgradeOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "SetDatabaseInplaceVersionUpgrade")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	if setDatabaseInplaceVersionUpgradeOptions.SkipBackup != nil {
+		builder.AddQuery("skip_backup", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.SkipBackup))
+	}
+	if setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime != nil {
+		builder.AddQuery("expiration_datetime", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime))
+	}
+
+	body := make(map[string]interface{})
+	if setDatabaseInplaceVersionUpgradeOptions.Version != nil {
+		body["version"] = setDatabaseInplaceVersionUpgradeOptions.Version
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "set-json-body-error", common.GetComponentInfo())
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		err = core.SDKErrorf(err, "", "build-error", common.GetComponentInfo())
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = cloudDatabases.Service.Request(request, &rawResponse)
+	if err != nil {
+		core.EnrichHTTPProblem(err, "setDatabaseInplaceVersionUpgrade", getServiceComponentInfo())
+		err = core.SDKErrorf(err, "", "http-request-err", common.GetComponentInfo())
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetDatabaseInplaceVersionUpgradeResponse)
+		if err != nil {
+			err = core.SDKErrorf(err, "", "unmarshal-resp-error", common.GetComponentInfo())
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
 func getServiceComponentInfo() *core.ProblemComponent {
 	return core.NewProblemComponent(DefaultServiceName, "5.0.0")
 }
@@ -3176,17 +3263,6 @@ func UnmarshalBackups(m map[string]json.RawMessage, result interface{}) (err err
 }
 
 // Capability : Capability struct
-// Models which "extend" this model:
-// - CapabilityAutoscaling
-// - CapabilityEncryption
-// - CapabilityEndpoints
-// - CapabilityGroups
-// - CapabilityFlavors
-// - CapabilityLocations
-// - CapabilityPointInTimeRecovery
-// - CapabilityRemotes
-// - CapabilityRestores
-// - CapabilityVersions
 type Capability struct {
 	Autoscaling *AutoscalingCapability `json:"autoscaling,omitempty"`
 
@@ -3204,17 +3280,11 @@ type Capability struct {
 
 	Remotes *RemotesCapability `json:"remotes,omitempty"`
 
+	// Only available for requests with Backup. Only available capability for Backup requests.
 	Restores *RestoresCapability `json:"restores,omitempty"`
 
 	// An array of versions of the database, their status, preferedness, and transitions.
 	Versions []VersionsCapabilityItem `json:"versions,omitempty"`
-}
-func (*Capability) isaCapability() bool {
-	return true
-}
-
-type CapabilityIntf interface {
-	isaCapability() bool
 }
 
 // UnmarshalCapability unmarshals an instance of Capability from the specified map of raw messages.
@@ -4335,7 +4405,7 @@ func UnmarshalCreateCapabilityRequestOptions(m map[string]json.RawMessage, resul
 
 // CreateCapabilityResponse : CreateCapabilityResponse struct
 type CreateCapabilityResponse struct {
-	Capability CapabilityIntf `json:"capability,omitempty"`
+	Capability *Capability `json:"capability,omitempty"`
 }
 
 // UnmarshalCreateCapabilityResponse unmarshals an instance of CreateCapabilityResponse from the specified map of raw messages.
@@ -4722,8 +4792,11 @@ type DeployablesVersionsItemTransitionsItem struct {
 	// The database type.
 	Application *string `json:"application,omitempty"`
 
-	// method of going from from_version to to_version.
+	// in-place or restore method of going from from_version to to_version.
 	Method *string `json:"method,omitempty"`
+
+	// Option to upgrade instance without taking a backup.
+	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
 
 	// The version the transition in from.
 	FromVersion *string `json:"from_version,omitempty"`
@@ -4743,6 +4816,11 @@ func UnmarshalDeployablesVersionsItemTransitionsItem(m map[string]json.RawMessag
 	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "method-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)
@@ -5304,7 +5382,6 @@ const (
 	GetDeploymentCapabilityOptionsCapabilityIDAutoscalingConst = "autoscaling"
 	GetDeploymentCapabilityOptionsCapabilityIDEncryptionConst = "encryption"
 	GetDeploymentCapabilityOptionsCapabilityIDEndpointsConst = "endpoints"
-	GetDeploymentCapabilityOptionsCapabilityIDFlavorsConst = "flavors"
 	GetDeploymentCapabilityOptionsCapabilityIDGroupsConst = "groups"
 	GetDeploymentCapabilityOptionsCapabilityIDLocationsConst = "locations"
 	GetDeploymentCapabilityOptionsCapabilityIDPointInTimeRecoveryConst = "point_in_time_recovery"
@@ -5358,7 +5435,7 @@ func (options *GetDeploymentCapabilityOptions) SetHeaders(param map[string]strin
 
 // GetDeploymentCapabilityResponse : GetDeploymentCapabilityResponse struct
 type GetDeploymentCapabilityResponse struct {
-	Capability CapabilityIntf `json:"capability,omitempty"`
+	Capability *Capability `json:"capability,omitempty"`
 }
 
 // UnmarshalGetDeploymentCapabilityResponse unmarshals an instance of GetDeploymentCapabilityResponse from the specified map of raw messages.
@@ -6597,30 +6674,13 @@ func UnmarshalMySQLConnectionURI(m map[string]json.RawMessage, result interface{
 
 // PointInTimeRecoveryCapability : PointInTimeRecoveryCapability struct
 type PointInTimeRecoveryCapability struct {
-	PointInTimeRecovery *PointInTimeRecoveryCapabilityPointInTimeRecovery `json:"point_in_time_recovery,omitempty"`
+	// Point in time recovery capability.
+	PointInTimeRecoverySupported *bool `json:"point_in_time_recovery_supported,omitempty"`
 }
 
 // UnmarshalPointInTimeRecoveryCapability unmarshals an instance of PointInTimeRecoveryCapability from the specified map of raw messages.
 func UnmarshalPointInTimeRecoveryCapability(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(PointInTimeRecoveryCapability)
-	err = core.UnmarshalModel(m, "point_in_time_recovery", &obj.PointInTimeRecovery, UnmarshalPointInTimeRecoveryCapabilityPointInTimeRecovery)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "point_in_time_recovery-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// PointInTimeRecoveryCapabilityPointInTimeRecovery : PointInTimeRecoveryCapabilityPointInTimeRecovery struct
-type PointInTimeRecoveryCapabilityPointInTimeRecovery struct {
-	// Point in time recovery capability.
-	PointInTimeRecoverySupported *bool `json:"point_in_time_recovery_supported,omitempty"`
-}
-
-// UnmarshalPointInTimeRecoveryCapabilityPointInTimeRecovery unmarshals an instance of PointInTimeRecoveryCapabilityPointInTimeRecovery from the specified map of raw messages.
-func UnmarshalPointInTimeRecoveryCapabilityPointInTimeRecovery(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(PointInTimeRecoveryCapabilityPointInTimeRecovery)
 	err = core.UnmarshalPrimitive(m, "point_in_time_recovery_supported", &obj.PointInTimeRecoverySupported)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "point_in_time_recovery_supported-error", common.GetComponentInfo())
@@ -6919,30 +6979,13 @@ func UnmarshalRemotes(m map[string]json.RawMessage, result interface{}) (err err
 
 // RemotesCapability : RemotesCapability struct
 type RemotesCapability struct {
-	Remotes *RemotesCapabilityRemotes `json:"remotes,omitempty"`
+	// Read-only replica capability.
+	ReadOnlyReplicasSupported *bool `json:"read_only_replicas_supported,omitempty"`
 }
 
 // UnmarshalRemotesCapability unmarshals an instance of RemotesCapability from the specified map of raw messages.
 func UnmarshalRemotesCapability(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(RemotesCapability)
-	err = core.UnmarshalModel(m, "remotes", &obj.Remotes, UnmarshalRemotesCapabilityRemotes)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "remotes-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RemotesCapabilityRemotes : RemotesCapabilityRemotes struct
-type RemotesCapabilityRemotes struct {
-	// Read-only replica capability.
-	ReadOnlyReplicasSupported *bool `json:"read_only_replicas_supported,omitempty"`
-}
-
-// UnmarshalRemotesCapabilityRemotes unmarshals an instance of RemotesCapabilityRemotes from the specified map of raw messages.
-func UnmarshalRemotesCapabilityRemotes(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RemotesCapabilityRemotes)
 	err = core.UnmarshalPrimitive(m, "read_only_replicas_supported", &obj.ReadOnlyReplicasSupported)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "read_only_replicas_supported-error", common.GetComponentInfo())
@@ -6952,33 +6995,15 @@ func UnmarshalRemotesCapabilityRemotes(m map[string]json.RawMessage, result inte
 	return
 }
 
-// RestoresCapability : RestoresCapability struct
+// RestoresCapability : Only available for requests with Backup. Only available capability for Backup requests.
 type RestoresCapability struct {
-	// Only available for requests with Backup. Only available capability for Backup requests.
-	Restores *RestoresCapabilityRestores `json:"restores,omitempty"`
+	// Backup restore capability.
+	BackupRestoreSupported *bool `json:"backup_restore_supported,omitempty"`
 }
 
 // UnmarshalRestoresCapability unmarshals an instance of RestoresCapability from the specified map of raw messages.
 func UnmarshalRestoresCapability(m map[string]json.RawMessage, result interface{}) (err error) {
 	obj := new(RestoresCapability)
-	err = core.UnmarshalModel(m, "restores", &obj.Restores, UnmarshalRestoresCapabilityRestores)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "restores-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// RestoresCapabilityRestores : Only available for requests with Backup. Only available capability for Backup requests.
-type RestoresCapabilityRestores struct {
-	// Backup restore capability.
-	BackupRestoreSupported *bool `json:"backup_restore_supported,omitempty"`
-}
-
-// UnmarshalRestoresCapabilityRestores unmarshals an instance of RestoresCapabilityRestores from the specified map of raw messages.
-func UnmarshalRestoresCapabilityRestores(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(RestoresCapabilityRestores)
 	err = core.UnmarshalPrimitive(m, "backup_restore_supported", &obj.BackupRestoreSupported)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "backup_restore_supported-error", common.GetComponentInfo())
@@ -7160,6 +7185,81 @@ func UnmarshalSetAutoscalingConditionsResponse(m map[string]json.RawMessage, res
 	return
 }
 
+// SetDatabaseInplaceVersionUpgradeOptions : The SetDatabaseInplaceVersionUpgrade options.
+type SetDatabaseInplaceVersionUpgradeOptions struct {
+	// Deployment ID.
+	ID *string `json:"id" validate:"required,ne="`
+
+	// a database version.
+	Version *string `json:"version" validate:"required"`
+
+	// (Optional, Boolean) Whether to skip taking a backup before upgrading the database version. This is only applicable
+	// for supported database types. To learn more, refer to the version upgrade documentation.
+	SkipBackup *bool `json:"skip_backup,omitempty"`
+
+	// The expiration_datetime must be in the ISO8601 timestamp format and between 5 minutes and 24 hours from now. It
+	// allows you to specify how long to wait for the job to start before the upgrade is cancelled.
+	ExpirationDatetime *strfmt.DateTime `json:"expiration_datetime,omitempty"`
+
+	// Allows users to set headers on API requests.
+	Headers map[string]string
+}
+
+// NewSetDatabaseInplaceVersionUpgradeOptions : Instantiate SetDatabaseInplaceVersionUpgradeOptions
+func (*CloudDatabasesV5) NewSetDatabaseInplaceVersionUpgradeOptions(id string, version string) *SetDatabaseInplaceVersionUpgradeOptions {
+	return &SetDatabaseInplaceVersionUpgradeOptions{
+		ID: core.StringPtr(id),
+		Version: core.StringPtr(version),
+	}
+}
+
+// SetID : Allow user to set ID
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetID(id string) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
+}
+
+// SetVersion : Allow user to set Version
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetVersion(version string) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.Version = core.StringPtr(version)
+	return _options
+}
+
+// SetSkipBackup : Allow user to set SkipBackup
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetSkipBackup(skipBackup bool) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.SkipBackup = core.BoolPtr(skipBackup)
+	return _options
+}
+
+// SetExpirationDatetime : Allow user to set ExpirationDatetime
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetExpirationDatetime(expirationDatetime *strfmt.DateTime) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.ExpirationDatetime = expirationDatetime
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *SetDatabaseInplaceVersionUpgradeOptions) SetHeaders(param map[string]string) *SetDatabaseInplaceVersionUpgradeOptions {
+	options.Headers = param
+	return options
+}
+
+// SetDatabaseInplaceVersionUpgradeResponse : SetDatabaseInplaceVersionUpgradeResponse struct
+type SetDatabaseInplaceVersionUpgradeResponse struct {
+	Task *Task `json:"task,omitempty"`
+}
+
+// UnmarshalSetDatabaseInplaceVersionUpgradeResponse unmarshals an instance of SetDatabaseInplaceVersionUpgradeResponse from the specified map of raw messages.
+func UnmarshalSetDatabaseInplaceVersionUpgradeResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(SetDatabaseInplaceVersionUpgradeResponse)
+	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "task-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // SetDeploymentScalingGroupOptions : The SetDeploymentScalingGroup options.
 type SetDeploymentScalingGroupOptions struct {
 	// Deployment ID.
@@ -7273,6 +7373,9 @@ type Task struct {
 	// ID of the task.
 	ID *string `json:"id,omitempty"`
 
+	// The resource type of the task.
+	ResourceType *string `json:"resource_type,omitempty"`
+
 	// Human-readable description of the task.
 	Description *string `json:"description,omitempty"`
 
@@ -7289,11 +7392,25 @@ type Task struct {
 	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
 }
 
+// Constants associated with the Task.ResourceType property.
+// The resource type of the task.
+const (
+	TaskResourceTypeBackupConst = "backup"
+	TaskResourceTypeConfigurationConst = "configuration"
+	TaskResourceTypeIPConst = "ip"
+	TaskResourceTypeInstanceConst = "instance"
+	TaskResourceTypePasswordConst = "password"
+	TaskResourceTypeUpgradeConst = "upgrade"
+	TaskResourceTypeUserConst = "user"
+)
+
 // Constants associated with the Task.Status property.
 // The status of the task.
 const (
 	TaskStatusCompletedConst = "completed"
+	TaskStatusExpiredConst = "expired"
 	TaskStatusFailedConst = "failed"
+	TaskStatusQueuedConst = "queued"
 	TaskStatusRunningConst = "running"
 )
 
@@ -7303,6 +7420,11 @@ func UnmarshalTask(m map[string]json.RawMessage, result interface{}) (err error)
 	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "id-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "resource_type", &obj.ResourceType)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "resource_type-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
@@ -7728,227 +7850,6 @@ func UnmarshalAutoscalingSetGroupAutoscalingAutoscalingMemoryGroup(m map[string]
 	err = core.UnmarshalModel(m, "memory", &obj.Memory, UnmarshalAutoscalingMemoryGroupMemory)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "memory-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityAutoscaling : CapabilityAutoscaling struct
-// This model "extends" Capability
-type CapabilityAutoscaling struct {
-	Autoscaling *AutoscalingCapability `json:"autoscaling,omitempty"`
-}
-
-func (*CapabilityAutoscaling) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityAutoscaling unmarshals an instance of CapabilityAutoscaling from the specified map of raw messages.
-func UnmarshalCapabilityAutoscaling(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityAutoscaling)
-	err = core.UnmarshalModel(m, "autoscaling", &obj.Autoscaling, UnmarshalAutoscalingCapability)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "autoscaling-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityEncryption : CapabilityEncryption struct
-// This model "extends" Capability
-type CapabilityEncryption struct {
-	Encryption *EncryptionCapability `json:"encryption,omitempty"`
-}
-
-func (*CapabilityEncryption) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityEncryption unmarshals an instance of CapabilityEncryption from the specified map of raw messages.
-func UnmarshalCapabilityEncryption(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityEncryption)
-	err = core.UnmarshalModel(m, "encryption", &obj.Encryption, UnmarshalEncryptionCapability)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "encryption-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityEndpoints : CapabilityEndpoints struct
-// This model "extends" Capability
-type CapabilityEndpoints struct {
-	Endpoints *EndpointsCapability `json:"endpoints,omitempty"`
-}
-
-func (*CapabilityEndpoints) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityEndpoints unmarshals an instance of CapabilityEndpoints from the specified map of raw messages.
-func UnmarshalCapabilityEndpoints(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityEndpoints)
-	err = core.UnmarshalModel(m, "endpoints", &obj.Endpoints, UnmarshalEndpointsCapability)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "endpoints-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityFlavors : CapabilityFlavors struct
-// This model "extends" Capability
-type CapabilityFlavors struct {
-	Flavors []FlavorsCapabilityItem `json:"flavors,omitempty"`
-}
-
-func (*CapabilityFlavors) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityFlavors unmarshals an instance of CapabilityFlavors from the specified map of raw messages.
-func UnmarshalCapabilityFlavors(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityFlavors)
-	err = core.UnmarshalModel(m, "flavors", &obj.Flavors, UnmarshalFlavorsCapabilityItem)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "flavors-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityGroups : CapabilityGroups struct
-// This model "extends" Capability
-type CapabilityGroups struct {
-	Groups []Group `json:"groups,omitempty"`
-}
-
-func (*CapabilityGroups) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityGroups unmarshals an instance of CapabilityGroups from the specified map of raw messages.
-func UnmarshalCapabilityGroups(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityGroups)
-	err = core.UnmarshalModel(m, "groups", &obj.Groups, UnmarshalGroup)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "groups-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityLocations : CapabilityLocations struct
-// This model "extends" Capability
-type CapabilityLocations struct {
-	Locations *LocationsCapability `json:"locations,omitempty"`
-}
-
-func (*CapabilityLocations) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityLocations unmarshals an instance of CapabilityLocations from the specified map of raw messages.
-func UnmarshalCapabilityLocations(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityLocations)
-	err = core.UnmarshalModel(m, "locations", &obj.Locations, UnmarshalLocationsCapability)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "locations-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityPointInTimeRecovery : CapabilityPointInTimeRecovery struct
-// This model "extends" Capability
-type CapabilityPointInTimeRecovery struct {
-	PointInTimeRecovery *PointInTimeRecoveryCapability `json:"point_in_time_recovery,omitempty"`
-}
-
-func (*CapabilityPointInTimeRecovery) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityPointInTimeRecovery unmarshals an instance of CapabilityPointInTimeRecovery from the specified map of raw messages.
-func UnmarshalCapabilityPointInTimeRecovery(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityPointInTimeRecovery)
-	err = core.UnmarshalModel(m, "point_in_time_recovery", &obj.PointInTimeRecovery, UnmarshalPointInTimeRecoveryCapability)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "point_in_time_recovery-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityRemotes : CapabilityRemotes struct
-// This model "extends" Capability
-type CapabilityRemotes struct {
-	Remotes *RemotesCapability `json:"remotes,omitempty"`
-}
-
-func (*CapabilityRemotes) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityRemotes unmarshals an instance of CapabilityRemotes from the specified map of raw messages.
-func UnmarshalCapabilityRemotes(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityRemotes)
-	err = core.UnmarshalModel(m, "remotes", &obj.Remotes, UnmarshalRemotesCapability)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "remotes-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityRestores : CapabilityRestores struct
-// This model "extends" Capability
-type CapabilityRestores struct {
-	Restores *RestoresCapability `json:"restores,omitempty"`
-}
-
-func (*CapabilityRestores) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityRestores unmarshals an instance of CapabilityRestores from the specified map of raw messages.
-func UnmarshalCapabilityRestores(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityRestores)
-	err = core.UnmarshalModel(m, "restores", &obj.Restores, UnmarshalRestoresCapability)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "restores-error", common.GetComponentInfo())
-		return
-	}
-	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
-	return
-}
-
-// CapabilityVersions : CapabilityVersions struct
-// This model "extends" Capability
-type CapabilityVersions struct {
-	// An array of versions of the database, their status, preferedness, and transitions.
-	Versions []VersionsCapabilityItem `json:"versions,omitempty"`
-}
-
-func (*CapabilityVersions) isaCapability() bool {
-	return true
-}
-
-// UnmarshalCapabilityVersions unmarshals an instance of CapabilityVersions from the specified map of raw messages.
-func UnmarshalCapabilityVersions(m map[string]json.RawMessage, result interface{}) (err error) {
-	obj := new(CapabilityVersions)
-	err = core.UnmarshalModel(m, "versions", &obj.Versions, UnmarshalVersionsCapabilityItem)
-	if err != nil {
-		err = core.SDKErrorf(err, "", "versions-error", common.GetComponentInfo())
 		return
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))

@@ -242,7 +242,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"deployables": [{"type": "elasticsearch", "versions": [{"version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "from_version": "5.6", "to_version": "6.7"}]}]}]}`)
+					fmt.Fprintf(res, "%s", `{"deployables": [{"type": "elasticsearch", "versions": [{"version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "skip_backup_supported": false, "from_version": "5.6", "to_version": "6.7"}]}]}]}`)
 				}))
 			})
 			It(`Invoke ListDeployables successfully with retries`, func() {
@@ -295,7 +295,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"deployables": [{"type": "elasticsearch", "versions": [{"version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "from_version": "5.6", "to_version": "6.7"}]}]}]}`)
+					fmt.Fprintf(res, "%s", `{"deployables": [{"type": "elasticsearch", "versions": [{"version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "skip_backup_supported": false, "from_version": "5.6", "to_version": "6.7"}]}]}]}`)
 				}))
 			})
 			It(`Invoke ListDeployables successfully`, func() {
@@ -878,7 +878,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke CreateDatabaseUser successfully with retries`, func() {
@@ -955,7 +955,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke CreateDatabaseUser successfully`, func() {
@@ -1157,7 +1157,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke UpdateUser successfully with retries`, func() {
@@ -1234,7 +1234,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke UpdateUser successfully`, func() {
@@ -1415,7 +1415,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke DeleteDatabaseUser successfully with retries`, func() {
@@ -1471,7 +1471,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke DeleteDatabaseUser successfully`, func() {
@@ -1672,7 +1672,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke UpdateDatabaseConfiguration successfully with retries`, func() {
@@ -1763,7 +1763,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke UpdateDatabaseConfiguration successfully`, func() {
@@ -2196,7 +2196,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke ResyncReplica successfully with retries`, func() {
@@ -2250,7 +2250,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke ResyncReplica successfully`, func() {
@@ -2425,7 +2425,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke PromoteReadOnlyReplica successfully with retries`, func() {
@@ -2496,7 +2496,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke PromoteReadOnlyReplica successfully`, func() {
@@ -2657,7 +2657,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"tasks": [{"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}]}`)
+					fmt.Fprintf(res, "%s", `{"tasks": [{"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}]}`)
 				}))
 			})
 			It(`Invoke ListDeploymentTasks successfully with retries`, func() {
@@ -2711,7 +2711,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"tasks": [{"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}]}`)
+					fmt.Fprintf(res, "%s", `{"tasks": [{"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}]}`)
 				}))
 			})
 			It(`Invoke ListDeploymentTasks successfully`, func() {
@@ -2869,7 +2869,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke GetTask successfully with retries`, func() {
@@ -2923,7 +2923,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke GetTask successfully`, func() {
@@ -3505,7 +3505,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke StartOndemandBackup successfully with retries`, func() {
@@ -3559,7 +3559,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke StartOndemandBackup successfully`, func() {
@@ -4911,7 +4911,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke SetDeploymentScalingGroup successfully with retries`, func() {
@@ -5011,7 +5011,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke SetDeploymentScalingGroup successfully`, func() {
@@ -5520,7 +5520,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke SetAutoscalingConditions successfully with retries`, func() {
@@ -5618,7 +5618,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke SetAutoscalingConditions successfully`, func() {
@@ -5860,7 +5860,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke KillConnections successfully with retries`, func() {
@@ -5914,7 +5914,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke KillConnections successfully`, func() {
@@ -6095,7 +6095,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke CreateLogicalReplicationSlot successfully with retries`, func() {
@@ -6172,7 +6172,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke CreateLogicalReplicationSlot successfully`, func() {
@@ -6352,7 +6352,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke DeleteLogicalReplicationSlot successfully with retries`, func() {
@@ -6407,7 +6407,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke DeleteLogicalReplicationSlot successfully`, func() {
@@ -6807,7 +6807,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke SetAllowlist successfully with retries`, func() {
@@ -6886,7 +6886,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke SetAllowlist successfully`, func() {
@@ -7087,7 +7087,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke AddAllowlistEntry successfully with retries`, func() {
@@ -7163,7 +7163,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke AddAllowlistEntry successfully`, func() {
@@ -7340,7 +7340,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke DeleteAllowlistEntry successfully with retries`, func() {
@@ -7395,7 +7395,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(202)
-					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "description": "Description", "status": "running", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
 				}))
 			})
 			It(`Invoke DeleteAllowlistEntry successfully`, func() {
@@ -7596,7 +7596,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}}}`)
+					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}, "encryption": {"disk_encryption_supported": true}, "endpoints": {"direct_endpoints_supported": false, "public_endpoints_supported": true, "private_endpoints_supported": true, "multiple_endpoints_supported": true}, "groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}], "flavors": [{"id": "b3c.4x16.encrypted", "name": "4x16", "cpu": {"allocation_count": 2}, "memory": {"allocation_mb": 12288}, "hosting_size": "xs"}], "locations": {"locations": ["us-south"]}, "point_in_time_recovery": {"point_in_time_recovery_supported": true}, "remotes": {"read_only_replicas_supported": true}, "restores": {"backup_restore_supported": true}, "versions": [{"type": "elasticsearch", "version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "skip_backup_supported": false, "from_version": "5.6", "to_version": "6.7"}]}]}}`)
 				}))
 			})
 			It(`Invoke CreateCapability successfully with retries`, func() {
@@ -7690,7 +7690,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}}}`)
+					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}, "encryption": {"disk_encryption_supported": true}, "endpoints": {"direct_endpoints_supported": false, "public_endpoints_supported": true, "private_endpoints_supported": true, "multiple_endpoints_supported": true}, "groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}], "flavors": [{"id": "b3c.4x16.encrypted", "name": "4x16", "cpu": {"allocation_count": 2}, "memory": {"allocation_mb": 12288}, "hosting_size": "xs"}], "locations": {"locations": ["us-south"]}, "point_in_time_recovery": {"point_in_time_recovery_supported": true}, "remotes": {"read_only_replicas_supported": true}, "restores": {"backup_restore_supported": true}, "versions": [{"type": "elasticsearch", "version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "skip_backup_supported": false, "from_version": "5.6", "to_version": "6.7"}]}]}}`)
 				}))
 			})
 			It(`Invoke CreateCapability successfully`, func() {
@@ -7930,7 +7930,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}}}`)
+					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}, "encryption": {"disk_encryption_supported": true}, "endpoints": {"direct_endpoints_supported": false, "public_endpoints_supported": true, "private_endpoints_supported": true, "multiple_endpoints_supported": true}, "groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}], "flavors": [{"id": "b3c.4x16.encrypted", "name": "4x16", "cpu": {"allocation_count": 2}, "memory": {"allocation_mb": 12288}, "hosting_size": "xs"}], "locations": {"locations": ["us-south"]}, "point_in_time_recovery": {"point_in_time_recovery_supported": true}, "remotes": {"read_only_replicas_supported": true}, "restores": {"backup_restore_supported": true}, "versions": [{"type": "elasticsearch", "version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "skip_backup_supported": false, "from_version": "5.6", "to_version": "6.7"}]}]}}`)
 				}))
 			})
 			It(`Invoke GetDeploymentCapability successfully with retries`, func() {
@@ -7991,7 +7991,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
-					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}}}`)
+					fmt.Fprintf(res, "%s", `{"capability": {"autoscaling": {"autoscaling_supported": true}, "encryption": {"disk_encryption_supported": true}, "endpoints": {"direct_endpoints_supported": false, "public_endpoints_supported": true, "private_endpoints_supported": true, "multiple_endpoints_supported": true}, "groups": [{"id": "member", "count": 2, "members": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 20, "step_size_count": 1, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "memory": {"units": "mb", "allocation_mb": 12288, "minimum_mb": 1024, "maximum_mb": 114688, "step_size_mb": 1024, "is_adjustable": true, "is_optional": false, "can_scale_down": true, "cpu_enforcement_ratio_ceiling_mb": 16384, "cpu_enforcement_ratio_mb": 8192}, "cpu": {"units": "count", "allocation_count": 2, "minimum_count": 2, "maximum_count": 32, "step_size_count": 2, "is_adjustable": false, "is_optional": false, "can_scale_down": true}, "disk": {"units": "mb", "allocation_mb": 10240, "minimum_mb": 2048, "maximum_mb": 4194304, "step_size_mb": 2048, "is_adjustable": true, "is_optional": false, "can_scale_down": false}, "host_flavor": {"id": "b3c.4x16.encrypted", "name": "4x16", "hosting_size": "xs"}}], "flavors": [{"id": "b3c.4x16.encrypted", "name": "4x16", "cpu": {"allocation_count": 2}, "memory": {"allocation_mb": 12288}, "hosting_size": "xs"}], "locations": {"locations": ["us-south"]}, "point_in_time_recovery": {"point_in_time_recovery_supported": true}, "remotes": {"read_only_replicas_supported": true}, "restores": {"backup_restore_supported": true}, "versions": [{"type": "elasticsearch", "version": "5.6", "status": "stable", "is_preferred": true, "transitions": [{"application": "elasticsearch", "method": "restore", "skip_backup_supported": false, "from_version": "5.6", "to_version": "6.7"}]}]}}`)
 				}))
 			})
 			It(`Invoke GetDeploymentCapability successfully`, func() {
@@ -8088,6 +8088,271 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 
 				// Invoke operation
 				result, response, operationErr := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+
+				// Verify a nil result
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions) - Operation response error`, func() {
+		setDatabaseInplaceVersionUpgradePath := "/deployments/testString/version"
+		Context(`Using mock server endpoint with invalid JSON response`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(setDatabaseInplaceVersionUpgradePath))
+					Expect(req.Method).To(Equal("PATCH"))
+					// TODO: Add check for skip_backup query parameter
+					// TODO: Add check for expiration_datetime query parameter
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprint(res, `} this is not valid json {`)
+				}))
+			})
+			It(`Invoke SetDatabaseInplaceVersionUpgrade with error: Operation response processing error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the SetDatabaseInplaceVersionUpgradeOptions model
+				setDatabaseInplaceVersionUpgradeOptionsModel := new(clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ID = core.StringPtr("testString")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Version = core.StringPtr("7")
+				setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup = core.BoolPtr(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime = CreateMockDateTime("2025-10-05T17:17:17Z")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Expect response parsing to fail since we are receiving a text/plain response
+				result, response, operationErr := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+
+				// Enable retries and test again
+				cloudDatabasesService.EnableRetries(0, 0)
+				result, response, operationErr = cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+	})
+	Describe(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
+		setDatabaseInplaceVersionUpgradePath := "/deployments/testString/version"
+		Context(`Using mock server endpoint with timeout`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(setDatabaseInplaceVersionUpgradePath))
+					Expect(req.Method).To(Equal("PATCH"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					// TODO: Add check for skip_backup query parameter
+					// TODO: Add check for expiration_datetime query parameter
+					// Sleep a short time to support a timeout test
+					time.Sleep(100 * time.Millisecond)
+
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+				}))
+			})
+			It(`Invoke SetDatabaseInplaceVersionUpgrade successfully with retries`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+				cloudDatabasesService.EnableRetries(0, 0)
+
+				// Construct an instance of the SetDatabaseInplaceVersionUpgradeOptions model
+				setDatabaseInplaceVersionUpgradeOptionsModel := new(clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ID = core.StringPtr("testString")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Version = core.StringPtr("7")
+				setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup = core.BoolPtr(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime = CreateMockDateTime("2025-10-05T17:17:17Z")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with a Context to test a timeout error
+				ctx, cancelFunc := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc()
+				_, _, operationErr := cloudDatabasesService.SetDatabaseInplaceVersionUpgradeWithContext(ctx, setDatabaseInplaceVersionUpgradeOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+
+				// Disable retries and test again
+				cloudDatabasesService.DisableRetries()
+				result, response, operationErr := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+				// Re-test the timeout error with retries disabled
+				ctx, cancelFunc2 := context.WithTimeout(context.Background(), 80*time.Millisecond)
+				defer cancelFunc2()
+				_, _, operationErr = cloudDatabasesService.SetDatabaseInplaceVersionUpgradeWithContext(ctx, setDatabaseInplaceVersionUpgradeOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring("deadline exceeded"))
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Verify the contents of the request
+					Expect(req.URL.EscapedPath()).To(Equal(setDatabaseInplaceVersionUpgradePath))
+					Expect(req.Method).To(Equal("PATCH"))
+
+					// For gzip-disabled operation, verify Content-Encoding is not set.
+					Expect(req.Header.Get("Content-Encoding")).To(BeEmpty())
+
+					// If there is a body, then make sure we can read it
+					bodyBuf := new(bytes.Buffer)
+					if req.Header.Get("Content-Encoding") == "gzip" {
+						body, err := core.NewGzipDecompressionReader(req.Body)
+						Expect(err).To(BeNil())
+						_, err = bodyBuf.ReadFrom(body)
+						Expect(err).To(BeNil())
+					} else {
+						_, err := bodyBuf.ReadFrom(req.Body)
+						Expect(err).To(BeNil())
+					}
+					fmt.Fprintf(GinkgoWriter, "  Request body: %s", bodyBuf.String())
+
+					// TODO: Add check for skip_backup query parameter
+					// TODO: Add check for expiration_datetime query parameter
+					// Set mock response
+					res.Header().Set("Content-type", "application/json")
+					res.WriteHeader(200)
+					fmt.Fprintf(res, "%s", `{"task": {"id": "ID", "resource_type": "backup", "description": "Description", "status": "queued", "deployment_id": "DeploymentID", "progress_percent": 15, "created_at": "2019-01-01T12:00:00.000Z"}}`)
+				}))
+			})
+			It(`Invoke SetDatabaseInplaceVersionUpgrade successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Invoke operation with nil options model (negative test)
+				result, response, operationErr := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(nil)
+				Expect(operationErr).NotTo(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+
+				// Construct an instance of the SetDatabaseInplaceVersionUpgradeOptions model
+				setDatabaseInplaceVersionUpgradeOptionsModel := new(clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ID = core.StringPtr("testString")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Version = core.StringPtr("7")
+				setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup = core.BoolPtr(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime = CreateMockDateTime("2025-10-05T17:17:17Z")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation with valid options model (positive test)
+				result, response, operationErr = cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptionsModel)
+				Expect(operationErr).To(BeNil())
+				Expect(response).ToNot(BeNil())
+				Expect(result).ToNot(BeNil())
+
+			})
+			It(`Invoke SetDatabaseInplaceVersionUpgrade with error: Operation validation and request error`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the SetDatabaseInplaceVersionUpgradeOptions model
+				setDatabaseInplaceVersionUpgradeOptionsModel := new(clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ID = core.StringPtr("testString")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Version = core.StringPtr("7")
+				setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup = core.BoolPtr(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime = CreateMockDateTime("2025-10-05T17:17:17Z")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+				// Invoke operation with empty URL (negative test)
+				err := cloudDatabasesService.SetServiceURL("")
+				Expect(err).To(BeNil())
+				result, response, operationErr := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptionsModel)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(operationErr.Error()).To(ContainSubstring(core.ERRORMSG_SERVICE_URL_MISSING))
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+				// Construct a second instance of the SetDatabaseInplaceVersionUpgradeOptions model with no property values
+				setDatabaseInplaceVersionUpgradeOptionsModelNew := new(clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions)
+				// Invoke operation with invalid model (negative test)
+				result, response, operationErr = cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptionsModelNew)
+				Expect(operationErr).ToNot(BeNil())
+				Expect(response).To(BeNil())
+				Expect(result).To(BeNil())
+			})
+			AfterEach(func() {
+				testServer.Close()
+			})
+		})
+		Context(`Using mock server endpoint with missing response body`, func() {
+			BeforeEach(func() {
+				testServer = httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+					defer GinkgoRecover()
+
+					// Set success status code with no respoonse body
+					res.WriteHeader(200)
+				}))
+			})
+			It(`Invoke SetDatabaseInplaceVersionUpgrade successfully`, func() {
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5(&clouddatabasesv5.CloudDatabasesV5Options{
+					URL:           testServer.URL,
+					Authenticator: &core.NoAuthAuthenticator{},
+				})
+				Expect(serviceErr).To(BeNil())
+				Expect(cloudDatabasesService).ToNot(BeNil())
+
+				// Construct an instance of the SetDatabaseInplaceVersionUpgradeOptions model
+				setDatabaseInplaceVersionUpgradeOptionsModel := new(clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ID = core.StringPtr("testString")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Version = core.StringPtr("7")
+				setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup = core.BoolPtr(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime = CreateMockDateTime("2025-10-05T17:17:17Z")
+				setDatabaseInplaceVersionUpgradeOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
+
+				// Invoke operation
+				result, response, operationErr := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptionsModel)
 				Expect(operationErr).To(BeNil())
 				Expect(response).ToNot(BeNil())
 
@@ -8575,6 +8840,23 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(setAutoscalingConditionsOptionsModel.GroupID).To(Equal(core.StringPtr("testString")))
 				Expect(setAutoscalingConditionsOptionsModel.Autoscaling).To(Equal(autoscalingSetGroupAutoscalingModel))
 				Expect(setAutoscalingConditionsOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
+			})
+			It(`Invoke NewSetDatabaseInplaceVersionUpgradeOptions successfully`, func() {
+				// Construct an instance of the SetDatabaseInplaceVersionUpgradeOptions model
+				id := "testString"
+				setDatabaseInplaceVersionUpgradeOptionsVersion := "7"
+				setDatabaseInplaceVersionUpgradeOptionsModel := cloudDatabasesService.NewSetDatabaseInplaceVersionUpgradeOptions(id, setDatabaseInplaceVersionUpgradeOptionsVersion)
+				setDatabaseInplaceVersionUpgradeOptionsModel.SetID("testString")
+				setDatabaseInplaceVersionUpgradeOptionsModel.SetVersion("7")
+				setDatabaseInplaceVersionUpgradeOptionsModel.SetSkipBackup(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.SetExpirationDatetime(CreateMockDateTime("2025-10-05T17:17:17Z"))
+				setDatabaseInplaceVersionUpgradeOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
+				Expect(setDatabaseInplaceVersionUpgradeOptionsModel).ToNot(BeNil())
+				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.ID).To(Equal(core.StringPtr("testString")))
+				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.Version).To(Equal(core.StringPtr("7")))
+				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup).To(Equal(core.BoolPtr(true)))
+				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime).To(Equal(CreateMockDateTime("2025-10-05T17:17:17Z")))
+				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewSetDeploymentScalingGroupOptions successfully`, func() {
 				// Construct an instance of the GroupScalingMembers model

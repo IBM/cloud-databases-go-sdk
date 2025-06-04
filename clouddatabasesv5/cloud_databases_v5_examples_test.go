@@ -1021,7 +1021,6 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(createCapabilityResponse).ToNot(BeNil())
 		})
-		
 		It(`GetDeploymentCapability request example`, func() {
 			fmt.Println("\nGetDeploymentCapability() result:")
 			// begin-getDeploymentCapability
@@ -1046,6 +1045,29 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getDeploymentCapabilityResponse).ToNot(BeNil())
+		})
+		It(`SetDatabaseInplaceVersionUpgrade request example`, func() {
+			fmt.Println("\nSetDatabaseInplaceVersionUpgrade() result:")
+			// begin-setDatabaseInplaceVersionUpgrade
+
+			setDatabaseInplaceVersionUpgradeOptions := cloudDatabasesService.NewSetDatabaseInplaceVersionUpgradeOptions(
+				"testString",
+				"7",
+			)
+			setDatabaseInplaceVersionUpgradeOptions.SetSkipBackup(true)
+
+			setDatabaseInplaceVersionUpgradeResponse, response, err := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(setDatabaseInplaceVersionUpgradeResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-setDatabaseInplaceVersionUpgrade
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
 		})
 	})
 })

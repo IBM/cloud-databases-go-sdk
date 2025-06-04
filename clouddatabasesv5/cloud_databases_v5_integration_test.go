@@ -367,7 +367,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
 			userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -439,7 +439,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			userModel := &clouddatabasesv5.User{
 				Username: core.StringPtr("user"),
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
@@ -469,7 +469,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			It(`changes the password successfully`, func() {
 
 				userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-					Password: core.StringPtr("xyzzyyzzyx111111111"),
+					Password: core.StringPtr("XyzzyyzzYx111111111"),
 				}
 
 				updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -577,7 +577,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
 				EndpointType:    core.StringPtr("private"),
-				Password:        core.StringPtr("prov1dedpassword"),
+				Password:        core.StringPtr("Prov1dedpassword"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -1184,6 +1184,25 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getDeploymentCapabilityResponse).ToNot(BeNil())
+		})
+	})
+
+	Describe(`SetDatabaseInplaceVersionUpgrade - Upgrade your database version`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
+			// If failing check validation message as you ned to edit the version if deprecated
+			setDatabaseInplaceVersionUpgradeOptions := &clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions{
+				ID: &deploymentID,
+				Version: core.StringPtr("7.0"),
+				SkipBackup: core.BoolPtr(true),
+			}
+
+			setDatabaseInplaceVersionUpgradeResponse, response, err := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions)
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
 		})
 	})
 })
