@@ -991,5 +991,83 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getAllowlistResponse).ToNot(BeNil())
 		})
+
+		It(`CreateCapability request example`, func() {
+			fmt.Println("\nCreateCapability() result:")
+			// begin-createCapability
+
+			createCapabilityRequestDeploymentModel := &clouddatabasesv5.CreateCapabilityRequestDeployment{
+				Type: core.StringPtr("postgresql"),
+				Version: core.StringPtr("10"),
+				Platform: core.StringPtr("classic"),
+				Location: core.StringPtr("us-south"),
+			}
+
+			createCapabilityOptions := cloudDatabasesService.NewCreateCapabilityOptions(
+				"autoscaling",
+			)
+			createCapabilityOptions.SetDeployment(createCapabilityRequestDeploymentModel)
+
+			createCapabilityResponse, response, err := cloudDatabasesService.CreateCapability(createCapabilityOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(createCapabilityResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-createCapability
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(createCapabilityResponse).ToNot(BeNil())
+		})
+		It(`GetDeploymentCapability request example`, func() {
+			fmt.Println("\nGetDeploymentCapability() result:")
+			// begin-getDeploymentCapability
+
+			getDeploymentCapabilityOptions := cloudDatabasesService.NewGetDeploymentCapabilityOptions(
+				"testString",
+				"autoscaling",
+			)
+			getDeploymentCapabilityOptions.SetTargetPlatform("target_platform=classic")
+			getDeploymentCapabilityOptions.SetTargetLocation("target_location=us-east")
+			getDeploymentCapabilityOptions.SetHostFlavor("host_flavor=multitenant")
+
+			getDeploymentCapabilityResponse, response, err := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(getDeploymentCapabilityResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-getDeploymentCapability
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDeploymentCapabilityResponse).ToNot(BeNil())
+		})
+		It(`SetDatabaseInplaceVersionUpgrade request example`, func() {
+			fmt.Println("\nSetDatabaseInplaceVersionUpgrade() result:")
+			// begin-setDatabaseInplaceVersionUpgrade
+
+			setDatabaseInplaceVersionUpgradeOptions := cloudDatabasesService.NewSetDatabaseInplaceVersionUpgradeOptions(
+				"testString",
+				"7",
+			)
+			setDatabaseInplaceVersionUpgradeOptions.SetSkipBackup(true)
+
+			setDatabaseInplaceVersionUpgradeResponse, response, err := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions)
+			if err != nil {
+				panic(err)
+			}
+			b, _ := json.MarshalIndent(setDatabaseInplaceVersionUpgradeResponse, "", "  ")
+			fmt.Println(string(b))
+
+			// end-setDatabaseInplaceVersionUpgrade
+
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
+		})
 	})
 })

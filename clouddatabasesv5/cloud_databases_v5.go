@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ const ParameterizedServiceURL = "https://api.{region}.databases.cloud.ibm.com/v5
 
 var defaultUrlVariables = map[string]string{
 	"platform": "ibm",
-	"region":   "us-south",
+	"region": "us-south",
 }
 
 // CloudDatabasesV5Options : Service options
@@ -402,7 +402,7 @@ func (cloudDatabases *CloudDatabasesV5) CreateDatabaseUserWithContext(ctx contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id":        *createDatabaseUserOptions.ID,
+		"id": *createDatabaseUserOptions.ID,
 		"user_type": *createDatabaseUserOptions.UserType,
 	}
 
@@ -483,9 +483,9 @@ func (cloudDatabases *CloudDatabasesV5) UpdateUserWithContext(ctx context.Contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id":        *updateUserOptions.ID,
+		"id": *updateUserOptions.ID,
 		"user_type": *updateUserOptions.UserType,
-		"username":  *updateUserOptions.Username,
+		"username": *updateUserOptions.Username,
 	}
 
 	builder := core.NewRequestBuilder(core.PATCH)
@@ -565,9 +565,9 @@ func (cloudDatabases *CloudDatabasesV5) DeleteDatabaseUserWithContext(ctx contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id":        *deleteDatabaseUserOptions.ID,
+		"id": *deleteDatabaseUserOptions.ID,
 		"user_type": *deleteDatabaseUserOptions.UserType,
-		"username":  *deleteDatabaseUserOptions.Username,
+		"username": *deleteDatabaseUserOptions.Username,
 	}
 
 	builder := core.NewRequestBuilder(core.DELETE)
@@ -1262,8 +1262,8 @@ func (cloudDatabases *CloudDatabasesV5) StartOndemandBackupWithContext(ctx conte
 }
 
 // GetPitrData : Get earliest point-in-time-recovery timestamp
-// Returns the earliest available time for point-in-time-recovery in ISO8601 UTC format. PostgreSQL and EnterpriseDB
-// only.
+// Returns the earliest available time for point-in-time-recovery in ISO8601 UTC format. PostgreSQL, EnterpriseDB, MySQL
+// and MongoDB Enterprise only.
 func (cloudDatabases *CloudDatabasesV5) GetPitrData(getPitrDataOptions *GetPitrDataOptions) (result *GetPitrDataResponse, response *core.DetailedResponse, err error) {
 	result, response, err = cloudDatabases.GetPitrDataWithContext(context.Background(), getPitrDataOptions)
 	err = core.RepurposeSDKProblem(err, "")
@@ -1353,9 +1353,9 @@ func (cloudDatabases *CloudDatabasesV5) GetConnectionWithContext(ctx context.Con
 	}
 
 	pathParamsMap := map[string]string{
-		"id":            *getConnectionOptions.ID,
-		"user_type":     *getConnectionOptions.UserType,
-		"user_id":       *getConnectionOptions.UserID,
+		"id": *getConnectionOptions.ID,
+		"user_type": *getConnectionOptions.UserType,
+		"user_id": *getConnectionOptions.UserID,
 		"endpoint_type": *getConnectionOptions.EndpointType,
 	}
 
@@ -1430,9 +1430,9 @@ func (cloudDatabases *CloudDatabasesV5) CompleteConnectionWithContext(ctx contex
 	}
 
 	pathParamsMap := map[string]string{
-		"id":            *completeConnectionOptions.ID,
-		"user_type":     *completeConnectionOptions.UserType,
-		"user_id":       *completeConnectionOptions.UserID,
+		"id": *completeConnectionOptions.ID,
+		"user_type": *completeConnectionOptions.UserType,
+		"user_id": *completeConnectionOptions.UserID,
 		"endpoint_type": *completeConnectionOptions.EndpointType,
 	}
 
@@ -1662,7 +1662,7 @@ func (cloudDatabases *CloudDatabasesV5) SetDeploymentScalingGroupWithContext(ctx
 	}
 
 	pathParamsMap := map[string]string{
-		"id":       *setDeploymentScalingGroupOptions.ID,
+		"id": *setDeploymentScalingGroupOptions.ID,
 		"group_id": *setDeploymentScalingGroupOptions.GroupID,
 	}
 
@@ -1744,7 +1744,7 @@ func (cloudDatabases *CloudDatabasesV5) GetAutoscalingConditionsWithContext(ctx 
 	}
 
 	pathParamsMap := map[string]string{
-		"id":       *getAutoscalingConditionsOptions.ID,
+		"id": *getAutoscalingConditionsOptions.ID,
 		"group_id": *getAutoscalingConditionsOptions.GroupID,
 	}
 
@@ -1815,7 +1815,7 @@ func (cloudDatabases *CloudDatabasesV5) SetAutoscalingConditionsWithContext(ctx 
 	}
 
 	pathParamsMap := map[string]string{
-		"id":       *setAutoscalingConditionsOptions.ID,
+		"id": *setAutoscalingConditionsOptions.ID,
 		"group_id": *setAutoscalingConditionsOptions.GroupID,
 	}
 
@@ -2045,7 +2045,7 @@ func (cloudDatabases *CloudDatabasesV5) DeleteLogicalReplicationSlotWithContext(
 	}
 
 	pathParamsMap := map[string]string{
-		"id":   *deleteLogicalReplicationSlotOptions.ID,
+		"id": *deleteLogicalReplicationSlotOptions.ID,
 		"name": *deleteLogicalReplicationSlotOptions.Name,
 	}
 
@@ -2349,7 +2349,7 @@ func (cloudDatabases *CloudDatabasesV5) DeleteAllowlistEntryWithContext(ctx cont
 	}
 
 	pathParamsMap := map[string]string{
-		"id":        *deleteAllowlistEntryOptions.ID,
+		"id": *deleteAllowlistEntryOptions.ID,
 		"ipaddress": *deleteAllowlistEntryOptions.Ipaddress,
 	}
 
@@ -2396,6 +2396,261 @@ func (cloudDatabases *CloudDatabasesV5) DeleteAllowlistEntryWithContext(ctx cont
 
 	return
 }
+
+// CreateCapability : Discover capability information
+// Returns capability information based on the parameters provided. Also returns request parameters or defaults if
+// request parameters are blank.
+func (cloudDatabases *CloudDatabasesV5) CreateCapability(createCapabilityOptions *CreateCapabilityOptions) (result *CreateCapabilityResponse, response *core.DetailedResponse, err error) {
+	result, response, err = cloudDatabases.CreateCapabilityWithContext(context.Background(), createCapabilityOptions)
+	err = core.RepurposeSDKProblem(err, "")
+	return
+}
+
+// CreateCapabilityWithContext is an alternate form of the CreateCapability method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) CreateCapabilityWithContext(ctx context.Context, createCapabilityOptions *CreateCapabilityOptions) (result *CreateCapabilityResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(createCapabilityOptions, "createCapabilityOptions cannot be nil")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "unexpected-nil-param", common.GetComponentInfo())
+		return
+	}
+	err = core.ValidateStruct(createCapabilityOptions, "createCapabilityOptions")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "struct-validation-error", common.GetComponentInfo())
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"capability_id": *createCapabilityOptions.CapabilityID,
+	}
+
+	builder := core.NewRequestBuilder(core.POST)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/capability/{capability_id}`, pathParamsMap)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "url-resolve-error", common.GetComponentInfo())
+		return
+	}
+
+	for headerName, headerValue := range createCapabilityOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "CreateCapability")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	body := make(map[string]interface{})
+	if createCapabilityOptions.Deployment != nil {
+		body["deployment"] = createCapabilityOptions.Deployment
+	}
+	if createCapabilityOptions.Backup != nil {
+		body["backup"] = createCapabilityOptions.Backup
+	}
+	if createCapabilityOptions.Options != nil {
+		body["options"] = createCapabilityOptions.Options
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "set-json-body-error", common.GetComponentInfo())
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		err = core.SDKErrorf(err, "", "build-error", common.GetComponentInfo())
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = cloudDatabases.Service.Request(request, &rawResponse)
+	if err != nil {
+		core.EnrichHTTPProblem(err, "createCapability", getServiceComponentInfo())
+		err = core.SDKErrorf(err, "", "http-request-err", common.GetComponentInfo())
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalCreateCapabilityResponse)
+		if err != nil {
+			err = core.SDKErrorf(err, "", "unmarshal-resp-error", common.GetComponentInfo())
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// GetDeploymentCapability : Discover capability information from a deployment
+// Returns capability information based on the deployment provided. Also returns url parameters or defaults if request
+// parameters are blank.
+func (cloudDatabases *CloudDatabasesV5) GetDeploymentCapability(getDeploymentCapabilityOptions *GetDeploymentCapabilityOptions) (result *GetDeploymentCapabilityResponse, response *core.DetailedResponse, err error) {
+	result, response, err = cloudDatabases.GetDeploymentCapabilityWithContext(context.Background(), getDeploymentCapabilityOptions)
+	err = core.RepurposeSDKProblem(err, "")
+	return
+}
+
+// GetDeploymentCapabilityWithContext is an alternate form of the GetDeploymentCapability method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) GetDeploymentCapabilityWithContext(ctx context.Context, getDeploymentCapabilityOptions *GetDeploymentCapabilityOptions) (result *GetDeploymentCapabilityResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(getDeploymentCapabilityOptions, "getDeploymentCapabilityOptions cannot be nil")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "unexpected-nil-param", common.GetComponentInfo())
+		return
+	}
+	err = core.ValidateStruct(getDeploymentCapabilityOptions, "getDeploymentCapabilityOptions")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "struct-validation-error", common.GetComponentInfo())
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"id": *getDeploymentCapabilityOptions.ID,
+		"capability_id": *getDeploymentCapabilityOptions.CapabilityID,
+	}
+
+	builder := core.NewRequestBuilder(core.GET)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/capability/{capability_id}`, pathParamsMap)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "url-resolve-error", common.GetComponentInfo())
+		return
+	}
+
+	for headerName, headerValue := range getDeploymentCapabilityOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "GetDeploymentCapability")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+
+	if getDeploymentCapabilityOptions.TargetPlatform != nil {
+		builder.AddQuery("target_platform", fmt.Sprint(*getDeploymentCapabilityOptions.TargetPlatform))
+	}
+	if getDeploymentCapabilityOptions.TargetLocation != nil {
+		builder.AddQuery("target_location", fmt.Sprint(*getDeploymentCapabilityOptions.TargetLocation))
+	}
+	if getDeploymentCapabilityOptions.HostFlavor != nil {
+		builder.AddQuery("host_flavor", fmt.Sprint(*getDeploymentCapabilityOptions.HostFlavor))
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		err = core.SDKErrorf(err, "", "build-error", common.GetComponentInfo())
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = cloudDatabases.Service.Request(request, &rawResponse)
+	if err != nil {
+		core.EnrichHTTPProblem(err, "getDeploymentCapability", getServiceComponentInfo())
+		err = core.SDKErrorf(err, "", "http-request-err", common.GetComponentInfo())
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalGetDeploymentCapabilityResponse)
+		if err != nil {
+			err = core.SDKErrorf(err, "", "unmarshal-resp-error", common.GetComponentInfo())
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
+
+// SetDatabaseInplaceVersionUpgrade : Upgrade your database version
+// Upgrade your database version. See version upgrade documentation for details.
+func (cloudDatabases *CloudDatabasesV5) SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions) (result *SetDatabaseInplaceVersionUpgradeResponse, response *core.DetailedResponse, err error) {
+	result, response, err = cloudDatabases.SetDatabaseInplaceVersionUpgradeWithContext(context.Background(), setDatabaseInplaceVersionUpgradeOptions)
+	err = core.RepurposeSDKProblem(err, "")
+	return
+}
+
+// SetDatabaseInplaceVersionUpgradeWithContext is an alternate form of the SetDatabaseInplaceVersionUpgrade method which supports a Context parameter
+func (cloudDatabases *CloudDatabasesV5) SetDatabaseInplaceVersionUpgradeWithContext(ctx context.Context, setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions) (result *SetDatabaseInplaceVersionUpgradeResponse, response *core.DetailedResponse, err error) {
+	err = core.ValidateNotNil(setDatabaseInplaceVersionUpgradeOptions, "setDatabaseInplaceVersionUpgradeOptions cannot be nil")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "unexpected-nil-param", common.GetComponentInfo())
+		return
+	}
+	err = core.ValidateStruct(setDatabaseInplaceVersionUpgradeOptions, "setDatabaseInplaceVersionUpgradeOptions")
+	if err != nil {
+		err = core.SDKErrorf(err, "", "struct-validation-error", common.GetComponentInfo())
+		return
+	}
+
+	pathParamsMap := map[string]string{
+		"id": *setDatabaseInplaceVersionUpgradeOptions.ID,
+	}
+
+	builder := core.NewRequestBuilder(core.PATCH)
+	builder = builder.WithContext(ctx)
+	builder.EnableGzipCompression = cloudDatabases.GetEnableGzipCompression()
+	_, err = builder.ResolveRequestURL(cloudDatabases.Service.Options.URL, `/deployments/{id}/version`, pathParamsMap)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "url-resolve-error", common.GetComponentInfo())
+		return
+	}
+
+	for headerName, headerValue := range setDatabaseInplaceVersionUpgradeOptions.Headers {
+		builder.AddHeader(headerName, headerValue)
+	}
+
+	sdkHeaders := common.GetSdkHeaders("cloud_databases", "V5", "SetDatabaseInplaceVersionUpgrade")
+	for headerName, headerValue := range sdkHeaders {
+		builder.AddHeader(headerName, headerValue)
+	}
+	builder.AddHeader("Accept", "application/json")
+	builder.AddHeader("Content-Type", "application/json")
+
+	if setDatabaseInplaceVersionUpgradeOptions.SkipBackup != nil {
+		builder.AddQuery("skip_backup", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.SkipBackup))
+	}
+	if setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime != nil {
+		builder.AddQuery("expiration_datetime", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime))
+	}
+
+	body := make(map[string]interface{})
+	if setDatabaseInplaceVersionUpgradeOptions.Version != nil {
+		body["version"] = setDatabaseInplaceVersionUpgradeOptions.Version
+	}
+	_, err = builder.SetBodyContentJSON(body)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "set-json-body-error", common.GetComponentInfo())
+		return
+	}
+
+	request, err := builder.Build()
+	if err != nil {
+		err = core.SDKErrorf(err, "", "build-error", common.GetComponentInfo())
+		return
+	}
+
+	var rawResponse map[string]json.RawMessage
+	response, err = cloudDatabases.Service.Request(request, &rawResponse)
+	if err != nil {
+		core.EnrichHTTPProblem(err, "setDatabaseInplaceVersionUpgrade", getServiceComponentInfo())
+		err = core.SDKErrorf(err, "", "http-request-err", common.GetComponentInfo())
+		return
+	}
+	if rawResponse != nil {
+		err = core.UnmarshalModel(rawResponse, "", &result, UnmarshalSetDatabaseInplaceVersionUpgradeResponse)
+		if err != nil {
+			err = core.SDKErrorf(err, "", "unmarshal-resp-error", common.GetComponentInfo())
+			return
+		}
+		response.Result = result
+	}
+
+	return
+}
 func getServiceComponentInfo() *core.ProblemComponent {
 	return core.NewProblemComponent(DefaultServiceName, "5.0.0")
 }
@@ -2407,7 +2662,7 @@ type AddAllowlistEntryOptions struct {
 
 	IPAddress *AllowlistEntry `json:"ip_address,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -2535,6 +2790,24 @@ func UnmarshalAutoscalingCPUGroupCPURate(m map[string]json.RawMessage, result in
 	err = core.UnmarshalPrimitive(m, "units", &obj.Units)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "units-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// AutoscalingCapability : AutoscalingCapability struct
+type AutoscalingCapability struct {
+	// Autoscaling capability.
+	AutoscalingSupported *bool `json:"autoscaling_supported,omitempty"`
+}
+
+// UnmarshalAutoscalingCapability unmarshals an instance of AutoscalingCapability from the specified map of raw messages.
+func UnmarshalAutoscalingCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(AutoscalingCapability)
+	err = core.UnmarshalPrimitive(m, "autoscaling_supported", &obj.AutoscalingSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "autoscaling_supported-error", common.GetComponentInfo())
 		return
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
@@ -2852,7 +3125,6 @@ type AutoscalingSetGroupAutoscaling struct {
 
 	CPU *AutoscalingCPUGroupCPU `json:"cpu,omitempty"`
 }
-
 func (*AutoscalingSetGroupAutoscaling) isaAutoscalingSetGroupAutoscaling() bool {
 	return true
 }
@@ -2913,7 +3185,7 @@ type Backup struct {
 // Constants associated with the Backup.Type property.
 // The type of backup.
 const (
-	BackupTypeOnDemandConst  = "on_demand"
+	BackupTypeOnDemandConst = "on_demand"
 	BackupTypeScheduledConst = "scheduled"
 )
 
@@ -2921,8 +3193,8 @@ const (
 // The status of this backup.
 const (
 	BackupStatusCompletedConst = "completed"
-	BackupStatusFailedConst    = "failed"
-	BackupStatusRunningConst   = "running"
+	BackupStatusFailedConst = "failed"
+	BackupStatusRunningConst = "running"
 )
 
 // UnmarshalBackup unmarshals an instance of Backup from the specified map of raw messages.
@@ -2990,6 +3262,88 @@ func UnmarshalBackups(m map[string]json.RawMessage, result interface{}) (err err
 	return
 }
 
+// Capability : Capability struct
+type Capability struct {
+	Autoscaling *AutoscalingCapability `json:"autoscaling,omitempty"`
+
+	Encryption *EncryptionCapability `json:"encryption,omitempty"`
+
+	Endpoints *EndpointsCapability `json:"endpoints,omitempty"`
+
+	Groups []Group `json:"groups,omitempty"`
+
+	Flavors []FlavorsCapabilityItem `json:"flavors,omitempty"`
+
+	Locations *LocationsCapability `json:"locations,omitempty"`
+
+	PointInTimeRecovery *PointInTimeRecoveryCapability `json:"point_in_time_recovery,omitempty"`
+
+	Remotes *RemotesCapability `json:"remotes,omitempty"`
+
+	// Only available for requests with Backup. Only available capability for Backup requests.
+	Restores *RestoresCapability `json:"restores,omitempty"`
+
+	// An array of versions of the database, their status, preferedness, and transitions.
+	Versions []VersionsCapabilityItem `json:"versions,omitempty"`
+}
+
+// UnmarshalCapability unmarshals an instance of Capability from the specified map of raw messages.
+func UnmarshalCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(Capability)
+	err = core.UnmarshalModel(m, "autoscaling", &obj.Autoscaling, UnmarshalAutoscalingCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "autoscaling-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "encryption", &obj.Encryption, UnmarshalEncryptionCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "encryption-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "endpoints", &obj.Endpoints, UnmarshalEndpointsCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "endpoints-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "groups", &obj.Groups, UnmarshalGroup)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "groups-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "flavors", &obj.Flavors, UnmarshalFlavorsCapabilityItem)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "flavors-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "locations", &obj.Locations, UnmarshalLocationsCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "locations-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "point_in_time_recovery", &obj.PointInTimeRecovery, UnmarshalPointInTimeRecoveryCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "point_in_time_recovery-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "remotes", &obj.Remotes, UnmarshalRemotesCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "remotes-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "restores", &obj.Restores, UnmarshalRestoresCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "restores-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "versions", &obj.Versions, UnmarshalVersionsCapabilityItem)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "versions-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // CompleteConnectionOptions : The CompleteConnection options.
 type CompleteConnectionOptions struct {
 	// Deployment ID.
@@ -3012,7 +3366,7 @@ type CompleteConnectionOptions struct {
 	// by other commands.
 	CertificateRoot *string `json:"certificate_root,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -3021,15 +3375,15 @@ type CompleteConnectionOptions struct {
 // fetched.
 const (
 	CompleteConnectionOptionsEndpointTypePrivateConst = "private"
-	CompleteConnectionOptionsEndpointTypePublicConst  = "public"
+	CompleteConnectionOptionsEndpointTypePublicConst = "public"
 )
 
 // NewCompleteConnectionOptions : Instantiate CompleteConnectionOptions
 func (*CloudDatabasesV5) NewCompleteConnectionOptions(id string, userType string, userID string, endpointType string) *CompleteConnectionOptions {
 	return &CompleteConnectionOptions{
-		ID:           core.StringPtr(id),
-		UserType:     core.StringPtr(userType),
-		UserID:       core.StringPtr(userID),
+		ID: core.StringPtr(id),
+		UserType: core.StringPtr(userType),
+		UserID: core.StringPtr(userID),
 		EndpointType: core.StringPtr(endpointType),
 	}
 }
@@ -3230,7 +3584,7 @@ type Configuration struct {
 // authentication.
 const (
 	ConfigurationLogConnectionsOffConst = "off"
-	ConfigurationLogConnectionsOnConst  = "on"
+	ConfigurationLogConnectionsOnConst = "on"
 )
 
 // Constants associated with the Configuration.LogDisconnections property.
@@ -3238,7 +3592,7 @@ const (
 // duration of the session.
 const (
 	ConfigurationLogDisconnectionsOffConst = "off"
-	ConfigurationLogDisconnectionsOnConst  = "on"
+	ConfigurationLogDisconnectionsOnConst = "on"
 )
 
 // Constants associated with the Configuration.SynchronousCommit property.
@@ -3246,7 +3600,7 @@ const (
 // synchronous replication which will impact performance and availabilty.
 const (
 	ConfigurationSynchronousCommitLocalConst = "local"
-	ConfigurationSynchronousCommitOffConst   = "off"
+	ConfigurationSynchronousCommitOffConst = "off"
 )
 
 // Constants associated with the Configuration.WalLevel property.
@@ -3260,25 +3614,25 @@ const (
 // Constants associated with the Configuration.MaxmemoryPolicy property.
 // The policy with which Redis evicts keys when maximum memory is reached.
 const (
-	ConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
-	ConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
-	ConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
-	ConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
+	ConfigurationMaxmemoryPolicyAllkeysLruConst = "allkeys-lru"
+	ConfigurationMaxmemoryPolicyAllkeysRandomConst = "allkeys-random"
+	ConfigurationMaxmemoryPolicyNoevictionConst = "noeviction"
+	ConfigurationMaxmemoryPolicyVolatileLruConst = "volatile-lru"
 	ConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
-	ConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
+	ConfigurationMaxmemoryPolicyVolatileTTLConst = "volatile-ttl"
 )
 
 // Constants associated with the Configuration.Appendonly property.
 // If set to yes this will enable AOF persistence.
 const (
-	ConfigurationAppendonlyNoConst  = "no"
+	ConfigurationAppendonlyNoConst = "no"
 	ConfigurationAppendonlyYesConst = "yes"
 )
 
 // Constants associated with the Configuration.StopWritesOnBgsaveError property.
 // Whether or not to stop accepting writes when background persistence actions fail.
 const (
-	ConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
+	ConfigurationStopWritesOnBgsaveErrorNoConst = "no"
 	ConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
 )
 
@@ -3288,9 +3642,8 @@ const (
 const (
 	ConfigurationDefaultAuthenticationPluginCachingSha2PasswordConst = "caching_sha2_password"
 	ConfigurationDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
-	ConfigurationDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
+	ConfigurationDefaultAuthenticationPluginSha256PasswordConst = "sha256_password"
 )
-
 func (*Configuration) isaConfiguration() bool {
 	return true
 }
@@ -3538,7 +3891,6 @@ type Connection struct {
 
 	Emp *ConnectionURI `json:"emp,omitempty"`
 }
-
 func (*Connection) isaConnection() bool {
 	return true
 }
@@ -3854,6 +4206,220 @@ func UnmarshalConnectionURI(m map[string]json.RawMessage, result interface{}) (e
 	return
 }
 
+// CreateCapabilityOptions : The CreateCapability options.
+type CreateCapabilityOptions struct {
+	// Capability ID.
+	CapabilityID *string `json:"capability_id" validate:"required,ne="`
+
+	// Either `deployment` or `backup`, not both. The `deployment` object can only be used with its supported
+	// `capability_id`.
+	Deployment *CreateCapabilityRequestDeployment `json:"deployment,omitempty"`
+
+	// Either `deployment` or `backup`, not both. The `backup` object can only be used with its supported `capability_id`.
+	Backup *CreateCapabilityRequestBackup `json:"backup,omitempty"`
+
+	Options *CreateCapabilityRequestOptions `json:"options,omitempty"`
+
+	// Allows users to set headers on API requests.
+	Headers map[string]string
+}
+
+// Constants associated with the CreateCapabilityOptions.CapabilityID property.
+// Capability ID.
+const (
+	CreateCapabilityOptionsCapabilityIDAutoscalingConst = "autoscaling"
+	CreateCapabilityOptionsCapabilityIDEncryptionConst = "encryption"
+	CreateCapabilityOptionsCapabilityIDEndpointsConst = "endpoints"
+	CreateCapabilityOptionsCapabilityIDFlavorsConst = "flavors"
+	CreateCapabilityOptionsCapabilityIDGroupsConst = "groups"
+	CreateCapabilityOptionsCapabilityIDLocationsConst = "locations"
+	CreateCapabilityOptionsCapabilityIDPointInTimeRecoveryConst = "point_in_time_recovery"
+	CreateCapabilityOptionsCapabilityIDRemotesConst = "remotes"
+	CreateCapabilityOptionsCapabilityIDRestoresConst = "restores"
+	CreateCapabilityOptionsCapabilityIDVersionsConst = "versions"
+)
+
+// NewCreateCapabilityOptions : Instantiate CreateCapabilityOptions
+func (*CloudDatabasesV5) NewCreateCapabilityOptions(capabilityID string) *CreateCapabilityOptions {
+	return &CreateCapabilityOptions{
+		CapabilityID: core.StringPtr(capabilityID),
+	}
+}
+
+// SetCapabilityID : Allow user to set CapabilityID
+func (_options *CreateCapabilityOptions) SetCapabilityID(capabilityID string) *CreateCapabilityOptions {
+	_options.CapabilityID = core.StringPtr(capabilityID)
+	return _options
+}
+
+// SetDeployment : Allow user to set Deployment
+func (_options *CreateCapabilityOptions) SetDeployment(deployment *CreateCapabilityRequestDeployment) *CreateCapabilityOptions {
+	_options.Deployment = deployment
+	return _options
+}
+
+// SetBackup : Allow user to set Backup
+func (_options *CreateCapabilityOptions) SetBackup(backup *CreateCapabilityRequestBackup) *CreateCapabilityOptions {
+	_options.Backup = backup
+	return _options
+}
+
+// SetOptions : Allow user to set Options
+func (_options *CreateCapabilityOptions) SetOptions(options *CreateCapabilityRequestOptions) *CreateCapabilityOptions {
+	_options.Options = options
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *CreateCapabilityOptions) SetHeaders(param map[string]string) *CreateCapabilityOptions {
+	options.Headers = param
+	return options
+}
+
+// CreateCapabilityRequestBackup : Either `deployment` or `backup`, not both. The `backup` object can only be used with its supported `capability_id`.
+type CreateCapabilityRequestBackup struct {
+	// Type of database.
+	Type *string `json:"type,omitempty"`
+
+	// database version.
+	Version *string `json:"version,omitempty"`
+
+	// classic or satellite.
+	Platform *string `json:"platform,omitempty"`
+
+	// where the database is located.
+	Location *string `json:"location,omitempty"`
+}
+
+// UnmarshalCreateCapabilityRequestBackup unmarshals an instance of CreateCapabilityRequestBackup from the specified map of raw messages.
+func UnmarshalCreateCapabilityRequestBackup(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CreateCapabilityRequestBackup)
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "type-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "version", &obj.Version)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "version-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "platform", &obj.Platform)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "platform-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "location", &obj.Location)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "location-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CreateCapabilityRequestDeployment : Either `deployment` or `backup`, not both. The `deployment` object can only be used with its supported
+// `capability_id`.
+type CreateCapabilityRequestDeployment struct {
+	// Type of database.
+	Type *string `json:"type,omitempty"`
+
+	// database version.
+	Version *string `json:"version,omitempty"`
+
+	// classic or satellite.
+	Platform *string `json:"platform,omitempty"`
+
+	// where the database is located.
+	Location *string `json:"location,omitempty"`
+
+	// database plan.
+	Plan *string `json:"plan,omitempty"`
+}
+
+// UnmarshalCreateCapabilityRequestDeployment unmarshals an instance of CreateCapabilityRequestDeployment from the specified map of raw messages.
+func UnmarshalCreateCapabilityRequestDeployment(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CreateCapabilityRequestDeployment)
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "type-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "version", &obj.Version)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "version-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "platform", &obj.Platform)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "platform-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "location", &obj.Location)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "location-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "plan", &obj.Plan)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "plan-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CreateCapabilityRequestOptions : CreateCapabilityRequestOptions struct
+type CreateCapabilityRequestOptions struct {
+	// classic or satellite.
+	TargetPlatform *string `json:"target_platform,omitempty"`
+
+	// Target location.
+	TargetLocation *string `json:"target_location,omitempty"`
+
+	// which host_flavor groups to return.
+	HostFlavor *string `json:"host_flavor,omitempty"`
+}
+
+// UnmarshalCreateCapabilityRequestOptions unmarshals an instance of CreateCapabilityRequestOptions from the specified map of raw messages.
+func UnmarshalCreateCapabilityRequestOptions(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CreateCapabilityRequestOptions)
+	err = core.UnmarshalPrimitive(m, "target_platform", &obj.TargetPlatform)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "target_platform-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "target_location", &obj.TargetLocation)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "target_location-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "host_flavor", &obj.HostFlavor)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "host_flavor-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// CreateCapabilityResponse : CreateCapabilityResponse struct
+type CreateCapabilityResponse struct {
+	Capability *Capability `json:"capability,omitempty"`
+}
+
+// UnmarshalCreateCapabilityResponse unmarshals an instance of CreateCapabilityResponse from the specified map of raw messages.
+func UnmarshalCreateCapabilityResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(CreateCapabilityResponse)
+	err = core.UnmarshalModel(m, "capability", &obj.Capability, UnmarshalCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "capability-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // CreateDatabaseUserOptions : The CreateDatabaseUser options.
 type CreateDatabaseUserOptions struct {
 	// Deployment ID.
@@ -3864,14 +4430,14 @@ type CreateDatabaseUserOptions struct {
 
 	User UserIntf `json:"user,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewCreateDatabaseUserOptions : Instantiate CreateDatabaseUserOptions
 func (*CloudDatabasesV5) NewCreateDatabaseUserOptions(id string, userType string) *CreateDatabaseUserOptions {
 	return &CreateDatabaseUserOptions{
-		ID:       core.StringPtr(id),
+		ID: core.StringPtr(id),
 		UserType: core.StringPtr(userType),
 	}
 }
@@ -3924,7 +4490,7 @@ type CreateLogicalReplicationSlotOptions struct {
 
 	LogicalReplicationSlot *LogicalReplicationSlot `json:"logical_replication_slot,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -3978,14 +4544,14 @@ type DeleteAllowlistEntryOptions struct {
 	// An IPv4 address or a CIDR range (netmasked IPv4 address).
 	Ipaddress *string `json:"ipaddress" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewDeleteAllowlistEntryOptions : Instantiate DeleteAllowlistEntryOptions
 func (*CloudDatabasesV5) NewDeleteAllowlistEntryOptions(id string, ipaddress string) *DeleteAllowlistEntryOptions {
 	return &DeleteAllowlistEntryOptions{
-		ID:        core.StringPtr(id),
+		ID: core.StringPtr(id),
 		Ipaddress: core.StringPtr(ipaddress),
 	}
 }
@@ -4036,14 +4602,14 @@ type DeleteDatabaseUserOptions struct {
 	// Username.
 	Username *string `json:"username" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewDeleteDatabaseUserOptions : Instantiate DeleteDatabaseUserOptions
 func (*CloudDatabasesV5) NewDeleteDatabaseUserOptions(id string, userType string, username string) *DeleteDatabaseUserOptions {
 	return &DeleteDatabaseUserOptions{
-		ID:       core.StringPtr(id),
+		ID: core.StringPtr(id),
 		UserType: core.StringPtr(userType),
 		Username: core.StringPtr(username),
 	}
@@ -4098,14 +4664,14 @@ type DeleteLogicalReplicationSlotOptions struct {
 	// Name of the logical replication slot.
 	Name *string `json:"name" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewDeleteLogicalReplicationSlotOptions : Instantiate DeleteLogicalReplicationSlotOptions
 func (*CloudDatabasesV5) NewDeleteLogicalReplicationSlotOptions(id string, name string) *DeleteLogicalReplicationSlotOptions {
 	return &DeleteLogicalReplicationSlotOptions{
-		ID:   core.StringPtr(id),
+		ID: core.StringPtr(id),
 		Name: core.StringPtr(name),
 	}
 }
@@ -4189,9 +4755,9 @@ type DeployablesVersionsItem struct {
 // Constants associated with the DeployablesVersionsItem.Status property.
 // The status of this version: To be finalized.
 const (
-	DeployablesVersionsItemStatusBetaConst       = "beta"
+	DeployablesVersionsItemStatusBetaConst = "beta"
 	DeployablesVersionsItemStatusDeprecatedConst = "deprecated"
-	DeployablesVersionsItemStatusStableConst     = "stable"
+	DeployablesVersionsItemStatusStableConst = "stable"
 )
 
 // UnmarshalDeployablesVersionsItem unmarshals an instance of DeployablesVersionsItem from the specified map of raw messages.
@@ -4226,8 +4792,11 @@ type DeployablesVersionsItemTransitionsItem struct {
 	// The database type.
 	Application *string `json:"application,omitempty"`
 
-	// method of going from from_version to to_version.
+	// in-place or restore method of going from from_version to to_version.
 	Method *string `json:"method,omitempty"`
+
+	// Option to upgrade instance without taking a backup.
+	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
 
 	// The version the transition in from.
 	FromVersion *string `json:"from_version,omitempty"`
@@ -4247,6 +4816,11 @@ func UnmarshalDeployablesVersionsItemTransitionsItem(m map[string]json.RawMessag
 	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "method-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)
@@ -4347,12 +4921,156 @@ func UnmarshalDeployment(m map[string]json.RawMessage, result interface{}) (err 
 	return
 }
 
+// EncryptionCapability : EncryptionCapability struct
+type EncryptionCapability struct {
+	// Disk encryption capability.
+	DiskEncryptionSupported *bool `json:"disk_encryption_supported,omitempty"`
+}
+
+// UnmarshalEncryptionCapability unmarshals an instance of EncryptionCapability from the specified map of raw messages.
+func UnmarshalEncryptionCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(EncryptionCapability)
+	err = core.UnmarshalPrimitive(m, "disk_encryption_supported", &obj.DiskEncryptionSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "disk_encryption_supported-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// EndpointsCapability : EndpointsCapability struct
+type EndpointsCapability struct {
+	// Direct endpoints capability.
+	DirectEndpointsSupported *bool `json:"direct_endpoints_supported,omitempty"`
+
+	// Public endpoints capability.
+	PublicEndpointsSupported *bool `json:"public_endpoints_supported,omitempty"`
+
+	// Private endpoints capability.
+	PrivateEndpointsSupported *bool `json:"private_endpoints_supported,omitempty"`
+
+	// Multiple endpoints capability.
+	MultipleEndpointsSupported *bool `json:"multiple_endpoints_supported,omitempty"`
+}
+
+// UnmarshalEndpointsCapability unmarshals an instance of EndpointsCapability from the specified map of raw messages.
+func UnmarshalEndpointsCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(EndpointsCapability)
+	err = core.UnmarshalPrimitive(m, "direct_endpoints_supported", &obj.DirectEndpointsSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "direct_endpoints_supported-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "public_endpoints_supported", &obj.PublicEndpointsSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "public_endpoints_supported-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "private_endpoints_supported", &obj.PrivateEndpointsSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "private_endpoints_supported-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "multiple_endpoints_supported", &obj.MultipleEndpointsSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "multiple_endpoints_supported-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// FlavorsCapabilityItem : FlavorsCapabilityItem struct
+type FlavorsCapabilityItem struct {
+	// Host flavor id.
+	ID *string `json:"id,omitempty"`
+
+	// Host flavor name.
+	Name *string `json:"name,omitempty"`
+
+	CPU *FlavorsCapabilityItemCPU `json:"cpu,omitempty"`
+
+	Memory *FlavorsCapabilityItemMemory `json:"memory,omitempty"`
+
+	// Host flavor size.
+	HostingSize *string `json:"hosting_size,omitempty"`
+}
+
+// UnmarshalFlavorsCapabilityItem unmarshals an instance of FlavorsCapabilityItem from the specified map of raw messages.
+func UnmarshalFlavorsCapabilityItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(FlavorsCapabilityItem)
+	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "id-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "name", &obj.Name)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "name-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "cpu", &obj.CPU, UnmarshalFlavorsCapabilityItemCPU)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "cpu-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "memory", &obj.Memory, UnmarshalFlavorsCapabilityItemMemory)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "memory-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "hosting_size", &obj.HostingSize)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "hosting_size-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// FlavorsCapabilityItemCPU : FlavorsCapabilityItemCPU struct
+type FlavorsCapabilityItemCPU struct {
+	// Allocated number of cpus.
+	AllocationCount *int64 `json:"allocation_count,omitempty"`
+}
+
+// UnmarshalFlavorsCapabilityItemCPU unmarshals an instance of FlavorsCapabilityItemCPU from the specified map of raw messages.
+func UnmarshalFlavorsCapabilityItemCPU(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(FlavorsCapabilityItemCPU)
+	err = core.UnmarshalPrimitive(m, "allocation_count", &obj.AllocationCount)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "allocation_count-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// FlavorsCapabilityItemMemory : FlavorsCapabilityItemMemory struct
+type FlavorsCapabilityItemMemory struct {
+	// Allocated memory in MB.
+	AllocationMb *int64 `json:"allocation_mb,omitempty"`
+}
+
+// UnmarshalFlavorsCapabilityItemMemory unmarshals an instance of FlavorsCapabilityItemMemory from the specified map of raw messages.
+func UnmarshalFlavorsCapabilityItemMemory(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(FlavorsCapabilityItemMemory)
+	err = core.UnmarshalPrimitive(m, "allocation_mb", &obj.AllocationMb)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "allocation_mb-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // GetAllowlistOptions : The GetAllowlist options.
 type GetAllowlistOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4400,14 +5118,14 @@ type GetAutoscalingConditionsOptions struct {
 	// Group ID.
 	GroupID *string `json:"group_id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewGetAutoscalingConditionsOptions : Instantiate GetAutoscalingConditionsOptions
 func (*CloudDatabasesV5) NewGetAutoscalingConditionsOptions(id string, groupID string) *GetAutoscalingConditionsOptions {
 	return &GetAutoscalingConditionsOptions{
-		ID:      core.StringPtr(id),
+		ID: core.StringPtr(id),
 		GroupID: core.StringPtr(groupID),
 	}
 }
@@ -4435,7 +5153,7 @@ type GetBackupInfoOptions struct {
 	// Backup ID.
 	BackupID *string `json:"backup_id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4493,7 +5211,7 @@ type GetConnectionOptions struct {
 	// by other commands.
 	CertificateRoot *string `json:"certificate_root,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4501,15 +5219,15 @@ type GetConnectionOptions struct {
 // Endpoint Type. The endpoint must be enabled on the deployment before its connection information can be fetched.
 const (
 	GetConnectionOptionsEndpointTypePrivateConst = "private"
-	GetConnectionOptionsEndpointTypePublicConst  = "public"
+	GetConnectionOptionsEndpointTypePublicConst = "public"
 )
 
 // NewGetConnectionOptions : Instantiate GetConnectionOptions
 func (*CloudDatabasesV5) NewGetConnectionOptions(id string, userType string, userID string, endpointType string) *GetConnectionOptions {
 	return &GetConnectionOptions{
-		ID:           core.StringPtr(id),
-		UserType:     core.StringPtr(userType),
-		UserID:       core.StringPtr(userID),
+		ID: core.StringPtr(id),
+		UserType: core.StringPtr(userType),
+		UserID: core.StringPtr(userID),
 		EndpointType: core.StringPtr(endpointType),
 	}
 }
@@ -4576,14 +5294,14 @@ type GetDefaultScalingGroupsOptions struct {
 	// groups will be returned.
 	HostFlavor *string `json:"host_flavor,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // Constants associated with the GetDefaultScalingGroupsOptions.Type property.
 // Database type name.
 const (
-	GetDefaultScalingGroupsOptionsTypeEtcdConst       = "etcd"
+	GetDefaultScalingGroupsOptionsTypeEtcdConst = "etcd"
 	GetDefaultScalingGroupsOptionsTypePostgresqlConst = "postgresql"
 )
 
@@ -4636,12 +5354,108 @@ func UnmarshalGetDefaultScalingGroupsResponse(m map[string]json.RawMessage, resu
 	return
 }
 
+// GetDeploymentCapabilityOptions : The GetDeploymentCapability options.
+type GetDeploymentCapabilityOptions struct {
+	// Deployment ID.
+	ID *string `json:"id" validate:"required,ne="`
+
+	// Capability ID.
+	CapabilityID *string `json:"capability_id" validate:"required,ne="`
+
+	// Target platform. Required for Point In Time Recovery.
+	TargetPlatform *string `json:"target_platform,omitempty"`
+
+	// Target location. Required for Point In Time Recovery.
+	TargetLocation *string `json:"target_location,omitempty"`
+
+	// When a host_flavor of 'multitenant' is included with the request, IBM Cloud Database's new shared compute groups
+	// will be returned.
+	HostFlavor *string `json:"host_flavor,omitempty"`
+
+	// Allows users to set headers on API requests.
+	Headers map[string]string
+}
+
+// Constants associated with the GetDeploymentCapabilityOptions.CapabilityID property.
+// Capability ID.
+const (
+	GetDeploymentCapabilityOptionsCapabilityIDAutoscalingConst = "autoscaling"
+	GetDeploymentCapabilityOptionsCapabilityIDEncryptionConst = "encryption"
+	GetDeploymentCapabilityOptionsCapabilityIDEndpointsConst = "endpoints"
+	GetDeploymentCapabilityOptionsCapabilityIDGroupsConst = "groups"
+	GetDeploymentCapabilityOptionsCapabilityIDLocationsConst = "locations"
+	GetDeploymentCapabilityOptionsCapabilityIDPointInTimeRecoveryConst = "point_in_time_recovery"
+	GetDeploymentCapabilityOptionsCapabilityIDRemotesConst = "remotes"
+	GetDeploymentCapabilityOptionsCapabilityIDVersionsConst = "versions"
+)
+
+// NewGetDeploymentCapabilityOptions : Instantiate GetDeploymentCapabilityOptions
+func (*CloudDatabasesV5) NewGetDeploymentCapabilityOptions(id string, capabilityID string) *GetDeploymentCapabilityOptions {
+	return &GetDeploymentCapabilityOptions{
+		ID: core.StringPtr(id),
+		CapabilityID: core.StringPtr(capabilityID),
+	}
+}
+
+// SetID : Allow user to set ID
+func (_options *GetDeploymentCapabilityOptions) SetID(id string) *GetDeploymentCapabilityOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
+}
+
+// SetCapabilityID : Allow user to set CapabilityID
+func (_options *GetDeploymentCapabilityOptions) SetCapabilityID(capabilityID string) *GetDeploymentCapabilityOptions {
+	_options.CapabilityID = core.StringPtr(capabilityID)
+	return _options
+}
+
+// SetTargetPlatform : Allow user to set TargetPlatform
+func (_options *GetDeploymentCapabilityOptions) SetTargetPlatform(targetPlatform string) *GetDeploymentCapabilityOptions {
+	_options.TargetPlatform = core.StringPtr(targetPlatform)
+	return _options
+}
+
+// SetTargetLocation : Allow user to set TargetLocation
+func (_options *GetDeploymentCapabilityOptions) SetTargetLocation(targetLocation string) *GetDeploymentCapabilityOptions {
+	_options.TargetLocation = core.StringPtr(targetLocation)
+	return _options
+}
+
+// SetHostFlavor : Allow user to set HostFlavor
+func (_options *GetDeploymentCapabilityOptions) SetHostFlavor(hostFlavor string) *GetDeploymentCapabilityOptions {
+	_options.HostFlavor = core.StringPtr(hostFlavor)
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *GetDeploymentCapabilityOptions) SetHeaders(param map[string]string) *GetDeploymentCapabilityOptions {
+	options.Headers = param
+	return options
+}
+
+// GetDeploymentCapabilityResponse : GetDeploymentCapabilityResponse struct
+type GetDeploymentCapabilityResponse struct {
+	Capability *Capability `json:"capability,omitempty"`
+}
+
+// UnmarshalGetDeploymentCapabilityResponse unmarshals an instance of GetDeploymentCapabilityResponse from the specified map of raw messages.
+func UnmarshalGetDeploymentCapabilityResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(GetDeploymentCapabilityResponse)
+	err = core.UnmarshalModel(m, "capability", &obj.Capability, UnmarshalCapability)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "capability-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // GetDeploymentInfoOptions : The GetDeploymentInfo options.
 type GetDeploymentInfoOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4686,7 +5500,7 @@ type GetPitrDataOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4731,7 +5545,7 @@ type GetTaskOptions struct {
 	// Task ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -4793,10 +5607,10 @@ type Group struct {
 // Constants associated with the Group.ID property.
 // Id/name for group.
 const (
-	GroupIDAnalyticsConst   = "analytics"
+	GroupIDAnalyticsConst = "analytics"
 	GroupIDBiConnectorConst = "bi_connector"
-	GroupIDMemberConst      = "member"
-	GroupIDSearchConst      = "search"
+	GroupIDMemberConst = "member"
+	GroupIDSearchConst = "search"
 )
 
 // UnmarshalGroup unmarshals an instance of Group from the specified map of raw messages.
@@ -5336,7 +6150,7 @@ type KillConnectionsOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5379,7 +6193,7 @@ func UnmarshalKillConnectionsResponse(m map[string]json.RawMessage, result inter
 // ListDeployablesOptions : The ListDeployables options.
 type ListDeployablesOptions struct {
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5416,7 +6230,7 @@ type ListDeploymentBackupsOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5444,7 +6258,7 @@ type ListDeploymentScalingGroupsOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5489,7 +6303,7 @@ type ListDeploymentTasksOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5515,7 +6329,7 @@ func (options *ListDeploymentTasksOptions) SetHeaders(param map[string]string) *
 // ListRegionsOptions : The ListRegions options.
 type ListRegionsOptions struct {
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5553,7 +6367,7 @@ type ListRemotesOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -5594,6 +6408,24 @@ func UnmarshalListRemotesResponse(m map[string]json.RawMessage, result interface
 	return
 }
 
+// LocationsCapability : LocationsCapability struct
+type LocationsCapability struct {
+	// An array of regions and satellite locations.
+	Locations []string `json:"locations,omitempty"`
+}
+
+// UnmarshalLocationsCapability unmarshals an instance of LocationsCapability from the specified map of raw messages.
+func UnmarshalLocationsCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(LocationsCapability)
+	err = core.UnmarshalPrimitive(m, "locations", &obj.Locations)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "locations-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // LogicalReplicationSlot : LogicalReplicationSlot struct
 type LogicalReplicationSlot struct {
 	// name of the replication slot.
@@ -5609,9 +6441,9 @@ type LogicalReplicationSlot struct {
 // NewLogicalReplicationSlot : Instantiate LogicalReplicationSlot (Generic Model Constructor)
 func (*CloudDatabasesV5) NewLogicalReplicationSlot(name string, databaseName string, pluginType string) (_model *LogicalReplicationSlot, err error) {
 	_model = &LogicalReplicationSlot{
-		Name:         core.StringPtr(name),
+		Name: core.StringPtr(name),
 		DatabaseName: core.StringPtr(databaseName),
-		PluginType:   core.StringPtr(pluginType),
+		PluginType: core.StringPtr(pluginType),
 	}
 	err = core.ValidateStruct(_model, "required parameters")
 	if err != nil {
@@ -5840,6 +6672,24 @@ func UnmarshalMySQLConnectionURI(m map[string]json.RawMessage, result interface{
 	return
 }
 
+// PointInTimeRecoveryCapability : PointInTimeRecoveryCapability struct
+type PointInTimeRecoveryCapability struct {
+	// Point in time recovery capability.
+	PointInTimeRecoverySupported *bool `json:"point_in_time_recovery_supported,omitempty"`
+}
+
+// UnmarshalPointInTimeRecoveryCapability unmarshals an instance of PointInTimeRecoveryCapability from the specified map of raw messages.
+func UnmarshalPointInTimeRecoveryCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(PointInTimeRecoveryCapability)
+	err = core.UnmarshalPrimitive(m, "point_in_time_recovery_supported", &obj.PointInTimeRecoverySupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "point_in_time_recovery_supported-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // PointInTimeRecoveryData : PointInTimeRecoveryData struct
 type PointInTimeRecoveryData struct {
 	EarliestPointInTimeRecoveryTime *string `json:"earliest_point_in_time_recovery_time,omitempty"`
@@ -5960,7 +6810,7 @@ type PromoteReadOnlyReplicaOptions struct {
 	// Promotion and Upgrade options.
 	Promotion map[string]interface{} `json:"promotion,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6127,12 +6977,48 @@ func UnmarshalRemotes(m map[string]json.RawMessage, result interface{}) (err err
 	return
 }
 
+// RemotesCapability : RemotesCapability struct
+type RemotesCapability struct {
+	// Read-only replica capability.
+	ReadOnlyReplicasSupported *bool `json:"read_only_replicas_supported,omitempty"`
+}
+
+// UnmarshalRemotesCapability unmarshals an instance of RemotesCapability from the specified map of raw messages.
+func UnmarshalRemotesCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(RemotesCapability)
+	err = core.UnmarshalPrimitive(m, "read_only_replicas_supported", &obj.ReadOnlyReplicasSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "read_only_replicas_supported-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// RestoresCapability : Only available for requests with Backup. Only available capability for Backup requests.
+type RestoresCapability struct {
+	// Backup restore capability.
+	BackupRestoreSupported *bool `json:"backup_restore_supported,omitempty"`
+}
+
+// UnmarshalRestoresCapability unmarshals an instance of RestoresCapability from the specified map of raw messages.
+func UnmarshalRestoresCapability(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(RestoresCapability)
+	err = core.UnmarshalPrimitive(m, "backup_restore_supported", &obj.BackupRestoreSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "backup_restore_supported-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // ResyncReplicaOptions : The ResyncReplica options.
 type ResyncReplicaOptions struct {
 	// Deployment ID of the read-only replica.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6183,7 +7069,7 @@ type SetAllowlistOptions struct {
 	// header to ensure synchronicity between clients.
 	IfMatch *string `json:"If-Match,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6245,15 +7131,15 @@ type SetAutoscalingConditionsOptions struct {
 
 	Autoscaling AutoscalingSetGroupAutoscalingIntf `json:"autoscaling" validate:"required"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewSetAutoscalingConditionsOptions : Instantiate SetAutoscalingConditionsOptions
 func (*CloudDatabasesV5) NewSetAutoscalingConditionsOptions(id string, groupID string, autoscaling AutoscalingSetGroupAutoscalingIntf) *SetAutoscalingConditionsOptions {
 	return &SetAutoscalingConditionsOptions{
-		ID:          core.StringPtr(id),
-		GroupID:     core.StringPtr(groupID),
+		ID: core.StringPtr(id),
+		GroupID: core.StringPtr(groupID),
 		Autoscaling: autoscaling,
 	}
 }
@@ -6299,6 +7185,81 @@ func UnmarshalSetAutoscalingConditionsResponse(m map[string]json.RawMessage, res
 	return
 }
 
+// SetDatabaseInplaceVersionUpgradeOptions : The SetDatabaseInplaceVersionUpgrade options.
+type SetDatabaseInplaceVersionUpgradeOptions struct {
+	// Deployment ID.
+	ID *string `json:"id" validate:"required,ne="`
+
+	// a database version.
+	Version *string `json:"version" validate:"required"`
+
+	// (Optional, Boolean) Whether to skip taking a backup before upgrading the database version. This is only applicable
+	// for supported database types. To learn more, refer to the version upgrade documentation.
+	SkipBackup *bool `json:"skip_backup,omitempty"`
+
+	// The expiration_datetime must be in the ISO8601 timestamp format and between 5 minutes and 24 hours from now. It
+	// allows you to specify how long to wait for the job to start before the upgrade is cancelled.
+	ExpirationDatetime *strfmt.DateTime `json:"expiration_datetime,omitempty"`
+
+	// Allows users to set headers on API requests.
+	Headers map[string]string
+}
+
+// NewSetDatabaseInplaceVersionUpgradeOptions : Instantiate SetDatabaseInplaceVersionUpgradeOptions
+func (*CloudDatabasesV5) NewSetDatabaseInplaceVersionUpgradeOptions(id string, version string) *SetDatabaseInplaceVersionUpgradeOptions {
+	return &SetDatabaseInplaceVersionUpgradeOptions{
+		ID: core.StringPtr(id),
+		Version: core.StringPtr(version),
+	}
+}
+
+// SetID : Allow user to set ID
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetID(id string) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.ID = core.StringPtr(id)
+	return _options
+}
+
+// SetVersion : Allow user to set Version
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetVersion(version string) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.Version = core.StringPtr(version)
+	return _options
+}
+
+// SetSkipBackup : Allow user to set SkipBackup
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetSkipBackup(skipBackup bool) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.SkipBackup = core.BoolPtr(skipBackup)
+	return _options
+}
+
+// SetExpirationDatetime : Allow user to set ExpirationDatetime
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetExpirationDatetime(expirationDatetime *strfmt.DateTime) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.ExpirationDatetime = expirationDatetime
+	return _options
+}
+
+// SetHeaders : Allow user to set Headers
+func (options *SetDatabaseInplaceVersionUpgradeOptions) SetHeaders(param map[string]string) *SetDatabaseInplaceVersionUpgradeOptions {
+	options.Headers = param
+	return options
+}
+
+// SetDatabaseInplaceVersionUpgradeResponse : SetDatabaseInplaceVersionUpgradeResponse struct
+type SetDatabaseInplaceVersionUpgradeResponse struct {
+	Task *Task `json:"task,omitempty"`
+}
+
+// UnmarshalSetDatabaseInplaceVersionUpgradeResponse unmarshals an instance of SetDatabaseInplaceVersionUpgradeResponse from the specified map of raw messages.
+func UnmarshalSetDatabaseInplaceVersionUpgradeResponse(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(SetDatabaseInplaceVersionUpgradeResponse)
+	err = core.UnmarshalModel(m, "task", &obj.Task, UnmarshalTask)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "task-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
 // SetDeploymentScalingGroupOptions : The SetDeploymentScalingGroup options.
 type SetDeploymentScalingGroupOptions struct {
 	// Deployment ID.
@@ -6309,14 +7270,14 @@ type SetDeploymentScalingGroupOptions struct {
 
 	Group *GroupScaling `json:"group,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewSetDeploymentScalingGroupOptions : Instantiate SetDeploymentScalingGroupOptions
 func (*CloudDatabasesV5) NewSetDeploymentScalingGroupOptions(id string, groupID string) *SetDeploymentScalingGroupOptions {
 	return &SetDeploymentScalingGroupOptions{
-		ID:      core.StringPtr(id),
+		ID: core.StringPtr(id),
 		GroupID: core.StringPtr(groupID),
 	}
 }
@@ -6367,7 +7328,7 @@ type StartOndemandBackupOptions struct {
 	// Deployment ID.
 	ID *string `json:"id" validate:"required,ne="`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6412,6 +7373,9 @@ type Task struct {
 	// ID of the task.
 	ID *string `json:"id,omitempty"`
 
+	// The resource type of the task.
+	ResourceType *string `json:"resource_type,omitempty"`
+
 	// Human-readable description of the task.
 	Description *string `json:"description,omitempty"`
 
@@ -6428,12 +7392,26 @@ type Task struct {
 	CreatedAt *strfmt.DateTime `json:"created_at,omitempty"`
 }
 
+// Constants associated with the Task.ResourceType property.
+// The resource type of the task.
+const (
+	TaskResourceTypeBackupConst = "backup"
+	TaskResourceTypeConfigurationConst = "configuration"
+	TaskResourceTypeIPConst = "ip"
+	TaskResourceTypeInstanceConst = "instance"
+	TaskResourceTypePasswordConst = "password"
+	TaskResourceTypeUpgradeConst = "upgrade"
+	TaskResourceTypeUserConst = "user"
+)
+
 // Constants associated with the Task.Status property.
 // The status of the task.
 const (
 	TaskStatusCompletedConst = "completed"
-	TaskStatusFailedConst    = "failed"
-	TaskStatusRunningConst   = "running"
+	TaskStatusExpiredConst = "expired"
+	TaskStatusFailedConst = "failed"
+	TaskStatusQueuedConst = "queued"
+	TaskStatusRunningConst = "running"
 )
 
 // UnmarshalTask unmarshals an instance of Task from the specified map of raw messages.
@@ -6442,6 +7420,11 @@ func UnmarshalTask(m map[string]json.RawMessage, result interface{}) (err error)
 	err = core.UnmarshalPrimitive(m, "id", &obj.ID)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "id-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "resource_type", &obj.ResourceType)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "resource_type-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "description", &obj.Description)
@@ -6497,7 +7480,7 @@ type UpdateDatabaseConfigurationOptions struct {
 
 	Configuration ConfigurationIntf `json:"configuration,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
@@ -6556,14 +7539,14 @@ type UpdateUserOptions struct {
 
 	User UserUpdateIntf `json:"user,omitempty"`
 
-	// Allows users to set headers on API requests
+	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
 
 // NewUpdateUserOptions : Instantiate UpdateUserOptions
 func (*CloudDatabasesV5) NewUpdateUserOptions(id string, userType string, username string) *UpdateUserOptions {
 	return &UpdateUserOptions{
-		ID:       core.StringPtr(id),
+		ID: core.StringPtr(id),
 		UserType: core.StringPtr(userType),
 		Username: core.StringPtr(username),
 	}
@@ -6632,7 +7615,6 @@ type User struct {
 	// remove command categories. Allowed categories are `read`, `write`, `admin` and `all`.
 	Role *string `json:"role,omitempty"`
 }
-
 func (*User) isaUser() bool {
 	return true
 }
@@ -6675,7 +7657,6 @@ type UserUpdate struct {
 	// remove command categories. Allowed categories are `read`, `write`, `admin` and `all`.
 	Role *string `json:"role,omitempty"`
 }
-
 func (*UserUpdate) isaUserUpdate() bool {
 	return true
 }
@@ -6695,6 +7676,114 @@ func UnmarshalUserUpdate(m map[string]json.RawMessage, result interface{}) (err 
 	err = core.UnmarshalPrimitive(m, "role", &obj.Role)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "role-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// VersionsCapabilityItem : VersionsCapabilityItem struct
+type VersionsCapabilityItem struct {
+	// The database type.
+	Type *string `json:"type,omitempty"`
+
+	// The version number.
+	Version *string `json:"version,omitempty"`
+
+	// The status of this version: To be finalized.
+	Status *string `json:"status,omitempty"`
+
+	// Should this version be preferred over others?.
+	IsPreferred *bool `json:"is_preferred,omitempty"`
+
+	// versions that this version can be upgraded to.
+	Transitions []VersionsCapabilityItemTransitionsItem `json:"transitions,omitempty"`
+}
+
+// Constants associated with the VersionsCapabilityItem.Status property.
+// The status of this version: To be finalized.
+const (
+	VersionsCapabilityItemStatusBetaConst = "beta"
+	VersionsCapabilityItemStatusDeprecatedConst = "deprecated"
+	VersionsCapabilityItemStatusStableConst = "stable"
+)
+
+// UnmarshalVersionsCapabilityItem unmarshals an instance of VersionsCapabilityItem from the specified map of raw messages.
+func UnmarshalVersionsCapabilityItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VersionsCapabilityItem)
+	err = core.UnmarshalPrimitive(m, "type", &obj.Type)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "type-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "version", &obj.Version)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "version-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "status", &obj.Status)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "status-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "is_preferred", &obj.IsPreferred)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "is_preferred-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalModel(m, "transitions", &obj.Transitions, UnmarshalVersionsCapabilityItemTransitionsItem)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "transitions-error", common.GetComponentInfo())
+		return
+	}
+	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
+	return
+}
+
+// VersionsCapabilityItemTransitionsItem : VersionsCapabilityItemTransitionsItem struct
+type VersionsCapabilityItemTransitionsItem struct {
+	// The database type.
+	Application *string `json:"application,omitempty"`
+
+	// method of going from from_version to to_version.
+	Method *string `json:"method,omitempty"`
+
+	// Option to upgrade instance without taking a backup.
+	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
+
+	// The version the transition in from.
+	FromVersion *string `json:"from_version,omitempty"`
+
+	// The version the transition is to.
+	ToVersion *string `json:"to_version,omitempty"`
+}
+
+// UnmarshalVersionsCapabilityItemTransitionsItem unmarshals an instance of VersionsCapabilityItemTransitionsItem from the specified map of raw messages.
+func UnmarshalVersionsCapabilityItemTransitionsItem(m map[string]json.RawMessage, result interface{}) (err error) {
+	obj := new(VersionsCapabilityItemTransitionsItem)
+	err = core.UnmarshalPrimitive(m, "application", &obj.Application)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "application-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "method", &obj.Method)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "method-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "from_version-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "to_version", &obj.ToVersion)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "to_version-error", common.GetComponentInfo())
 		return
 	}
 	reflect.ValueOf(result).Elem().Set(reflect.ValueOf(obj))
@@ -6828,7 +7917,7 @@ type ConfigurationMySQLConfiguration struct {
 const (
 	ConfigurationMySQLConfigurationDefaultAuthenticationPluginCachingSha2PasswordConst = "caching_sha2_password"
 	ConfigurationMySQLConfigurationDefaultAuthenticationPluginMysqlNativePasswordConst = "mysql_native_password"
-	ConfigurationMySQLConfigurationDefaultAuthenticationPluginSha256PasswordConst      = "sha256_password"
+	ConfigurationMySQLConfigurationDefaultAuthenticationPluginSha256PasswordConst = "sha256_password"
 )
 
 func (*ConfigurationMySQLConfiguration) isaConfiguration() bool {
@@ -6989,7 +8078,7 @@ type ConfigurationPgConfiguration struct {
 // authentication.
 const (
 	ConfigurationPgConfigurationLogConnectionsOffConst = "off"
-	ConfigurationPgConfigurationLogConnectionsOnConst  = "on"
+	ConfigurationPgConfigurationLogConnectionsOnConst = "on"
 )
 
 // Constants associated with the ConfigurationPgConfiguration.LogDisconnections property.
@@ -6997,7 +8086,7 @@ const (
 // duration of the session.
 const (
 	ConfigurationPgConfigurationLogDisconnectionsOffConst = "off"
-	ConfigurationPgConfigurationLogDisconnectionsOnConst  = "on"
+	ConfigurationPgConfigurationLogDisconnectionsOnConst = "on"
 )
 
 // Constants associated with the ConfigurationPgConfiguration.SynchronousCommit property.
@@ -7005,7 +8094,7 @@ const (
 // synchronous replication which will impact performance and availabilty.
 const (
 	ConfigurationPgConfigurationSynchronousCommitLocalConst = "local"
-	ConfigurationPgConfigurationSynchronousCommitOffConst   = "off"
+	ConfigurationPgConfigurationSynchronousCommitOffConst = "off"
 )
 
 // Constants associated with the ConfigurationPgConfiguration.WalLevel property.
@@ -7157,25 +8246,25 @@ type ConfigurationRedisConfiguration struct {
 // Constants associated with the ConfigurationRedisConfiguration.MaxmemoryPolicy property.
 // The policy with which Redis evicts keys when maximum memory is reached.
 const (
-	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysLruConst     = "allkeys-lru"
-	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysRandomConst  = "allkeys-random"
-	ConfigurationRedisConfigurationMaxmemoryPolicyNoevictionConst     = "noeviction"
-	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileLruConst    = "volatile-lru"
+	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysLruConst = "allkeys-lru"
+	ConfigurationRedisConfigurationMaxmemoryPolicyAllkeysRandomConst = "allkeys-random"
+	ConfigurationRedisConfigurationMaxmemoryPolicyNoevictionConst = "noeviction"
+	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileLruConst = "volatile-lru"
 	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileRandomConst = "volatile-random"
-	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileTTLConst    = "volatile-ttl"
+	ConfigurationRedisConfigurationMaxmemoryPolicyVolatileTTLConst = "volatile-ttl"
 )
 
 // Constants associated with the ConfigurationRedisConfiguration.Appendonly property.
 // If set to yes this will enable AOF persistence.
 const (
-	ConfigurationRedisConfigurationAppendonlyNoConst  = "no"
+	ConfigurationRedisConfigurationAppendonlyNoConst = "no"
 	ConfigurationRedisConfigurationAppendonlyYesConst = "yes"
 )
 
 // Constants associated with the ConfigurationRedisConfiguration.StopWritesOnBgsaveError property.
 // Whether or not to stop accepting writes when background persistence actions fail.
 const (
-	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorNoConst  = "no"
+	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorNoConst = "no"
 	ConfigurationRedisConfigurationStopWritesOnBgsaveErrorYesConst = "yes"
 )
 
@@ -7682,7 +8771,7 @@ type UserOpsManagerUser struct {
 // Role for new user. Available for MongoDB Enterprise Ops Manager users.
 const (
 	UserOpsManagerUserRoleGroupDataAccessAdminConst = "group_data_access_admin"
-	UserOpsManagerUserRoleGroupReadOnlyConst        = "group_read_only"
+	UserOpsManagerUserRoleGroupReadOnlyConst = "group_read_only"
 )
 
 // NewUserOpsManagerUser : Instantiate UserOpsManagerUser (Generic Model Constructor)

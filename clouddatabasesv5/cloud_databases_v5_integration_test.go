@@ -367,7 +367,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`CreateLogicalReplicationSlot(createLogicalReplicationSlotOptions *CreateLogicalReplicationSlotOptions)`, func() {
 
 			userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -439,7 +439,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 
 			userModel := &clouddatabasesv5.User{
 				Username: core.StringPtr("user"),
-				Password: core.StringPtr("password12345679"),
+				Password: core.StringPtr("Password12345679"),
 			}
 
 			createDatabaseUserOptions := &clouddatabasesv5.CreateDatabaseUserOptions{
@@ -469,7 +469,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			It(`changes the password successfully`, func() {
 
 				userUpdateModel := &clouddatabasesv5.UserUpdatePasswordSetting{
-					Password: core.StringPtr("xyzzyyzzyx111111111"),
+					Password: core.StringPtr("XyzzyyzzYx111111111"),
 				}
 
 				updateUserOptions := &clouddatabasesv5.UpdateUserOptions{
@@ -554,7 +554,7 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
+				EndpointType:    core.StringPtr("private"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -576,8 +576,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 				ID:              &deploymentID,
 				UserType:        core.StringPtr("database"),
 				UserID:          core.StringPtr("testuser"),
-				EndpointType:    core.StringPtr("public"),
-				Password:        core.StringPtr("prov1dedpassword"),
+				EndpointType:    core.StringPtr("private"),
+				Password:        core.StringPtr("Prov1dedpassword"),
 				CertificateRoot: core.StringPtr("/var/test"),
 			}
 
@@ -869,9 +869,6 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			} else if strings.Contains(deploymentID, "mysql") {
 				disk = 46080
 				memory = 6912
-			} else if strings.Contains(deploymentID, "cassandra") {
-				disk = 76800
-				memory = 40704
 			} else if strings.Contains(deploymentID, "enterprisedb") {
 				disk = 76800
 				memory = 6912
@@ -1125,6 +1122,87 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			Expect(err).To(BeNil())
 			Expect(response.StatusCode).To(Equal(200))
 			Expect(getTaskResponse).ToNot(BeNil())
+		})
+	})
+
+	// ------------------ CAPABILITY -----------------
+
+	Describe(`CreateCapability - Discover capability information`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`CreateCapability(createCapabilityOptions *CreateCapabilityOptions)`, func() {
+			createCapabilityRequestDeploymentModel := &clouddatabasesv5.CreateCapabilityRequestDeployment{
+				Type: core.StringPtr("postgresql"),
+				Version: core.StringPtr("10"),
+				Platform: core.StringPtr("classic"),
+				Location: core.StringPtr("us-south"),
+				Plan: core.StringPtr("standard"),
+			}
+
+			createCapabilityRequestBackupModel := &clouddatabasesv5.CreateCapabilityRequestBackup{
+				Type: core.StringPtr("PostgreSQL"),
+				Version: core.StringPtr("10"),
+				Platform: core.StringPtr("satellite"),
+				Location: core.StringPtr("us-south"),
+			}
+
+			createCapabilityRequestOptionsModel := &clouddatabasesv5.CreateCapabilityRequestOptions{
+				TargetPlatform: core.StringPtr("classic"),
+				TargetLocation: core.StringPtr("us-east"),
+				HostFlavor: core.StringPtr("multitenant"),
+			}
+
+			createCapabilityOptions := &clouddatabasesv5.CreateCapabilityOptions{
+				CapabilityID: core.StringPtr("autoscaling"),
+				Deployment: createCapabilityRequestDeploymentModel,
+				Backup: createCapabilityRequestBackupModel,
+				Options: createCapabilityRequestOptionsModel,
+			}
+
+			createCapabilityResponse, response, err := cloudDatabasesService.CreateCapability(createCapabilityOptions)
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(createCapabilityResponse).ToNot(BeNil())
+		})
+	})
+
+	Describe(`GetDeploymentCapability - Discover capability information from a deployment`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`GetDeploymentCapability(getDeploymentCapabilityOptions *GetDeploymentCapabilityOptions)`, func() {
+			getDeploymentCapabilityOptions := &clouddatabasesv5.GetDeploymentCapabilityOptions{
+				ID: &deploymentID,
+				CapabilityID: core.StringPtr("autoscaling"),
+				TargetPlatform: core.StringPtr("target_platform=classic"),
+				TargetLocation: core.StringPtr("target_location=us-east"),
+				HostFlavor: core.StringPtr("host_flavor=multitenant"),
+			}
+
+			getDeploymentCapabilityResponse, response, err := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptions)
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(getDeploymentCapabilityResponse).ToNot(BeNil())
+		})
+	})
+
+	Describe(`SetDatabaseInplaceVersionUpgrade - Upgrade your database version`, func() {
+		BeforeEach(func() {
+			shouldSkipTest()
+		})
+		It(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
+			// If failing check validation message as you ned to edit the version if deprecated
+			setDatabaseInplaceVersionUpgradeOptions := &clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions{
+				ID: &deploymentID,
+				Version: core.StringPtr("7.0"),
+				SkipBackup: core.BoolPtr(true),
+			}
+
+			setDatabaseInplaceVersionUpgradeResponse, response, err := cloudDatabasesService.SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions)
+			Expect(err).To(BeNil())
+			Expect(response.StatusCode).To(Equal(200))
+			Expect(setDatabaseInplaceVersionUpgradeResponse).ToNot(BeNil())
 		})
 	})
 })
