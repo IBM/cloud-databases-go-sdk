@@ -84,6 +84,12 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		}
 	}
 
+	var skipTestNotMongo = func() {
+		if !strings.Contains(deploymentID, "mongodb") {
+			Skip("Not Mongo, skipping tests...")
+		}
+	}
+
 	var skipTestConfiguration = func() {
 		if !strings.Contains(deploymentID, "postgresql") && !strings.Contains(deploymentID, "enterprisedb") && !strings.Contains(deploymentID, "redis") && !strings.Contains(deploymentID, "mysql") {
 			Skip("Cannot configure resource, skipping tests...")
@@ -1192,12 +1198,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 	Describe(`SetDatabaseInplaceVersionUpgrade - Upgrade your database version`, func() {
 		BeforeEach(func() {
 			shouldSkipTest()
+			skipTestNotMongo()
 		})
 		It(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
 			// If failing check validation message as you ned to edit the version if deprecated
 			setDatabaseInplaceVersionUpgradeOptions := &clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions{
 				ID:         &deploymentID,
-				Version:    core.StringPtr("7.0"),
+				Version:    core.StringPtr("8.0"),
 				SkipBackup: core.BoolPtr(true),
 			}
 
