@@ -1133,16 +1133,16 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`CreateCapability(createCapabilityOptions *CreateCapabilityOptions)`, func() {
 			createCapabilityRequestDeploymentModel := &clouddatabasesv5.CreateCapabilityRequestDeployment{
-				Type: core.StringPtr("postgresql"),
-				Version: core.StringPtr("10"),
+				Type:     core.StringPtr("postgresql"),
+				Version:  core.StringPtr("10"),
 				Platform: core.StringPtr("classic"),
 				Location: core.StringPtr("us-south"),
-				Plan: core.StringPtr("standard"),
+				Plan:     core.StringPtr("standard"),
 			}
 
 			createCapabilityRequestBackupModel := &clouddatabasesv5.CreateCapabilityRequestBackup{
-				Type: core.StringPtr("PostgreSQL"),
-				Version: core.StringPtr("10"),
+				Type:     core.StringPtr("PostgreSQL"),
+				Version:  core.StringPtr("10"),
 				Platform: core.StringPtr("satellite"),
 				Location: core.StringPtr("us-south"),
 			}
@@ -1150,14 +1150,14 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 			createCapabilityRequestOptionsModel := &clouddatabasesv5.CreateCapabilityRequestOptions{
 				TargetPlatform: core.StringPtr("classic"),
 				TargetLocation: core.StringPtr("us-east"),
-				HostFlavor: core.StringPtr("multitenant"),
+				HostFlavor:     core.StringPtr("multitenant"),
 			}
 
 			createCapabilityOptions := &clouddatabasesv5.CreateCapabilityOptions{
 				CapabilityID: core.StringPtr("autoscaling"),
-				Deployment: createCapabilityRequestDeploymentModel,
-				Backup: createCapabilityRequestBackupModel,
-				Options: createCapabilityRequestOptionsModel,
+				Deployment:   createCapabilityRequestDeploymentModel,
+				Backup:       createCapabilityRequestBackupModel,
+				Options:      createCapabilityRequestOptionsModel,
 			}
 
 			createCapabilityResponse, response, err := cloudDatabasesService.CreateCapability(createCapabilityOptions)
@@ -1173,11 +1173,13 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		})
 		It(`GetDeploymentCapability(getDeploymentCapabilityOptions *GetDeploymentCapabilityOptions)`, func() {
 			getDeploymentCapabilityOptions := &clouddatabasesv5.GetDeploymentCapabilityOptions{
-				ID: &deploymentID,
-				CapabilityID: core.StringPtr("autoscaling"),
+				ID:             &deploymentID,
+				CapabilityID:   core.StringPtr("autoscaling"),
 				TargetPlatform: core.StringPtr("target_platform=classic"),
 				TargetLocation: core.StringPtr("target_location=us-east"),
-				HostFlavor: core.StringPtr("host_flavor=multitenant"),
+				HostFlavor:     core.StringPtr("host_flavor=multitenant"),
+				IncludeHidden:  core.BoolPtr(true),
+				IncludeBeta:    core.BoolPtr(true),
 			}
 
 			getDeploymentCapabilityResponse, response, err := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptions)
@@ -1194,8 +1196,8 @@ var _ = Describe(`CloudDatabasesV5 Integration Tests`, func() {
 		It(`SetDatabaseInplaceVersionUpgrade(setDatabaseInplaceVersionUpgradeOptions *SetDatabaseInplaceVersionUpgradeOptions)`, func() {
 			// If failing check validation message as you ned to edit the version if deprecated
 			setDatabaseInplaceVersionUpgradeOptions := &clouddatabasesv5.SetDatabaseInplaceVersionUpgradeOptions{
-				ID: &deploymentID,
-				Version: core.StringPtr("7.0"),
+				ID:         &deploymentID,
+				Version:    core.StringPtr("7.0"),
 				SkipBackup: core.BoolPtr(true),
 			}
 
