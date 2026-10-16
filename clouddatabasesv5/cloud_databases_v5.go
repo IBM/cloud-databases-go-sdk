@@ -2619,6 +2619,9 @@ func (cloudDatabases *CloudDatabasesV5) SetDatabaseInplaceVersionUpgradeWithCont
 	if setDatabaseInplaceVersionUpgradeOptions.SkipBackup != nil {
 		builder.AddQuery("skip_backup", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.SkipBackup))
 	}
+	if setDatabaseInplaceVersionUpgradeOptions.SkipReadOnly != nil {
+		builder.AddQuery("skip_read_only", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.SkipReadOnly))
+	}
 	if setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime != nil {
 		builder.AddQuery("expiration_datetime", fmt.Sprint(*setDatabaseInplaceVersionUpgradeOptions.ExpirationDatetime))
 	}
@@ -4804,6 +4807,9 @@ type DeployablesVersionsItemTransitionsItem struct {
 	// Option to upgrade instance without taking a backup.
 	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
 
+	// Option to upgrade instance without putting the database into read-only mode.
+	SkipReadOnlySupported *bool `json:"skip_read_only_supported,omitempty"`
+
 	// The version the transition in from.
 	FromVersion *string `json:"from_version,omitempty"`
 
@@ -4827,6 +4833,11 @@ func UnmarshalDeployablesVersionsItemTransitionsItem(m map[string]json.RawMessag
 	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_read_only_supported", &obj.SkipReadOnlySupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_read_only_supported-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)
@@ -7221,6 +7232,10 @@ type SetDatabaseInplaceVersionUpgradeOptions struct {
 	// for supported database types. To learn more, refer to the version upgrade documentation.
 	SkipBackup *bool `json:"skip_backup,omitempty"`
 
+	// (Optional, Boolean) Whether to skip putting the database in read-only mode before upgrading the database version. This is only applicable
+	// for supported database types (Elasticsearch). To learn more, refer to the version upgrade documentation.
+	SkipReadOnly *bool `json:"skip_read_only,omitempty"`
+
 	// The expiration_datetime must be in the ISO8601 timestamp format and between 5 minutes and 24 hours from now. It
 	// allows you to specify how long to wait for the job to start before the upgrade is cancelled.
 	ExpirationDatetime *strfmt.DateTime `json:"expiration_datetime,omitempty"`
@@ -7252,6 +7267,12 @@ func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetVersion(version stri
 // SetSkipBackup : Allow user to set SkipBackup
 func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetSkipBackup(skipBackup bool) *SetDatabaseInplaceVersionUpgradeOptions {
 	_options.SkipBackup = core.BoolPtr(skipBackup)
+	return _options
+}
+
+// SetSkipReadOnly : Allow user to set SkipReadOnly
+func (_options *SetDatabaseInplaceVersionUpgradeOptions) SetSkipReadOnly(skipReadOnly bool) *SetDatabaseInplaceVersionUpgradeOptions {
+	_options.SkipReadOnly = core.BoolPtr(skipReadOnly)
 	return _options
 }
 
@@ -7775,6 +7796,9 @@ type VersionsCapabilityItemTransitionsItem struct {
 	// Option to upgrade instance without taking a backup.
 	SkipBackupSupported *bool `json:"skip_backup_supported,omitempty"`
 
+	// Option to upgrade instance without putting the database into read-only mode.
+	SkipReadOnlySupported *bool `json:"skip_read_only_supported,omitempty"`
+
 	// The version the transition in from.
 	FromVersion *string `json:"from_version,omitempty"`
 
@@ -7798,6 +7822,11 @@ func UnmarshalVersionsCapabilityItemTransitionsItem(m map[string]json.RawMessage
 	err = core.UnmarshalPrimitive(m, "skip_backup_supported", &obj.SkipBackupSupported)
 	if err != nil {
 		err = core.SDKErrorf(err, "", "skip_backup_supported-error", common.GetComponentInfo())
+		return
+	}
+	err = core.UnmarshalPrimitive(m, "skip_read_only_supported", &obj.SkipReadOnlySupported)
+	if err != nil {
+		err = core.SDKErrorf(err, "", "skip_read_only_supported-error", common.GetComponentInfo())
 		return
 	}
 	err = core.UnmarshalPrimitive(m, "from_version", &obj.FromVersion)

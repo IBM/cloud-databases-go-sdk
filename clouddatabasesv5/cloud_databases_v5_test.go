@@ -8142,6 +8142,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				setDatabaseInplaceVersionUpgradeOptionsModel.ID = core.StringPtr("testString")
 				setDatabaseInplaceVersionUpgradeOptionsModel.Version = core.StringPtr("7")
 				setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup = core.BoolPtr(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.SkipReadOnly = core.BoolPtr(true)
 				setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime = CreateMockDateTime("2025-10-05T17:17:17Z")
 				setDatabaseInplaceVersionUpgradeOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
@@ -8866,12 +8867,14 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				setDatabaseInplaceVersionUpgradeOptionsModel.SetID("testString")
 				setDatabaseInplaceVersionUpgradeOptionsModel.SetVersion("7")
 				setDatabaseInplaceVersionUpgradeOptionsModel.SetSkipBackup(true)
+				setDatabaseInplaceVersionUpgradeOptionsModel.SetSkipReadOnly(true)
 				setDatabaseInplaceVersionUpgradeOptionsModel.SetExpirationDatetime(CreateMockDateTime("2025-10-05T17:17:17Z"))
 				setDatabaseInplaceVersionUpgradeOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(setDatabaseInplaceVersionUpgradeOptionsModel).ToNot(BeNil())
 				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.ID).To(Equal(core.StringPtr("testString")))
 				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.Version).To(Equal(core.StringPtr("7")))
 				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.SkipBackup).To(Equal(core.BoolPtr(true)))
+				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.SkipReadOnly).To(Equal(core.BoolPtr(true)))
 				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.ExpirationDatetime).To(Equal(CreateMockDateTime("2025-10-05T17:17:17Z")))
 				Expect(setDatabaseInplaceVersionUpgradeOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
