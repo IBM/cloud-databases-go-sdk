@@ -2539,6 +2539,12 @@ func (cloudDatabases *CloudDatabasesV5) GetDeploymentCapabilityWithContext(ctx c
 	if getDeploymentCapabilityOptions.HostFlavor != nil {
 		builder.AddQuery("host_flavor", fmt.Sprint(*getDeploymentCapabilityOptions.HostFlavor))
 	}
+	if getDeploymentCapabilityOptions.IncludeHidden != nil {
+		builder.AddQuery("include_hidden", fmt.Sprint(*getDeploymentCapabilityOptions.IncludeHidden))
+	}
+	if getDeploymentCapabilityOptions.IncludeBeta != nil {
+		builder.AddQuery("include_beta", fmt.Sprint(*getDeploymentCapabilityOptions.IncludeBeta))
+	}
 
 	request, err := builder.Build()
 	if err != nil {
@@ -5372,6 +5378,12 @@ type GetDeploymentCapabilityOptions struct {
 	// will be returned.
 	HostFlavor *string `json:"host_flavor,omitempty"`
 
+	// Include hidden versions. Only applicable for versions capability.
+	IncludeHidden *bool `json:"include_hidden,omitempty"`
+
+	// Include beta versions. Only applicable for versions capability.
+	IncludeBeta *bool `json:"include_beta,omitempty"`
+
 	// Allows users to set headers on API requests.
 	Headers map[string]string
 }
@@ -5424,6 +5436,18 @@ func (_options *GetDeploymentCapabilityOptions) SetTargetLocation(targetLocation
 // SetHostFlavor : Allow user to set HostFlavor
 func (_options *GetDeploymentCapabilityOptions) SetHostFlavor(hostFlavor string) *GetDeploymentCapabilityOptions {
 	_options.HostFlavor = core.StringPtr(hostFlavor)
+	return _options
+}
+
+// SetIncludeHidden : Allow user to set IncludeHidden
+func (_options *GetDeploymentCapabilityOptions) SetIncludeHidden(includeHidden bool) *GetDeploymentCapabilityOptions {
+	_options.IncludeHidden = core.BoolPtr(includeHidden)
+	return _options
+}
+
+// SetIncludeBeta : Allow user to set IncludeBeta
+func (_options *GetDeploymentCapabilityOptions) SetIncludeBeta(includeBeta bool) *GetDeploymentCapabilityOptions {
+	_options.IncludeBeta = core.BoolPtr(includeBeta)
 	return _options
 }
 

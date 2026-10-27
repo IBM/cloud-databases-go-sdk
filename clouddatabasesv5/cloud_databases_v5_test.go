@@ -68,14 +68,13 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL": "https://clouddatabasesv5/api",
+				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
 				"CLOUD_DATABASES_AUTH_TYPE": "noauth",
 			}
 
 			It(`Create service client using external config successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				})
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
 				Expect(cloudDatabasesService).ToNot(BeNil())
 				Expect(serviceErr).To(BeNil())
 				ClearTestEnvironment(testEnvironment)
@@ -104,8 +103,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 			})
 			It(`Create service client using external config and set url programatically successfully`, func() {
 				SetTestEnvironment(testEnvironment)
-				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-				})
+				cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
 				err := cloudDatabasesService.SetServiceURL("https://testService/api")
 				Expect(err).To(BeNil())
 				Expect(cloudDatabasesService).ToNot(BeNil())
@@ -123,13 +121,12 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid Auth`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_URL": "https://clouddatabasesv5/api",
+				"CLOUD_DATABASES_URL":       "https://clouddatabasesv5/api",
 				"CLOUD_DATABASES_AUTH_TYPE": "someOtherAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
-			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{
-			})
+			cloudDatabasesService, serviceErr := clouddatabasesv5.NewCloudDatabasesV5UsingExternalConfig(&clouddatabasesv5.CloudDatabasesV5Options{})
 
 			It(`Instantiate service client with error`, func() {
 				Expect(cloudDatabasesService).To(BeNil())
@@ -140,7 +137,7 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 		Context(`Using external config, construct service client instances with error: Invalid URL`, func() {
 			// Map containing environment variables used in testing.
 			var testEnvironment = map[string]string{
-				"CLOUD_DATABASES_AUTH_TYPE":   "NOAuth",
+				"CLOUD_DATABASES_AUTH_TYPE": "NOAuth",
 			}
 
 			SetTestEnvironment(testEnvironment)
@@ -7871,6 +7868,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.URL.Query()["target_platform"]).To(Equal([]string{"target_platform=classic"}))
 					Expect(req.URL.Query()["target_location"]).To(Equal([]string{"target_location=us-east"}))
 					Expect(req.URL.Query()["host_flavor"]).To(Equal([]string{"host_flavor=multitenant"}))
+					// TODO: Add check for include_hidden query parameter
+					// TODO: Add check for include_beta query parameter
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
 					fmt.Fprint(res, `} this is not valid json {`)
@@ -7891,6 +7890,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				getDeploymentCapabilityOptionsModel.TargetPlatform = core.StringPtr("target_platform=classic")
 				getDeploymentCapabilityOptionsModel.TargetLocation = core.StringPtr("target_location=us-east")
 				getDeploymentCapabilityOptionsModel.HostFlavor = core.StringPtr("host_flavor=multitenant")
+				getDeploymentCapabilityOptionsModel.IncludeHidden = core.BoolPtr(true)
+				getDeploymentCapabilityOptionsModel.IncludeBeta = core.BoolPtr(true)
 				getDeploymentCapabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Expect response parsing to fail since we are receiving a text/plain response
 				result, response, operationErr := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptionsModel)
@@ -7924,6 +7925,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.URL.Query()["target_platform"]).To(Equal([]string{"target_platform=classic"}))
 					Expect(req.URL.Query()["target_location"]).To(Equal([]string{"target_location=us-east"}))
 					Expect(req.URL.Query()["host_flavor"]).To(Equal([]string{"host_flavor=multitenant"}))
+					// TODO: Add check for include_hidden query parameter
+					// TODO: Add check for include_beta query parameter
 					// Sleep a short time to support a timeout test
 					time.Sleep(100 * time.Millisecond)
 
@@ -7949,6 +7952,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				getDeploymentCapabilityOptionsModel.TargetPlatform = core.StringPtr("target_platform=classic")
 				getDeploymentCapabilityOptionsModel.TargetLocation = core.StringPtr("target_location=us-east")
 				getDeploymentCapabilityOptionsModel.HostFlavor = core.StringPtr("host_flavor=multitenant")
+				getDeploymentCapabilityOptionsModel.IncludeHidden = core.BoolPtr(true)
+				getDeploymentCapabilityOptionsModel.IncludeBeta = core.BoolPtr(true)
 				getDeploymentCapabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with a Context to test a timeout error
@@ -7988,6 +7993,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 					Expect(req.URL.Query()["target_platform"]).To(Equal([]string{"target_platform=classic"}))
 					Expect(req.URL.Query()["target_location"]).To(Equal([]string{"target_location=us-east"}))
 					Expect(req.URL.Query()["host_flavor"]).To(Equal([]string{"host_flavor=multitenant"}))
+					// TODO: Add check for include_hidden query parameter
+					// TODO: Add check for include_beta query parameter
 					// Set mock response
 					res.Header().Set("Content-type", "application/json")
 					res.WriteHeader(200)
@@ -8015,6 +8022,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				getDeploymentCapabilityOptionsModel.TargetPlatform = core.StringPtr("target_platform=classic")
 				getDeploymentCapabilityOptionsModel.TargetLocation = core.StringPtr("target_location=us-east")
 				getDeploymentCapabilityOptionsModel.HostFlavor = core.StringPtr("host_flavor=multitenant")
+				getDeploymentCapabilityOptionsModel.IncludeHidden = core.BoolPtr(true)
+				getDeploymentCapabilityOptionsModel.IncludeBeta = core.BoolPtr(true)
 				getDeploymentCapabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation with valid options model (positive test)
@@ -8039,6 +8048,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				getDeploymentCapabilityOptionsModel.TargetPlatform = core.StringPtr("target_platform=classic")
 				getDeploymentCapabilityOptionsModel.TargetLocation = core.StringPtr("target_location=us-east")
 				getDeploymentCapabilityOptionsModel.HostFlavor = core.StringPtr("host_flavor=multitenant")
+				getDeploymentCapabilityOptionsModel.IncludeHidden = core.BoolPtr(true)
+				getDeploymentCapabilityOptionsModel.IncludeBeta = core.BoolPtr(true)
 				getDeploymentCapabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 				// Invoke operation with empty URL (negative test)
 				err := cloudDatabasesService.SetServiceURL("")
@@ -8084,6 +8095,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				getDeploymentCapabilityOptionsModel.TargetPlatform = core.StringPtr("target_platform=classic")
 				getDeploymentCapabilityOptionsModel.TargetLocation = core.StringPtr("target_location=us-east")
 				getDeploymentCapabilityOptionsModel.HostFlavor = core.StringPtr("host_flavor=multitenant")
+				getDeploymentCapabilityOptionsModel.IncludeHidden = core.BoolPtr(true)
+				getDeploymentCapabilityOptionsModel.IncludeBeta = core.BoolPtr(true)
 				getDeploymentCapabilityOptionsModel.Headers = map[string]string{"x-custom-header": "x-custom-value"}
 
 				// Invoke operation
@@ -8628,6 +8641,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				getDeploymentCapabilityOptionsModel.SetTargetPlatform("target_platform=classic")
 				getDeploymentCapabilityOptionsModel.SetTargetLocation("target_location=us-east")
 				getDeploymentCapabilityOptionsModel.SetHostFlavor("host_flavor=multitenant")
+				getDeploymentCapabilityOptionsModel.SetIncludeHidden(true)
+				getDeploymentCapabilityOptionsModel.SetIncludeBeta(true)
 				getDeploymentCapabilityOptionsModel.SetHeaders(map[string]string{"foo": "bar"})
 				Expect(getDeploymentCapabilityOptionsModel).ToNot(BeNil())
 				Expect(getDeploymentCapabilityOptionsModel.ID).To(Equal(core.StringPtr("testString")))
@@ -8635,6 +8650,8 @@ var _ = Describe(`CloudDatabasesV5`, func() {
 				Expect(getDeploymentCapabilityOptionsModel.TargetPlatform).To(Equal(core.StringPtr("target_platform=classic")))
 				Expect(getDeploymentCapabilityOptionsModel.TargetLocation).To(Equal(core.StringPtr("target_location=us-east")))
 				Expect(getDeploymentCapabilityOptionsModel.HostFlavor).To(Equal(core.StringPtr("host_flavor=multitenant")))
+				Expect(getDeploymentCapabilityOptionsModel.IncludeHidden).To(Equal(core.BoolPtr(true)))
+				Expect(getDeploymentCapabilityOptionsModel.IncludeBeta).To(Equal(core.BoolPtr(true)))
 				Expect(getDeploymentCapabilityOptionsModel.Headers).To(Equal(map[string]string{"foo": "bar"}))
 			})
 			It(`Invoke NewGetDeploymentInfoOptions successfully`, func() {

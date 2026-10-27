@@ -997,8 +997,8 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			// begin-createCapability
 
 			createCapabilityRequestDeploymentModel := &clouddatabasesv5.CreateCapabilityRequestDeployment{
-				Type: core.StringPtr("postgresql"),
-				Version: core.StringPtr("10"),
+				Type:     core.StringPtr("postgresql"),
+				Version:  core.StringPtr("10"),
 				Platform: core.StringPtr("classic"),
 				Location: core.StringPtr("us-south"),
 			}
@@ -1032,6 +1032,8 @@ var _ = Describe(`CloudDatabasesV5 Examples Tests`, func() {
 			getDeploymentCapabilityOptions.SetTargetPlatform("target_platform=classic")
 			getDeploymentCapabilityOptions.SetTargetLocation("target_location=us-east")
 			getDeploymentCapabilityOptions.SetHostFlavor("host_flavor=multitenant")
+			getDeploymentCapabilityOptions.SetIncludeHidden(true)
+			getDeploymentCapabilityOptions.SetIncludeBeta(true)
 
 			getDeploymentCapabilityResponse, response, err := cloudDatabasesService.GetDeploymentCapability(getDeploymentCapabilityOptions)
 			if err != nil {
